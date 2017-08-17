@@ -1,0 +1,29 @@
+{
+  "name": "places",
+  "version": "1.0.0",
+  "description": "Places app",
+  "main": "src/main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./src/server.js",
+    "postinstall": "db-migrate up --config config/db-migrate.json --migrations-dir src/migrations"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "author": "",
+  "license": "ISC",
+  "homepage": "",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "compression": "^1.6.2",
+    "config": "^1.21.0",
+    "cors": "^2.8.4",
+    "db-migrate": "^0.10.0-beta.16",
+    "db-migrate-mysql": "^1.1.7",
+    "express": "^4.14.0",
+    "jsonwebtoken": "^7.4.1",
+    "node-mysql": "^0.4.2"
+  }
+}

@@ -1,0 +1,86 @@
+.dialog-shadow {
+  position: fixed;
+  z-index: 99;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.8);
+  opacity: 0;
+}
+
+.dialog-box {
+  position: fixed;
+  z-index: 100;
+  left: 50%;
+  top: 20px;
+  background-color: #fff;
+  padding: 20px;
+  width: 800px;
+  margin-left: -400px;
+  max-height: calc(100% - 40px);
+  overflow-y: scroll;
+  border: none;
+  transition: 0.4s;
+  opacity: 0;
+}
+.dialog-box.with-header {
+  padding: 0;
+}
+.dialog-box .dialog-header {
+  background-color: $brand_color;
+  color: #fff;
+  padding: 20px;
+}
+.dialog-box .dialog-content {
+  padding: 20px;
+}
+.dialog-box::-webkit-scrollbar {
+  display: none;
+}
+
+.dialog-shadow.open {
+  animation: fade-in 0.3s ease;
+  animation-fill-mode: forwards;
+  -webkit-animation: fade-in 0.3s ease;
+  -webkit-animation-fill-mode: forwards;
+}
+
+.dialog-shadow.closed {
+  animation: fade-out 0.3s ease;
+  animation-fill-mode: forwards;
+  -webkit-animation: fade-out 0.3s ease;
+  -webkit-animation-fill-mode: forwards;
+}
+
+.dialog-box.open {
+  animation: fade-in 0.3s ease;
+  animation-fill-mode: forwards;
+  -webkit-animation: fade-in 0.3s ease;
+  -webkit-animation-fill-mode: forwards;
+}
+
+.dialog-box.closed {
+  animation: fade-out 0.3s ease;
+  animation-fill-mode: forwards;
+  -webkit-animation: fade-out 0.3s ease;
+  -webkit-animation-fill-mode: forwards;
+}
+
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes fade-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+@-webkit-keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@-webkit-keyframes fade-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}

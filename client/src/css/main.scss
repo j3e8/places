@@ -1,0 +1,172 @@
+$brand_color: #44bac9;
+$text_color: #292020;
+
+$blue: #44bac9;
+$cancel_color: #a7a9ac;
+
+html {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 300;
+  font-size: 14px;
+  color: $text_color;
+}
+
+div,
+section,
+header,
+nav,
+main,
+footer,
+aside,
+th,
+td,
+article,
+body * {
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+}
+
+main {
+  height: 100%;
+}
+
+.content {
+  padding: 50px 20px 100px 20px;
+}
+
+.content-fill-height {
+  display: flex;
+  flex-direction: column;
+  & > * {
+    flex: 1 0 100%;
+    -ms-flex: 1 0 auto;
+  }
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+table thead tr th {
+  text-align: left;
+  font-weight: normal;
+  padding: 8px 16px;
+}
+table tbody tr td {
+  padding: 8px 16px;
+  border-top: 1px solid #e6e6e6;
+}
+table tbody tr:nth-child(even) td {
+  background-color: #fcfcfc;
+}
+table tfoot tr td {
+  padding: 8px 16px;
+}
+
+a {
+  color: $brand_color;
+  text-decoration: none;
+
+  img {
+    border: none;
+  }
+}
+
+.space {
+  margin: 30px 0 10px 0;
+}
+.gap {
+  margin: 8px 0 3px 0;
+}
+.breathe {
+  margin-top:15px;
+  margin-bottom:8px
+}
+section.breathe {
+  margin-top:30px;
+  margin-bottom:10px
+}
+.text-center {
+  text-align:center
+}
+.text-left {
+  text-align:left
+}
+.text-right {
+  text-align:right
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.edit {
+  color: $brand_color;
+  cursor: pointer;
+}
+
+hr {
+  height: 0;
+  border: none;
+  border-top: 1px solid #e6e6e6;
+  margin: 20px 0;
+}
+
+.flex-row > .flex-cell.content {
+  margin: 0;
+  padding: 50px 40px;
+
+  @media (max-width: 800px) {
+    flex: 0 0 100%;
+    -ms-flex: 0 0 100%;
+  }
+
+  @media (max-width: 600px) {
+    padding: 20px;
+    margin: 0;
+  }
+}
+
+.flex-row > .flex-cell.cart-sidebar {
+  flex: 0 0 280px;
+  -ms-flex: 0 0 280px;
+  background-color: #e6e6e6;
+  padding: 20px;
+
+  @media (max-width: 800px) {
+    flex: 0 0 100%;
+    -ms-flex: 0 0 100%;
+  }
+}
+
+
+.form {
+  background-color: $brand_color;
+  padding: 20px;
+  color: #fff;
+
+  .warning {
+    background-color: #BA0A0A;
+    color: #fff;
+    padding: 10px;
+    font-size: 13px;
+  }
+}
+
+.mobile-only {
+  display: none;
+}
+
+@media (max-width: 800px) {
+  .desktop-only {
+    display: none !important;
+  }
+}

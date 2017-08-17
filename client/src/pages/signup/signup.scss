@@ -1,0 +1,17 @@
+.page__signup {
+  .floating {
+    max-width: 300px;
+    margin: 50px auto;
+  }
+  .box {
+    margin: 10px 0;
+  }
+  #photo-half {
+    background-image: url(/assets/images/signin/hawaii2.jpg);
+    background-position: center top;
+    background-size: cover;
+  }
+  input.ng-invalid.ng-dirty.ng-touched {
+    border: 1px solid red;
+  }
+}

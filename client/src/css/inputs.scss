@@ -1,0 +1,176 @@
+button,
+input[type=button],
+input[type=submit],
+a.button {
+  border: none;
+  padding: 8px 16px;
+  background-color: $brand_color;
+  color: #fff;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 14px;
+  cursor: pointer;
+}
+button.cancel,
+input[type=button].cancel,
+input[type=submit].cancel,
+a.button.cancel {
+  color: #888;
+  background-color: #e6e6e6;
+}
+button.secondary,
+input[type=button].secondary,
+input[type=submit].secondary,
+a.button.secondary {
+  color: $brand_color;
+  background-color: #e6e6e6;
+  border: 1px solid $brand_color;
+  padding: 8px 16px;
+  text-decoration: none;
+}
+button.sm,
+input[type=button].sm,
+input[type=submit].sm,
+a.button.sm {
+  font-size: 12px;
+  padding: 5px 12px;
+}
+
+h1,h2 {
+  button,
+  input[type=button],
+  input[type=submit],
+  a.button {
+    padding: 5px 12px;
+    font-size: 13px;
+    vertical-align: middle;
+    margin: 0 10px;
+  }
+}
+
+input,
+textarea,
+button,
+select {
+  outline: none;
+  -webkit-appearance: none;
+}
+
+label {
+  font-size: 13px;
+}
+
+input[type=text],
+input[type=password],
+input[type=email],
+input[type=phone],
+input[type=number],
+input[type=date],
+textarea,
+select {
+  padding: 6px 8px;
+  border: 1px solid #e6e6e6;
+  font-size: 14px;
+  width: 100%;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  background-color: #fff;
+}
+select {
+  width: auto;
+  border-radius: 0;
+  background-color: #fff;
+  padding-right: 20px;
+  position: relative;
+  background-image: url(/assets/images/drop-arrow.svg);
+  background-position: calc(100% - 4px) center;
+  background-repeat: no-repeat;
+  background-size: 10px auto;
+}
+
+::placeholder {
+  color: #e0e0e0;
+}
+::-webkit-input-placeholder {
+  color: #e0e0e0;
+}
+::-moz-placeholder {
+  color: #e0e0e0;
+}
+::-ms-input-placeholder {
+  color: #e0e0e0;
+}
+
+textarea {
+  height: 100px;
+}
+textarea.thin {
+  height: 50px;
+}
+
+input[type=checkbox] {
+  display: none;
+  & + label:before {
+    font-family: 'Material Icons';
+    font-weight: normal;
+    font-style: normal;
+    content: " ";
+    display: inline-block;
+    color: #ddd;
+    margin-right: 8px;
+    vertical-align: bottom;
+    cursor: pointer;
+    border: 2px solid #ddd;
+    width: 15px;
+    height: 15px;
+  }
+  &:checked {
+    & + label:before {
+      font-size: 18px;
+      content: "\E876";
+      color: #fff;
+      background-color: $brand_color;
+      border: none;
+      width: auto;
+      height: auto;
+    }
+  }
+}
+
+input[type=radio] {
+  display: none;
+  & + label:before {
+    font-family: 'Material Icons';
+    font-weight: normal;
+    font-style: normal;
+    content: " ";
+    display: inline-block;
+    color: #ddd;
+    margin-right: 8px;
+    vertical-align: bottom;
+    cursor: pointer;
+    border: 2px solid #ddd;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    overflow: hidden;
+  }
+  &:checked {
+    & + label:before {
+      font-size: 16px;
+      content: "\E876";
+      color: #fff;
+      background-color: $brand_color;
+      border-color: $brand_color;
+    }
+  }
+  &:disabled {
+    & + label:before {
+      cursor: default;
+    }
+  }
+}
+
+label + .field {
+  margin-top: 4px;
+}

@@ -1,0 +1,28 @@
+.new-list-page {
+  .map-cell {
+    background-color: #f0f0f0;
+  }
+  .list-cell {
+    flex: 0 0 300px;
+    background-color: #fff;
+    padding: 0;
+
+    .content {
+      padding: 15px;
+    }
+
+    section {
+      margin: 15px 0;
+    }
+
+    h3 {
+      i.material-icons {
+        vertical-align: middle;
+        color: $blue;
+        font-size: 100%;
+        padding-bottom: 3px;
+        cursor: pointer;
+      }
+    }
+  }
+}

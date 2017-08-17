@@ -1,0 +1,36 @@
+<div class="flex-row new-list-page">
+  <div class="flex-cell map-cell" id="list-map">
+
+  </div>
+  <div class="flex-cell list-cell">
+
+    <div class="flex-column">
+      <div class="flex-cell fixed">
+        <div class="content">
+          <h1>New List</h1>
+          <div>A new list created by you</div>
+        </div>
+      </div>
+      <div class="flex-cell">
+        <section>
+          <div class="content">
+            <h3>Places <i class="material-icons" ng-click="showNewPlaceDialog()">add_circle</i></h3>
+          </div>
+
+          <div ng-repeat="place in places">
+            {{ place.name }}
+          </div>
+        </section>
+      </div>
+      <div class="flex-cell fixed text-center">
+        <div class="content">
+          <button>Save</button>
+          <button class="cancel">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<place-dialog show="newPlaceDialogIsDisplayed" on-save="afterPlaceSave" on-cancel="closeNewPlaceDialog"></place-dialog>

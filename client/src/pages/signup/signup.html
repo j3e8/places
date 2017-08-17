@@ -1,0 +1,31 @@
+<div class="page__signup content-fill-height">
+
+  <div class="flex-row">
+    <div class="flex-cell">
+      <div class="floating">
+        <h1>Sign up</h1>
+        It's free and it only takes 3.2 seconds.
+        <div class="box">
+          <form name="signupForm">
+            <div>
+              <label>Username</label>
+              <input type="text" ng-model="username" placeholder="johndoe" ng-pattern="usernamePattern">
+            </div>
+            <div class="gap">
+              <label>Email</label>
+              <input type="text" ng-model="email" placeholder="john@example.com" ng-pattern="emailPattern">
+            </div>
+            <div class="gap">
+              <label>Password</label>
+              <input type="password" ng-model="password">
+            </div>
+            <div class="gap text-right">
+              <button ng-click="signup()">Sign up</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="flex-cell" id="photo-half"></div>
+  </div>
+</div>

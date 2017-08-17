@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html ng-app="mainApp" ng-controller="mainController">
+  <head>
+    <title>Places</title>
+    <meta name="viewport" content="initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular-route.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular-animate.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular-sanitize.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script type="text/javascript" src="bundle.js"></script>
+    <link rel="shortcut icon" type="image/x-icon" id="favicon" />
+    <link rel="stylesheet" type="text/css" href="bundle.css" />
+  </head>
+  <body>
+    <page-header user="user"></page-header>
+
+    <main ng-view class="content-fill-height">
+    </main>
+
+    <page-footer></page-footer>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDItJShk07ug4wOmP10N06QmI6UAqa3NmU&callback=initMap&libraries=drawing" async></script>
+  </body>
+</html>
