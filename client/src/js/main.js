@@ -32,5 +32,5 @@ app.config(["$routeProvider", "$locationProvider", function($routeProvider, $loc
 .run(function($rootScope, $route){
   $rootScope.$on('$routeChangeSuccess', function(e,to){
     window.scrollTo(0, 0);
-  })
+  });
 });

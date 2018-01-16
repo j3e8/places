@@ -1,5 +1,8 @@
 const PlaceModule = require('../../modules/place');
 
-module.exports = function(requestBody) {
-  return PlaceModule.insertPlace({ 'id': 1, 'name': 'j3e8' }, requestBody);
+module.exports = function(user, requestBody) {
+  if (user) {
+    return PlaceModule.insertPlace(user, requestBody);
+  }
+  return Promise.reject({ code: 401, message: "Unauthorized" });
 }

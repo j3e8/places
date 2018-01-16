@@ -3,5 +3,5 @@ const UserModule = require('../../modules/user');
 
 module.exports = function(requestBody) {
   return UserModule.authenticate(requestBody.username, requestBody.password)
-  .then((user) => jwt.sign(user));
+  .then((user) => jwt.sign({ user: user }));
 }

@@ -1,11 +1,11 @@
-let db = require('../../connections/db');
-let PlaceHelper = {};
+const db = require('../../connections/db');
+const LatLng = require('../lat-lng');
 
-PlaceHelper.insert = function(user, place) {
-  let minLatitude = 0;
-  let maxLatitude = 0;
-  let minLongitude = 0;
-  let maxLongitude = 0;
+module.exports = function(user, place) {
+  let minLatitude = LatLng.getMinLatitudeFromShapeData(place.shapeData);
+  let maxLatitude = LatLng.getMaxLatitudeFromShapeData(place.shapeData);
+  let minLongitude = LatLng.getMinLongitudeFromShapeData(place.shapeData);
+  let maxLongitude = LatLng.getMaxLongitudeFromShapeData(place.shapeData);
   let obj = {
     'placeName': place.placeName,
     'minLatitude': minLatitude,
@@ -20,5 +20,3 @@ PlaceHelper.insert = function(user, place) {
   console.log('insert into places set', obj);
   return db.query(`INSERT INTO places SET ?`, obj);
 }
-
-module.exports = PlaceHelper;
