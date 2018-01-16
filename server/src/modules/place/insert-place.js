@@ -1,4 +1,4 @@
-let db = require('../connections/db');
+let db = require('../../connections/db');
 let PlaceHelper = {};
 
 PlaceHelper.insert = function(user, place) {

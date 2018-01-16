@@ -1,21 +1,22 @@
-let Place = require('../api/place');
-let PlaceType = require('../api/placetype');
+const Place = require('../api/place');
+const PlaceType = require('../api/placetype');
+const ErrorHandler = require('../lib/error-handler');
 
 module.exports = function(app) {
   app.post('/api/place', function(req, res) {
-    Place.create(req.body)
+    Place.createPlace(req.body)
     .then((result) => res.json(result))
     .catch((err) => ErrorHandler.respondWithError(res, err));
   });
 
   app.put('/api/place/:placeId', function(req, res) {
-    Place.update(req.params.placeId, req.body)
+    Place.updatePlace(req.params.placeId, req.body)
     .then((result) => res.json(result))
     .catch((err) => ErrorHandler.respondWithError(res, err));
   });
 
   app.get('/api/place/:placeId', function(req, res) {
-    Place.get(req.params.placeId)
+    Place.getPlace(req.params.placeId)
     .then((result) => res.json(result))
     .catch((err) => ErrorHandler.respondWithError(res, err));
   });

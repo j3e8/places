@@ -10,7 +10,7 @@ let jwtoptions = {
   'decodedObjectKey': '$user',
   'duration': '20m'
 }
-require('./modules/jwt').init(jwtconf.publicKey, jwtconf.privateKey, jwtoptions);
+require('./lib/jwt').init(jwtconf.publicKey, jwtconf.privateKey, jwtoptions);
 
 app.use(cors());
 app.use(compression());

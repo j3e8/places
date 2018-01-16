@@ -2,7 +2,7 @@ let jwt = require('jsonwebtoken');
 
 let publicKey, privateKey;
 let options = {
-  'decodedObjectKey': 'jwt',
+  'decodedObjectKey': 'user',
   'algorithm': 'RS256',
   'duration': '15m'
 }
@@ -27,23 +27,12 @@ function init(pubkey, privkey, opt) {
     });
   }
 
-  JWT.verify = function(token) {
-    return new Promise((resolve, reject) => {
-      jwt.verify(token, publicKey, (err, decoded) => {
-        if (err) {
-          reject(err);
-        }
-        resolve(decoded);
-      });
-    });
-  }
-
   JWT.requirejwt = function(req, res, next) {
     let token = parseTokenFromHeader(headers.authorization);
-    JWT.verify(token)
+    verify(token)
     .then((decoded) => {
       req[options.decodedObjectKey] = decoded;
-      next();
+      next(decoded);
     })
     .catch((err) => {
       res.status(401).end();
@@ -58,6 +47,17 @@ function parseTokenFromHeader(header) {
     return header.substring(7);
   }
   return header;
+}
+
+function verify(token) {
+  return new Promise((resolve, reject) => {
+    jwt.verify(token, publicKey, (err, decoded) => {
+      if (err) {
+        reject(err);
+      }
+      resolve(decoded);
+    });
+  });
 }
 
 module.exports = {
