@@ -1,0 +1,16 @@
+page-header {
+  header {
+    height: 50px;
+    background-color: $blue;
+    box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+    z-index: 10;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 7px 15px;
+    img {
+      height: 100%;
+    }
+  }
+}

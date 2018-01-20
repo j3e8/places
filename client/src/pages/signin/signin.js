@@ -8,7 +8,7 @@ app.controller("signinController", ["$scope", "$location", "UserService", functi
     $scope.errorMessage = null;
     UserService.authenticate($scope.username, $scope.password)
     .then(function() {
-      $location.path('/dashboard');
+      $location.path('/home');
       $scope.$apply();
     })
     .catch(function(err) {

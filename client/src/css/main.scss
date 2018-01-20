@@ -1,7 +1,10 @@
-$brand_color: #44bac9;
-$text_color: #292020;
+$brand_color: #45c5ff;
+$blue: #45c5ff;
+$purple: #d792f4;
+$green: #37f4a6;
+$yellow: #ffed48;
 
-$blue: #44bac9;
+$text_color: #292020;
 $cancel_color: #a7a9ac;
 
 html {
@@ -35,7 +38,8 @@ body * {
 }
 
 main {
-  height: 100%;
+  min-height: 100%;
+  padding-top: 50px;
 }
 
 .content {

@@ -1,6 +1,8 @@
-let url = require('url');
-let app = require('express')();
-let config = require('config');
+const url = require('url');
+const https = require('https');
+const app = require('express')();
+const config = require('config');
+const fs = require('fs');
 
 const serverConfig = config.get("server");
 
@@ -32,6 +34,11 @@ app.get('/*', function(req, res) {
   res.sendFile('src/index.html', { root: process.cwd() });
 });
 
-app.listen(serverConfig.port, () => {
+let options = {
+  cert: fs.readFileSync(config.get('https').cert),
+  key: fs.readFileSync(config.get('https').key)
+};
+let server = https.createServer(options, app)
+server.listen(serverConfig.port, () => {
   console.log(`Listening on ${url.format(serverConfig)}`);
 });

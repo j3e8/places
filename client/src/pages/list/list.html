@@ -15,10 +15,31 @@
         <section>
           <div class="content">
             <h3>Places <i class="material-icons" ng-click="showNewPlaceDialog()">add_circle</i></h3>
+
+            <ul ng-show="places.length" class="places-list">
+              <li ng-repeat="place in places">
+                <div class="flex-row spaced">
+                  <div class="flex-cell">{{ place.placeName }}</div>
+                  <div class="flex-cell fixed place-type">{{ place.placeType }}</div>
+                </div>
+              </li>
+            </ul>
           </div>
 
-          <div ng-repeat="place in places">
-            {{ place.name }}
+          <div class="content-horizontal" id="place-search">
+            <div class="flex-row spaced vertical-center">
+              <div class="flex-cell fixed">
+                <i class="material-icons">search</i>
+              </div>
+              <div class="flex-cell search-box-cell">
+                <input type="text" ng-model="placeSearch" ng-change="searchPlaces(placeSearch)">
+              </div>
+            </div>
+            <div id="place-search-results" ng-show="placeSearch && placeSearchResults.length">
+              <div class="place-search-result" ng-repeat="result in placeSearchResults" ng-click="handlePlaceResultClick(result)">
+                {{ result.placeName }}
+              </div>
+            </div>
           </div>
         </section>
       </div>
@@ -33,4 +54,4 @@
   </div>
 </div>
 
-<place-dialog show="newPlaceDialogIsDisplayed" on-save="afterPlaceSave" on-cancel="closeNewPlaceDialog"></place-dialog>
+<place-dialog ng-show="newPlaceDialogIsDisplayed" show="newPlaceDialogIsDisplayed" center="centerCoords" on-save="afterPlaceSave" on-cancel="closeNewPlaceDialog"></place-dialog>

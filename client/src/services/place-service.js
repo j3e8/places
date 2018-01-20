@@ -34,5 +34,16 @@ app.service("PlaceService", ["$http", "PLACES_SERVICE_URL", function($http, PLAC
     });
   }
 
+  PlaceService.search = function(search) {
+    return new Promise(function(resolve, reject) {
+      $http.get(PLACES_SERVICE_URL + '/place?search=' + search)
+      .then(function(response) {
+        resolve(response.data);
+      }, function(err) {
+        reject(err);
+      });
+    });
+  }
+
   return PlaceService;
 }]);

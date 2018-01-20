@@ -10,6 +10,9 @@
     .content {
       padding: 15px;
     }
+    .content-horizontal {
+      padding: 0 15px;
+    }
 
     section {
       margin: 15px 0;
@@ -22,6 +25,53 @@
         font-size: 100%;
         padding-bottom: 3px;
         cursor: pointer;
+      }
+    }
+  }
+
+  ul.places-list {
+    list-style: none;
+    margin: 15px 0 0 0;
+    padding: 0;
+    li {
+      padding: 10px 6px;
+      font-size: 15px;
+      border-top: 1px solid $blue;
+      &:last-child {
+        border-bottom: 1px solid $blue;
+      }
+      .place-type {
+        color: #888;
+        font-size: 13px;
+      }
+    }
+  }
+
+  #place-search {
+    position: relative;
+    .material-icons {
+      color: #888;
+    }
+    .search-box-cell {
+      margin-left: 0;
+    }
+    #place-search-results {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      min-width: 100%;
+      background-color: #fff;
+      box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.3);
+      .place-search-result {
+        padding: 6px 10px;
+        border-bottom: 1px solid #f0f0f0;
+        cursor: pointer;
+        &:last-child {
+          border-bottom: none;
+        }
+        &:hover {
+          background-color: #f0f0f0;
+        }
       }
     }
   }

@@ -4,6 +4,7 @@ app.directive("placeDialog", ["Shape", "MapService", "PlaceService", "$timeout",
     scope: {
       'show': '=',
       'place': '=?',
+      'center': '=',
       'onCancel': '=',
       'onSave': '='
     },
@@ -48,6 +49,12 @@ app.directive("placeDialog", ["Shape", "MapService", "PlaceService", "$timeout",
         }
       });
 
+      $scope.$watch("center", function() {
+        if (map) {
+          map.setCenter(new google.maps.LatLng($scope.center));
+        }
+      });
+
       PlaceService.loadPlaceTypes()
       .then(function(placeTypes) {
         $scope.placeTypes = placeTypes;
@@ -59,7 +66,6 @@ app.directive("placeDialog", ["Shape", "MapService", "PlaceService", "$timeout",
       });
 
       $scope.save = function() {
-        console.log("save place", $scope.place);
         var createOrUpdate = $scope.place.id ? PlaceService.update : PlaceService.create;
         createOrUpdate($scope.place)
         .then(function(place) {
@@ -89,12 +95,13 @@ app.directive("placeDialog", ["Shape", "MapService", "PlaceService", "$timeout",
       }
 
       function initMap() {
-        var coords = new google.maps.LatLng(DEFAULT_COORDS.lat, DEFAULT_COORDS.lng);
+        var coords = $scope.center || DEFAULT_COORDS;
         var zoom = DEFAULT_ZOOM;
         map = new google.maps.Map(document.getElementById('place-dialog-map'), {
-          'zoom': zoom,
-          'center': coords,
-          'mapTypeId': google.maps.MapTypeId.ROADMAP
+          zoom: zoom,
+          center: new google.maps.LatLng(coords),
+          mapTypeId: google.maps.MapTypeId.ROADMAP,
+          gestureHandling: 'greedy'
         });
 
         initDrawingManager();

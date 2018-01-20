@@ -5,6 +5,10 @@ app.config(["$routeProvider", "$locationProvider", function($routeProvider, $loc
 
   $routeProvider
   .when('/', {
+    templateUrl: '/pages/signin/signin.html',
+    controller: 'signinController'
+  })
+  .when('/home', {
     templateUrl: '/pages/home/home.html',
     controller: 'homeController'
   })
