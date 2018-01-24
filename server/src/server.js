@@ -1,11 +1,13 @@
-let url = require('url');
-let app = require('express')();
-let config = require('config');
-let cors = require('cors');
-let compression = require('compression');
-let bodyParser = require('body-parser');
+const url = require('url');
+const https = require('https');
+const app = require('express')();
+const config = require('config');
+const fs = require('fs');
+const cors = require('cors');
+const compression = require('compression');
+const bodyParser = require('body-parser');
 
-let jwtconf = config.get('jwt');
+const jwtconf = config.get('jwt');
 let jwtoptions = {
   'decodedObjectKey': '$user',
   'duration': '20m'
@@ -21,6 +23,11 @@ require('./routes/place.js')(app);
 require('./routes/user.js')(app);
 
 const serverConfig = config.get("server");
-app.listen(serverConfig.port, () => {
+let options = {
+  cert: fs.readFileSync(config.get('https').cert),
+  key: fs.readFileSync(config.get('https').key)
+};
+let server = https.createServer(options, app)
+server.listen(serverConfig.port, () => {
   console.log(`Listening on ${url.format(serverConfig)}`);
 });

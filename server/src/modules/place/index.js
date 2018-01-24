@@ -1,3 +1,4 @@
 module.exports = {
-  insertPlace: require('./insert-place')
+  insertPlace: require('./insert-place'),
+  searchPlaces: require('./search-places')
 }

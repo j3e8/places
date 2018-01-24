@@ -9,10 +9,17 @@
 
   <div class="breathe">
     <div class="tools">
-      <img src="/assets/images/pan.svg" ng-click="setDrawingMode('pan')">
-      <img src="/assets/images/marker.svg" ng-click="setDrawingMode('marker')">
-      <img src="/assets/images/polygon.svg" ng-click="setDrawingMode('polygon')">
-      <img src="/assets/images/polyline.svg" ng-click="setDrawingMode('polyline')">
+      <div class="flex-row spaced">
+        <div class="flex-cell fixed">
+          <img src="/assets/images/pan.svg" ng-click="setDrawingMode('pan')">
+          <img src="/assets/images/marker.svg" ng-click="setDrawingMode('marker')">
+          <img src="/assets/images/polygon.svg" ng-click="setDrawingMode('polygon')">
+          <img src="/assets/images/polyline.svg" ng-click="setDrawingMode('polyline')">
+        </div>
+        <div class="flex-cell">
+          <input type="text" id="gm-input" placeholder="Search">
+        </div>
+      </div>
     </div>
     <div id="place-dialog-map"></div>
   </div>

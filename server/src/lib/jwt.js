@@ -27,8 +27,7 @@ function init(pubkey, privkey, opt) {
   }
 
   JWT.requirejwt = function(req, res, next) {
-    let token = parseTokenFromHeader(req.headers.authorization);
-    verify(token)
+    JWT.decode(req.headers.authorization)
     .then((decoded) => {
       req.user = decoded.user;
       next();
@@ -39,18 +38,19 @@ function init(pubkey, privkey, opt) {
     });
   }
 
-  return JWT;
-}
-
-function verify(token) {
-  return new Promise((resolve, reject) => {
-    jwt.verify(token, publicKey, { 'algorithms': [ options.algorithm ] }, (err, decoded) => {
-      if (err) {
-        reject(err);
-      }
-      resolve(decoded);
+  JWT.decode = function(authHeader) {
+    let token = parseTokenFromHeader(authHeader);
+    return new Promise((resolve, reject) => {
+      jwt.verify(token, publicKey, { 'algorithms': [ options.algorithm ] }, (err, decoded) => {
+        if (err) {
+          reject(err);
+        }
+        resolve(decoded);
+      });
     });
-  });
+  }
+
+  return JWT;
 }
 
 function parseTokenFromHeader(header) {

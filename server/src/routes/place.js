@@ -22,6 +22,12 @@ module.exports = function(app) {
     .catch((err) => ErrorHandler.respondWithError(res, err));
   });
 
+  app.get('/api/place', function(req, res) {
+    Place.searchPlaces(req.query.search)
+    .then((result) => res.json(result))
+    .catch((err) => ErrorHandler.respondWithError(res, err));
+  });
+
   app.get('/api/placetypes', function(req, res) {
     PlaceType.listAll()
     .then((result) => res.json(result))

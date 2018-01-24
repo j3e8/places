@@ -59,7 +59,7 @@ function createUsersTable(db) {
         status enum('active','deleted') NOT NULL DEFAULT 'active',
         UNIQUE INDEX username_idx (username),
         UNIQUE INDEX email_idx (email)
-      ) ENGINE=InnoDB`,
+      ) ENGINE=InnoDB CHARACTER SET utf8 COLLATE utf8_unicode_ci`,
     function(err) {
       if (err) return reject(err);
       resolve();
@@ -79,7 +79,7 @@ function createListsTable(db) {
         FOREIGN KEY
           creator_key (creatorUserId)
           REFERENCES users (id)
-      ) ENGINE=InnoDB`,
+      ) ENGINE=InnoDB CHARACTER SET utf8 COLLATE utf8_unicode_ci`,
     function(err) {
       if (err) return reject(err);
       resolve();
@@ -109,7 +109,7 @@ function createPlacesTable(db) {
         FOREIGN KEY
           placetype_key (placeTypeId)
           REFERENCES placetypes (id)
-      ) ENGINE=InnoDB`,
+      ) ENGINE=InnoDB CHARACTER SET utf8 COLLATE utf8_unicode_ci`,
     function(err) {
       if (err) return reject(err);
       resolve();
@@ -123,7 +123,7 @@ function createPlaceTypesTable(db) {
       (
         id int NOT NULL PRIMARY KEY auto_increment,
         placeType varchar(100) NOT NULL
-      ) ENGINE=InnoDB`,
+      ) ENGINE=InnoDB CHARACTER SET utf8 COLLATE utf8_unicode_ci`,
     function(err) {
       if (err) return reject(err);
       resolve();
@@ -167,7 +167,7 @@ function createListPlacesTable(db) {
           place_key (placeId)
           REFERENCES places (id)
           ON DELETE CASCADE
-      ) ENGINE=InnoDB`,
+      ) ENGINE=InnoDB CHARACTER SET utf8 COLLATE utf8_unicode_ci`,
     function(err) {
       if (err) return reject(err);
       resolve();
@@ -191,7 +191,7 @@ function createUserListsTable(db) {
           list_key (listId)
           REFERENCES lists (id)
           ON DELETE CASCADE
-      ) ENGINE=InnoDB`,
+      ) ENGINE=InnoDB CHARACTER SET utf8 COLLATE utf8_unicode_ci`,
     function(err) {
       if (err) return reject(err);
       resolve();
@@ -215,7 +215,7 @@ function createUserPlacesTable(db) {
           place_key (placeId)
           REFERENCES places (id)
           ON DELETE CASCADE
-      ) ENGINE=InnoDB`,
+      ) ENGINE=InnoDB CHARACTER SET utf8 COLLATE utf8_unicode_ci`,
     function(err) {
       if (err) return reject(err);
       resolve();

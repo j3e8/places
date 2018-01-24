@@ -13,7 +13,7 @@ place-dialog {
   }
 
   .tools {
-    vertical-align: middle;
+    padding: 2px 0 8px 0;
     img {
       width: 25px;
       height: auto;
@@ -25,6 +25,9 @@ place-dialog {
       &:hover {
         background-color: rgba(68, 186, 201, 0.2);
       }
+    }
+    #gm-input {
+      padding: 4px 8px;
     }
   }
 }

@@ -18,5 +18,9 @@ module.exports = function(user, place) {
     'creatorUserId': user.id
   }
   console.log('insert into places set', obj);
-  return db.query(`INSERT INTO places SET ?`, obj);
+  return db.query(`INSERT INTO places SET ?`, obj)
+  .then((result) => {
+    obj.id = result.insertId;
+    return Promise.resolve(obj);
+  });
 }

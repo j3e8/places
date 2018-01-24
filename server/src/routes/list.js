@@ -4,13 +4,13 @@ const ErrorHandler = require('../lib/error-handler');
 
 module.exports = function(app) {
   app.post('/api/list', jwt.requirejwt, function(req, res) {
-    List.createList(req.body)
+    List.createList(req.user, req.body)
     .then((result) => res.json(result))
     .catch((err) => ErrorHandler.respondWithError(res, err));
   });
 
   app.put('/api/list/:listId', jwt.requirejwt, function(req, res) {
-    List.updateList(req.params.listId, req.body)
+    List.updateList(req.user, req.params.listId, req.body)
     .then((result) => res.json(result))
     .catch((err) => ErrorHandler.respondWithError(res, err));
   });

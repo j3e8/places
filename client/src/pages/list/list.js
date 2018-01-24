@@ -5,11 +5,13 @@ app.controller("listController", ["$scope", "MapService", "PlaceService", "$time
   var map;
   var drawingManager;
 
-  $scope.centerCoords = null;
   var DEFAULT_COORDS = { lat: 39.5464, lng: -97.3296 };
   var DEFAULT_ZOOM = 4;
   var SPECIFIC_ZOOM = 7;
   var shapeList = [];
+
+  $scope.centerCoords = DEFAULT_COORDS;
+  $scope.zoom = DEFAULT_ZOOM;
 
   MapService.load()
   .then(function() {
@@ -38,6 +40,7 @@ app.controller("listController", ["$scope", "MapService", "PlaceService", "$time
   $scope.showNewPlaceDialog = function() {
     var latlng = map.getCenter();
     $scope.centerCoords = { lat: latlng.lat(), lng: latlng.lng() };
+    $scope.zoom = map.getZoom();
     $scope.newPlaceDialogIsDisplayed = true;
   }
 
@@ -62,14 +65,13 @@ app.controller("listController", ["$scope", "MapService", "PlaceService", "$time
   }
 
   function initMap() {
-    var coords = $scope.centerCoords || DEFAULT_COORDS;
-    var zoom = $scope.centerCoords ? SPECIFIC_ZOOM : DEFAULT_ZOOM;
     map = new google.maps.Map(document.getElementById('list-map'), {
-      zoom: zoom,
-      center: new google.maps.LatLng(coords),
+      zoom: $scope.zoom,
+      center: new google.maps.LatLng($scope.centerCoords),
       mapTypeId: 'roadmap',
       gestureHandling: 'greedy'
     });
+    map.setOptions({ styles: CUSTOM_MAP_STYLES });
 
     // initializeShapeList();
   }
