@@ -20,6 +20,10 @@
 .flex-column.spaced {
 	margin:-10px;
 }
+.flex-row.mini-spaced,
+.flex-column.mini-spaced {
+	margin:-5px;
+}
 .vertical-center,
 .horizontal-center {
 	align-items:center;
@@ -37,15 +41,27 @@
 	.flex-column.spaced {
 		margin:-5px;
 	}
+  .flex-row.mini-spaced,
+	.flex-column.mini-spaced {
+		margin:-3px;
+	}
 }
 .flex-row.spaced > .flex-cell,
 .flex-column.spaced > .flex-cell {
 	margin:10px;
 }
+.flex-row.mini-spaced > .flex-cell,
+.flex-column.mini-spaced > .flex-cell {
+	margin:5px;
+}
 @media screen and (max-width:640px) {
 	.flex-row.spaced > .flex-cell,
 	.flex-column.spaced > .flex-cell {
 		margin:5px;
+	}
+  .flex-row.mini-spaced > .flex-cell,
+	.flex-column.mini-spaced > .flex-cell {
+		margin:3px;
 	}
 }
 .flex-row.wrap,
@@ -272,4 +288,103 @@
 	-webkit-flex:0 0 calc(100% - 20px);
 	-moz-flex:0 0 calc(100% - 20px);
 	-ms-flex:0 0 calc(100% - 20px);
+}
+
+.flex-row.mini-spaced > .flex-cell.fixed10,
+.flex-column.mini-spaced > .flex-cell.fixed10 {
+	flex:0 0 calc(10% - 10px);
+	-webkit-flex:0 0 calc(10% - 10px);
+	-moz-flex:0 0 calc(10% - 10px);
+	-ms-flex:0 0 calc(10% - 10px);
+}
+.flex-row.mini-spaced > .flex-cell.fixed20,
+.flex-column.mini-spaced > .flex-cell.fixed20 {
+	flex:0 0 calc(20% - 10px);
+	-webkit-flex:0 0 calc(20% - 10px);
+	-moz-flex:0 0 calc(20% - 10px);
+	-ms-flex:0 0 calc(20% - 10px);
+}
+.flex-row.mini-spaced > .flex-cell.fixed25,
+.flex-column.mini-spaced > .flex-cell.fixed25 {
+	flex:0 0 calc(25% - 10px);
+	-webkit-flex:0 0 calc(25% - 10px);
+	-moz-flex:0 0 calc(25% - 10px);
+	-ms-flex:0 0 calc(25% - 10px);
+}
+.flex-row.mini-spaced > .flex-cell.fixed30,
+.flex-column.mini-spaced > .flex-cell.fixed30 {
+	flex:0 0 calc(30% - 10px);
+	-webkit-flex:0 0 calc(30% - 10px);
+	-moz-flex:0 0 calc(30% - 10px);
+	-ms-flex:0 0 calc(30% - 10px);
+}
+.flex-row.mini-spaced > .flex-cell.fixed33,
+.flex-column.mini-spaced > .flex-cell.fixed33 {
+	flex:0 0 calc(33.3% - 10px);
+	-webkit-flex:0 0 calc(33.3% - 10px);
+	-moz-flex:0 0 calc(33.3% - 10px);
+	-ms-flex:0 0 calc(33.3% - 10px);
+}
+.flex-row.mini-spaced > .flex-cell.fixed40,
+.flex-column.mini-spaced > .flex-cell.fixed40 {
+	flex:0 0 calc(40% - 10px);
+	-webkit-flex:0 0 calc(40% - 10px);
+	-moz-flex:0 0 calc(40% - 10px);
+	-ms-flex:0 0 calc(40% - 10px);
+}
+.flex-row.mini-spaced > .flex-cell.fixed50,
+.flex-column.mini-spaced > .flex-cell.fixed50 {
+	flex:0 0 calc(50% - 10px);
+	-webkit-flex:0 0 calc(50% - 10px);
+	-moz-flex:0 0 calc(50% - 10px);
+	-ms-flex:0 0 calc(50% - 10px);
+}
+.flex-row.mini-spaced > .flex-cell.fixed60,
+.flex-column.mini-spaced > .flex-cell.fixed60 {
+	flex:0 0 calc(60% - 10px);
+	-webkit-flex:0 0 calc(60% - 10px);
+	-moz-flex:0 0 calc(60% - 10px);
+	-ms-flex:0 0 calc(60% - 10px);
+}
+.flex-row.mini-spaced > .flex-cell.fixed66,
+.flex-column.mini-spaced > .flex-cell.fixed66 {
+	flex:0 0 calc(66.6% - 10px);
+	-webkit-flex:0 0 calc(66.6% - 10px);
+	-moz-flex:0 0 calc(66.6% - 10px);
+	-ms-flex:0 0 calc(66.6% - 10px);
+}
+.flex-row.mini-spaced > .flex-cell.fixed70,
+.flex-column.mini-spaced > .flex-cell.fixed70 {
+	flex:0 0 calc(70% - 10px);
+	-webkit-flex:0 0 calc(70% - 10px);
+	-moz-flex:0 0 calc(70% - 10px);
+	-ms-flex:0 0 calc(70% - 10px);
+}
+.flex-row.mini-spaced > .flex-cell.fixed75,
+.flex-column.mini-spaced > .flex-cell.fixed75 {
+	flex:0 0 calc(75% - 10px);
+	-webkit-flex:0 0 calc(75% - 10px);
+	-moz-flex:0 0 calc(75% - 10px);
+	-ms-flex:0 0 calc(75% - 10px);
+}
+.flex-row.mini-spaced > .flex-cell.fixed80,
+.flex-column.mini-spaced > .flex-cell.fixed80 {
+	flex:0 0 calc(80% - 10px);
+	-webkit-flex:0 0 calc(80% - 10px);
+	-moz-flex:0 0 calc(80% - 10px);
+	-ms-flex:0 0 calc(80% - 10px);
+}
+.flex-row.mini-spaced > .flex-cell.fixed90,
+.flex-column.mini-spaced > .flex-cell.fixed90 {
+	flex:0 0 calc(90% - 10px);
+	-webkit-flex:0 0 calc(90% - 10px);
+	-moz-flex:0 0 calc(90% - 10px);
+	-ms-flex:0 0 calc(90% - 10px);
+}
+.flex-row.mini-spaced .flex-cell.fixed100,
+.flex-column.mini-spaced > .flex-cell.fixed100 {
+	flex:0 0 calc(100% - 10px);
+	-webkit-flex:0 0 calc(100% - 10px);
+	-moz-flex:0 0 calc(100% - 10px);
+	-ms-flex:0 0 calc(100% - 10px);
 }

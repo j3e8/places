@@ -50,6 +50,9 @@ page-header {
             color: #fff;
             display: block;
             font-size: 16px;
+            &:hover {
+              background-color: rgba(255, 255, 255, 0.08);
+            }
           }
         }
       }

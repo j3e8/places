@@ -20,4 +20,10 @@ module.exports = function(app) {
     .then((result) => res.json(result))
     .catch((err) => ErrorHandler.respondWithError(res, err));
   });
+
+  app.get('/api/user/:userId/lists', function(req, res) {
+    List.getListsForUser(req.params.userId)
+    .then((result) => res.json(result))
+    .catch((err) => ErrorHandler.respondWithError(res, err));
+  });
 }

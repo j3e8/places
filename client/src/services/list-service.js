@@ -23,6 +23,17 @@ app.service("ListService", ["$http", "PLACES_SERVICE_URL", function($http, PLACE
     });
   }
 
+  ListService.getListsForUser = function(userId) {
+    return new Promise(function(resolve, reject) {
+      $http.get(PLACES_SERVICE_URL + '/user/' + userId + '/lists')
+      .then(function(response) {
+        resolve(response.data);
+      }, function(err) {
+        reject(err);
+      });
+    });
+  }
+
   ListService.update = function(listId, list) {
     return new Promise(function(resolve, reject) {
       $http.put(PLACES_SERVICE_URL + '/list/' + listId, list)

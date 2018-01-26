@@ -16,9 +16,13 @@ app.config(["$routeProvider", "$locationProvider", function($routeProvider, $loc
     templateUrl: '/pages/admin/dashboard/dashboard.html',
     controller: 'adminDashboardController'
   })
-  .when('/list', {
-    templateUrl: '/pages/list/list.html',
-    controller: 'listController'
+  .when('/list/new', {
+    templateUrl: '/pages/edit-list/edit-list.html',
+    controller: 'editListController'
+  })
+  .when('/list/:listId/edit', {
+    templateUrl: '/pages/edit-list/edit-list.html',
+    controller: 'editListController'
   })
   .when('/list/:listId', {
     templateUrl: '/pages/list/list.html',
