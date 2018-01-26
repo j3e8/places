@@ -1,11 +1,16 @@
 module.exports = function(listId, userId, data) {
-  if (!data || !userId) {
+  if (!data) {
     return null;
   }
-  return {
-    id: listId || undefined,
-    creatorUserId: userId || undefined,
+  let obj = {
     listName: data.listName || undefined,
     description: data.description || undefined
   }
+  if (listId) {
+    obj.id = listId;
+  }
+  if (userId) {
+    obj.creatorUserId = userId;
+  }
+  return obj;
 }

@@ -1,3 +1,17 @@
 <header>
-  <img src="/assets/logo-white.svg" title="Kulana">
+  <div class="flex-row">
+    <div class="flex-cell">
+      <img src="/assets/logo-white.svg" title="Kulana">
+    </div>
+    <div class="flex-cell text-right">
+      <i class="material-icons menu-icon clickable" ng-click="toggleMenu()">menu</i>
+    </div>
+  </div>
+  <nav class="main-menu" ng-class="{ 'open': isMenuDisplayed, 'closed': isMenuDisplayed === false }">
+    <ul>
+      <li><a ng-href="/home">Home</a></li>
+      <li><a ng-href="/lists">My Lists</a></li>
+      <li><a ng-href="/profile">My Profile</a></li>
+    </ul>
+  </nav>
 </header>

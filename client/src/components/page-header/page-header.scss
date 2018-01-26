@@ -9,8 +9,75 @@ page-header {
     left: 0;
     right: 0;
     padding: 7px 15px;
-    img {
+
+    & > div.flex-row {
       height: 100%;
+      img {
+        height: 100%;
+      }
+      i.material-icons.menu-icon {
+        color: #fff;
+        font-size: 36px;
+        position: relative;
+        z-index: 11;
+      }
     }
+
+    nav.main-menu {
+      position: absolute;
+      top: 0;
+      right: 0;
+      z-index: 10;
+      box-shadow: -1px 1px 7px 1px rgba(0, 0, 0, 0.3);
+      padding-top: 50px;
+      width: 0;
+      opacity: 0;
+
+      ul {
+        background-color: #45c5ff;
+        margin: 0;
+        padding: 0;
+        li {
+          display: block;
+          text-align: left;
+          white-space: nowrap;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+          &:last-child {
+            border-bottom: none;
+          }
+          a {
+            padding: 10px 20px;
+            color: #fff;
+            display: block;
+            font-size: 16px;
+          }
+        }
+      }
+    }
+
+    nav.main-menu.open {
+      animation: slide-in 0.5s ease;
+      animation-fill-mode: forwards;
+      -webkit-animation: slide-in 0.5s ease;
+      -webkit-animation-fill-mode: forwards;
+    }
+
+    nav.main-menu.closed {
+      animation: slide-out 0.5s ease;
+      animation-fill-mode: forwards;
+      -webkit-animation: slide-out 0.5s ease;
+      -webkit-animation-fill-mode: forwards;
+    }
+
   }
+
+  @keyframes slide-in {
+    from { width: 0; opacity: 0; }
+    to { width: 70%; opacity: 1; }
+  }
+  @keyframes slide-out {
+    from { width: 70%; opacity: 1; }
+    to { width: 0; opacity: 0; }
+  }
+
 }

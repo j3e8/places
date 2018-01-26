@@ -1,6 +1,9 @@
-app.controller("listController", ["$scope", "MapService", "PlaceService", "$timeout", function($scope, MapService, PlaceService, $timeout) {
-  $scope.places = [];
+app.controller("listController", ["$scope", "$routeParams", "MapService", "PlaceService", "ListService", "alert", "$timeout", "$location",
+function($scope, $routeParams, MapService, PlaceService, ListService, alert, $timeout, $location) {
   $scope.newPlaceDialogIsDisplayed = undefined;
+  $scope.list = {
+    places: []
+  };
 
   var map;
   var drawingManager;
@@ -16,6 +19,21 @@ app.controller("listController", ["$scope", "MapService", "PlaceService", "$time
   MapService.load()
   .then(function() {
     initMap();
+    if ($routeParams.listId) {
+      ListService.get($routeParams.listId)
+      .then(function(list) {
+        $scope.list = list;
+        $scope.list.places.forEach(function(place) {
+          addPlaceToMap(place);
+        });
+        setMapToContainPlaces();
+        $scope.$apply();
+      })
+      .catch(function(err) {
+        console.error("Couldn't load list", err);
+        $scope.$apply();
+      });
+    }
   })
   .catch(function(err) {
     console.error(err);
@@ -24,17 +42,16 @@ app.controller("listController", ["$scope", "MapService", "PlaceService", "$time
   var searchTimeout = null;
   $scope.searchPlaces = function(str) {
     $timeout.cancel(searchTimeout);
-    $timeout(function() {
+    searchTimeout = $timeout(function() {
       PlaceService.search(str)
       .then(function(places) {
         $scope.placeSearchResults = places;
         $scope.$apply();
       })
       .catch(function(err) {
-        console.error(err);
         $scope.$apply();
       });
-    }, 200);
+    }, 300);
   }
 
   $scope.showNewPlaceDialog = function() {
@@ -55,13 +72,61 @@ app.controller("listController", ["$scope", "MapService", "PlaceService", "$time
   }
 
   $scope.addPlaceToList = function(place) {
-    $scope.places.push(place);
+    $scope.list.places.push(place);
     addPlaceToMap(place);
-    // TODO: reset bounds of map to contain all places
+    setMapToContainPlaces();
   }
 
   $scope.closeNewPlaceDialog = function() {
     $scope.newPlaceDialogIsDisplayed = false;
+  }
+
+  $scope.saveList = function() {
+    $scope.saveError = null;
+    if (!$scope.list.listName) {
+      $scope.saveError = "You must provide a list name";
+      return;
+    }
+    if (!$scope.list.places.length) {
+      $scope.saveError = "You must add at least one place before saving";
+      return;
+    }
+    $scope.isSaving = true;
+    createOrUpdate()
+    .then(function(list) {
+      $scope.isSaving = false;
+      if (list.id && !$scope.list.id) {
+        $location.path('/list/' + list.id);
+      }
+      else {
+        $scope.list = list;
+      }
+      $scope.$apply();
+    })
+    .catch(function(error) {
+      $scope.isSaving = false;
+      alert("There was a problem saving your list. Try again later.", true);
+      console.error(error);
+      $scope.$apply();
+    });
+  }
+
+  $scope.cancelList = function() {
+    $location.path('/home');
+  }
+
+  function createOrUpdate() {
+    var list = Object.assign({}, $scope.list);
+    list.places = list.places.map(function(place) {
+      return { id: place.id };
+    });
+    if ($scope.list.id) {
+      return ListService.update(list.id, list);
+    }
+    else {
+      console.log('create', list);
+      return ListService.create(list);
+    }
   }
 
   function initMap() {
@@ -81,7 +146,7 @@ app.controller("listController", ["$scope", "MapService", "PlaceService", "$time
     loadShapeList();
     shapeList.push(shape);
     var savableShapeList = shapeList.map(function(sh) {
-      let obj = Object.assign({}, sh);
+      var obj = Object.assign({}, sh);
       delete obj.gmObject;
       return obj;
     });
@@ -153,6 +218,18 @@ app.controller("listController", ["$scope", "MapService", "PlaceService", "$time
       // google.maps.event.addListener(gmObject, "click", shapeClick);
       place.gmObject = gmObject;
     }
+  }
+
+  function setMapToContainPlaces() {
+    var listBounds = ListService.calculateBounds($scope.list);
+    // var avgLat = (bounds.minLat + bounds.maxLat) / 2;
+    // var avgLng = (bounds.minLng + bounds.maxLng) / 2;
+    // map.setCenter(new google.maps.LatLng({ lat: avgLat, lng: avgLng }));
+
+    var bounds = new google.maps.LatLngBounds();
+    bounds.extend({ lat: listBounds.minLat, lng: listBounds.minLng });
+    bounds.extend({ lat: listBounds.maxLat, lng: listBounds.maxLng });
+    map.fitBounds(bounds);
   }
 
 }]);

@@ -6,7 +6,7 @@ module.exports = function(user, requestBody) {
   .then((l) => {
     listId = l.id;
     if (requestBody.places) {
-      return ListModule.addPlacesToList(list.id, requestBody.places);
+      return ListModule.addPlacesToList(listId, requestBody.places);
     }
   })
   .then(() => ListModule.getList(listId));

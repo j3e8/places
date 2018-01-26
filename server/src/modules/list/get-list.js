@@ -1,4 +1,5 @@
-let db = require('../../connections/db');
+const db = require('../../connections/db');
+const getPlacesOnList = require('./get-places-on-list');
 
 module.exports = function(listId) {
   let list;
@@ -11,7 +12,7 @@ module.exports = function(listId) {
   .then((rows) => {
     if (rows && rows.length) {
       list = rows[0];
-      return ListModule.getPlacesOnList(listId)
+      return getPlacesOnList(listId)
       .then((places) => {
         list.places = places;
         return Promise.resolve(list);

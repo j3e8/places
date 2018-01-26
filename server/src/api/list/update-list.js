@@ -4,7 +4,8 @@ module.exports = function(user, listId, requestBody) {
   return ListModule.updateList(listId, requestBody)
   .then(() => {
     if (requestBody.places) {
-      return ListModule.deleteOtherPlacesFromList(listId, requestBody.places);
+      return ListModule.deleteOtherPlacesFromList(listId, requestBody.places)
+      .then(() => ListModule.addPlacesToList(listId, requestBody.places));
     }
   })
   .then(() => ListModule.getList(listId));

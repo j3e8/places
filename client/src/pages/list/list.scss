@@ -1,4 +1,18 @@
 .new-list-page {
+  h1 {
+    input[type=text] {
+      border: 1px solid #e0e0e0;
+      padding: 5px;
+      margin: 0;
+      font-size: 21px;
+    }
+  }
+  textarea {
+    border: 1px solid #e0e0e0;
+    padding: 5px;
+    margin: 3px 0 0 0;
+  }
+
   .map-cell {
     background-color: #f0f0f0;
   }
@@ -14,10 +28,6 @@
       padding: 0 15px;
     }
 
-    section {
-      margin: 15px 0;
-    }
-
     h3 {
       i.material-icons {
         vertical-align: middle;
@@ -27,34 +37,43 @@
         cursor: pointer;
       }
     }
-  }
 
-  ul.places-list {
-    list-style: none;
-    margin: 15px 0 0 0;
-    padding: 0;
-    li {
-      padding: 10px 6px;
-      font-size: 15px;
-      border-top: 1px solid $blue;
-      &:last-child {
-        border-bottom: 1px solid $blue;
+    .place-list {
+      overflow-y: scroll;
+      & > .content {
+        padding-top: 0;
       }
-      .place-type {
-        color: #888;
-        font-size: 13px;
+      ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        li {
+          padding: 10px 6px;
+          font-size: 15px;
+          border-top: 1px solid $blue;
+          &:last-child {
+            border-bottom: 1px solid $blue;
+          }
+          .place-type {
+            color: #888;
+            font-size: 13px;
+          }
+        }
       }
     }
+
   }
 
   #place-search {
     position: relative;
-    .material-icons {
-      color: #888;
+    #search-box {
+      background-image: url(/assets/images/search.svg);
+      background-repeat: no-repeat;
+      background-position: 4px center;
+      background-size: auto 19px;
+      padding-left: 30px;
     }
-    .search-box-cell {
-      margin-left: 0;
-    }
+
     #place-search-results {
       position: absolute;
       top: 100%;
@@ -75,4 +94,10 @@
       }
     }
   }
+
+  #save-buttons {
+    background-color: $brand_color;
+    color: #fff;
+  }
+
 }

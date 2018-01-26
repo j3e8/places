@@ -1,0 +1,54 @@
+alert-popup {
+  .alert-popup {
+    position: fixed;
+    top: 10px;
+    left: 50%;
+    border-radius: 5px;
+    background-color: rgba(255, 234, 194, 0.9);
+    padding: 20px;
+    display: none;
+    color: #000;
+    box-shadow: 1px 3px 6px 0 rgba(0, 0, 0, 0.3);
+    margin-left: -200px;
+    width: 400px;
+    z-index: 100;
+    @media (max-width: 414px) {
+      width: 300px;
+      margin-left: -150px;
+    }
+
+    &.error {
+      background-color: rgba(214, 56, 79, 0.9);
+      color: #fff;
+      font-weight: 500;
+    }
+
+    &.open {
+      display: block;
+      animation: fadein 0.3s ease;
+      animation-fill-mode: forwards;
+    }
+    &.closed {
+      display: none;
+      animation: fadeout 0.5s ease;
+      animation-fill-mode: forwards;
+    }
+
+    @keyframes fadein {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @-webkit-keyframes fadein {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes fadeout {
+      from { opacity: 1; }
+      to { opacity: 0; }
+    }
+    @-webkit-keyframes fadeout {
+      from { opacity: 1; }
+      to { opacity: 0; }
+    }
+  }
+}
