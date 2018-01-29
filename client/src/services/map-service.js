@@ -33,10 +33,18 @@ app.service("MapService", ["$rootScope", function($rootScope) {
     var gmObject;
     switch(place.shapeType) {
       case 'point':
+        var icon = {
+          url: place.isChecked ? '/assets/images/marker-been-there.png' : '/assets/images/marker.png',
+          size: new google.maps.Size(44, 60),
+          origin: new google.maps.Point(0, 0),
+          anchor: new google.maps.Point(11, 29),
+          scaledSize: new google.maps.Size(22, 30)
+        }
         gmObject = new google.maps.Marker({
           shapeId: place.id,
           position: new google.maps.LatLng(place.shapeData.lat, place.shapeData.lng),
           title: place.placeName,
+          icon: icon,
           map: map
         });
         break;
@@ -44,11 +52,11 @@ app.service("MapService", ["$rootScope", function($rootScope) {
         gmObject = new google.maps.Polygon({
           shapeId: place.id,
           paths: place.shapeData,
-          strokeColor: '#ff0000',
+          strokeColor: place.isChecked ? '#2fb0dd' : '#c67788',
           strokeOpacity: 0.8,
           strokeWeight: 2,
-          fillColor: '#ff0000',
-          fillOpacity: 0.35,
+          fillColor: place.isChecked ? '#45c5ff' : '#ef8f9f',
+          fillOpacity: 0.4,
           map: map
         });
         break;
@@ -68,6 +76,28 @@ app.service("MapService", ["$rootScope", function($rootScope) {
     map.fitBounds(bounds);
   }
 
+  MapService.updatePlaceOnMap = function(map, place) {
+    if (!place || !place.gmObject) {
+      return;
+    }
+    switch(place.shapeType) {
+      case 'point':
+        var icon = {
+          url: place.isChecked ? '/assets/images/marker-been-there.png' : '/assets/images/marker.png',
+          size: new google.maps.Size(44, 60),
+          origin: new google.maps.Point(0, 0),
+          anchor: new google.maps.Point(11, 29),
+          scaledSize: new google.maps.Size(22, 30)
+        }
+        place.gmObject.setIcon(icon);
+        break;
+      case 'polygon':
+        place.gmObject.setStrokeColor(place.isChecked ? '#2fb0dd' : '#c67788');
+        place.gmObject.setFillColor(place.isChecked ? '#45c5ff' : '#ef8f9f');
+        break;
+      default: break;
+    }
+  }
 
   return MapService;
 }]);

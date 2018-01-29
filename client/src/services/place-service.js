@@ -23,6 +23,17 @@ app.service("PlaceService", ["$http", "PLACES_SERVICE_URL", function($http, PLAC
     });
   }
 
+  PlaceService.updateUserPlace = function(userId, place) {
+    return new Promise(function(resolve, reject) {
+      $http.put(PLACES_SERVICE_URL + '/user/' + userId + '/place/' + place.id, place)
+      .then(function(response) {
+        resolve(response.data);
+      }, function(err) {
+        reject(err);
+      });
+    });
+  }
+
   PlaceService.loadPlaceTypes = function() {
     return new Promise(function(resolve, reject) {
       $http.get(PLACES_SERVICE_URL + '/placetypes')

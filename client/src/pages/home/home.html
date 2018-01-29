@@ -1,9 +1,19 @@
 <div class="home-page">
   <div class="content">
+    <h1>Lists I follow <a ng-href="/list/new"><i class="material-icons">add_circle</i></a></h1>
+
+    <div>
+      <div ng-repeat="list in followedLists" class="list">
+        <a class="list-name" ng-href="/list/{{ list.id }}">{{ list.listName }}</a> <span class="list-number-of-places">{{ list.numberOfPlaces }} places</span>
+        <div class="list-description">{{ list.description }}</div>
+      </div>
+    </div>
+
+
     <h1>My Lists <a ng-href="/list/new"><i class="material-icons">add_circle</i></a></h1>
 
     <div>
-      <div ng-repeat="list in lists" class="list">
+      <div ng-repeat="list in createdLists" class="list">
         <a class="list-name" ng-href="/list/{{ list.id }}">{{ list.listName }}</a> <span class="list-number-of-places">{{ list.numberOfPlaces }} places</span>
         <div class="list-description">{{ list.description }}</div>
       </div>

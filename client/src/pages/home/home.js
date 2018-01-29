@@ -1,10 +1,11 @@
 app.controller("homeController", ["$scope", "ListService", "UserService", function($scope, ListService, UserService) {
   $scope.user = UserService.getUser();
-  $scope.lists = [];
+  $scope.followedLists = [];
+  $scope.createdLists = [];
 
   ListService.getListsForUser($scope.user.id)
-  .then(function(lists) {
-    $scope.lists = lists;
+  .then(function(createdLists) {
+    $scope.createdLists = createdLists;
     $scope.$apply();
   })
   .catch(function(err) {

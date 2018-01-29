@@ -1,6 +1,8 @@
-app.controller("listController", ["$scope", "$routeParams", "MapService", "PlaceService", "ListService", "alert", "$timeout", "$location",
-function($scope, $routeParams, MapService, PlaceService, ListService, alert, $timeout, $location) {
+app.controller("listController", ["$scope", "$routeParams", "MapService", "PlaceService", "ListService", "UserService", "alert", "$timeout", "$location",
+function($scope, $routeParams, MapService, PlaceService, ListService, UserService, alert, $timeout, $location) {
   var map;
+
+  var user = UserService.getUser();
 
   MapService.load()
   .then(function() {
@@ -23,6 +25,23 @@ function($scope, $routeParams, MapService, PlaceService, ListService, alert, $ti
   .catch(function(err) {
     console.error(err);
   });
+
+  $scope.handleCheckboxClick = function(place) {
+    var p = Object.assign({}, place);
+    p.gmObject = undefined;
+    if (!p.isChecked) {
+      p.dateChecked = undefined;
+    }
+    PlaceService.updateUserPlace(user.id, p)
+    .then(function(p) {
+      place.dateChecked = p.dateChecked;
+      MapService.updatePlaceOnMap(map, place);
+      $scope.$apply();
+    })
+    .catch(function(err) {
+      $scope.$apply();
+    });
+  }
 
   function initMap() {
     map = new google.maps.Map(document.getElementById('list-map'), {
