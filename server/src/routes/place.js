@@ -11,7 +11,13 @@ module.exports = function(app) {
   });
 
   app.put('/api/place/:placeId', jwt.requirejwt, function(req, res) {
-    Place.updatePlace(req.params.placeId, req.body)
+    Place.updatePlace(req.user, req.params.placeId, req.body)
+    .then((result) => res.json(result))
+    .catch((err) => ErrorHandler.respondWithError(res, err));
+  });
+
+  app.put('/api/user/:userId/place/:placeId', jwt.requirejwt, function(req, res) {
+    Place.updateUserPlace(req.user, req.params.userId, req.params.placeId, req.body)
     .then((result) => res.json(result))
     .catch((err) => ErrorHandler.respondWithError(res, err));
   });

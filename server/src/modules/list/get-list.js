@@ -1,7 +1,7 @@
 const db = require('../../connections/db');
 const getPlacesOnList = require('./get-places-on-list');
 
-module.exports = function(listId) {
+module.exports = function(listId, userId) {
   let list;
   let _listId = db.escape(listId);
   return db.query(`SELECT l.id, l.listName, l.description, l.dateCreated, l.dateModified,
@@ -12,7 +12,7 @@ module.exports = function(listId) {
   .then((rows) => {
     if (rows && rows.length) {
       list = rows[0];
-      return getPlacesOnList(listId)
+      return getPlacesOnList(listId, userId)
       .then((places) => {
         list.places = places;
         return Promise.resolve(list);

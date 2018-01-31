@@ -15,14 +15,14 @@ module.exports = function(app) {
     .catch((err) => ErrorHandler.respondWithError(res, err));
   });
 
-  app.get('/api/list/:listId', function(req, res) {
-    List.getList(req.params.listId)
+  app.get('/api/list/:listId', jwt.optionaljwt, function(req, res) {
+    List.getList(req.params.listId, req.user)
     .then((result) => res.json(result))
     .catch((err) => ErrorHandler.respondWithError(res, err));
   });
 
   app.get('/api/user/:userId/lists', function(req, res) {
-    List.getListsForUser(req.params.userId)
+    List.getListsCreatedByUser(req.params.userId)
     .then((result) => res.json(result))
     .catch((err) => ErrorHandler.respondWithError(res, err));
   });

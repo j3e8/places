@@ -38,6 +38,17 @@ function init(pubkey, privkey, opt) {
     });
   }
 
+  JWT.optionaljwt = function(req, res, next) {
+    JWT.decode(req.headers.authorization)
+    .then((decoded) => {
+      req.user = decoded.user;
+      next();
+    })
+    .catch((err) => {
+      next();
+    });
+  }
+
   JWT.decode = function(authHeader) {
     let token = parseTokenFromHeader(authHeader);
     return new Promise((resolve, reject) => {

@@ -1,5 +1,5 @@
 const PlaceModule = require('../../modules/place');
 
-module.exports = function(placeId, requestBody) {
-  return PlaceModule.updatePlace(placeId, requestBody);
+module.exports = function(user, placeId, requestBody) {
+  return PlaceModule.updatePlace(user, placeId, requestBody);
 }
