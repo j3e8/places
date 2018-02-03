@@ -21,8 +21,32 @@ module.exports = function(app) {
     .catch((err) => ErrorHandler.respondWithError(res, err));
   });
 
-  app.get('/api/user/:userId/lists', function(req, res) {
+  app.post('/api/user/:userId/list/:listId', jwt.requirejwt, function(req, res) {
+    List.followList(req.user, req.params.userId, req.params.listId)
+    .then((result) => res.json(result))
+    .catch((err) => ErrorHandler.respondWithError(res, err));
+  });
+
+  app.delete('/api/user/:userId/list/:listId', jwt.requirejwt, function(req, res) {
+    List.unfollowList(req.user, req.params.userId, req.params.listId)
+    .then((result) => res.json(result))
+    .catch((err) => ErrorHandler.respondWithError(res, err));
+  });
+
+  app.get('/api/user/:userId/lists/created', function(req, res) {
     List.getListsCreatedByUser(req.params.userId)
+    .then((result) => res.json(result))
+    .catch((err) => ErrorHandler.respondWithError(res, err));
+  });
+
+  app.get('/api/user/:userId/lists/followed', function(req, res) {
+    List.getListsFollowedByUser(req.params.userId)
+    .then((result) => res.json(result))
+    .catch((err) => ErrorHandler.respondWithError(res, err));
+  });
+
+  app.get('/api/lists/popular', jwt.optionaljwt, function(req, res) {
+    List.getPopularLists(req.user)
     .then((result) => res.json(result))
     .catch((err) => ErrorHandler.respondWithError(res, err));
   });
