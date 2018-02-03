@@ -1,10 +1,20 @@
 <div class="flex-column list-page">
   <div class="flex-cell fixed list-info">
-    <h1>{{ list.listName }}</h1>
-    <div>{{ list.description }}</div>
-    <div class="gap">
-      <input id="followed" type="checkbox" ng-model="list.isFollowed" ng-change="handleFollowChange(list)"> <label for="followed">Follow this list</label>
+    <div class="flex-row">
+      <div class="flex-cell">
+        <h1>{{ list.listName }}</h1>
+      </div>
+      <div class="flex-cell fixed subtle text-right">
+        <span class="highlight">{{ list.numberOfFollowers }}</span>
+        <span ng-show="list.numberOfFollowers == 1">follower</span>
+        <span ng-show="list.numberOfFollowers != 1">followers</span>
+        <div class="gap">
+          <button ng-click="handleFollowChange()" ng-show="!list.isFollowed">Follow</button>
+          <button ng-click="handleFollowChange()" class="cancel" ng-show="list.isFollowed">Unfollow</button>
+        </div>
+      </div>
     </div>
+    <div>{{ list.description }}</div>
   </div>
 
   <div class="flex-cell content-fill-height">

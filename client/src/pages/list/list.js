@@ -26,13 +26,15 @@ function($scope, $routeParams, MapService, PlaceService, ListService, UserServic
     console.error(err);
   });
 
-  $scope.handleFollowChange = function(list) {
+  $scope.handleFollowChange = function() {
     if (!user || !user.id) {
       return;
     }
-    if (list.isFollowed) {
-      ListService.follow(user.id, list.id)
+    $scope.list.isFollowed = !$scope.list.isFollowed;
+    if ($scope.list.isFollowed) {
+      ListService.follow(user.id, $scope.list.id)
       .then(function() {
+        $scope.list.numberOfFollowers++;
         $scope.$apply();
       })
       .catch(function(err) {
@@ -41,8 +43,9 @@ function($scope, $routeParams, MapService, PlaceService, ListService, UserServic
       });
     }
     else {
-      ListService.unfollow(user.id, list.id)
+      ListService.unfollow(user.id, $scope.list.id)
       .then(function() {
+        $scope.list.numberOfFollowers--;
         $scope.$apply();
       })
       .catch(function(err) {
