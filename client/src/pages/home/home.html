@@ -1,23 +1,48 @@
 <div class="home-page">
   <div class="content">
-    <h1>Lists I follow <a ng-href="/list/new"><i class="material-icons">add_circle</i></a></h1>
 
-    <div>
-      <div ng-repeat="list in followedLists" class="list">
-        <a class="list-name" ng-href="/list/{{ list.id }}">{{ list.listName }}</a> <span class="list-number-of-places">{{ list.numberOfPlaces }} places</span>
-        <div class="list-description">{{ list.description }}</div>
+    <section ng-show="followedLists.length">
+      <div class="flex-row vertical-bottom">
+        <div class="flex-cell">
+          <h1>Followed lists</h1>
+        </div>
+        <div class="flex-cell fixed subtle">
+          {{ followedLists.length }}
+          <span ng-show="followedLists.length == 1">list</span>
+          <span ng-show="followedLists.length != 1">lists</span>
+        </div>
       </div>
-    </div>
 
-
-    <h1>My Lists <a ng-href="/list/new"><i class="material-icons">add_circle</i></a></h1>
-
-    <div>
-      <div ng-repeat="list in createdLists" class="list">
-        <a class="list-name" ng-href="/list/{{ list.id }}">{{ list.listName }}</a> <span class="list-number-of-places">{{ list.numberOfPlaces }} places</span>
-        <div class="list-description">{{ list.description }}</div>
+      <div>
+        <list-tile ng-repeat="list in followedLists" list="list"></list-tile>
       </div>
-    </div>
+    </section>
+
+
+    <section ng-show="completedLists.length">
+      <div class="flex-row vertical-bottom">
+        <div class="flex-cell">
+          <h1>Completed lists</h1>
+        </div>
+        <div class="flex-cell fixed subtle">
+          {{ completedLists.length }}
+          <span ng-show="completedLists.length == 1">list</span>
+          <span ng-show="completedLists.length != 1">lists</span>
+        </div>
+      </div>
+
+      <div>
+        <list-tile ng-repeat="list in createdLists" list="list"></list-tile>
+      </div>
+    </section>
+
+    <section ng-show="followedLists.length < 3" class="subtle text-right">
+      <a href="/lists">Find some other lists to follow</a>.</i>
+    </section>
+
+    <section ng-show="!followedLists.length" class="subtle">
+      <i>You haven't followed any lists yet. <a href="/lists">Browse some popular ones</a>.</i>
+    </section>
 
   </div>
 </div>

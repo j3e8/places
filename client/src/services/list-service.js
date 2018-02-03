@@ -23,9 +23,53 @@ app.service("ListService", ["$http", "PLACES_SERVICE_URL", function($http, PLACE
     });
   }
 
-  ListService.getListsForUser = function(userId) {
+  ListService.getListsCreatedByUser = function(userId) {
     return new Promise(function(resolve, reject) {
-      $http.get(PLACES_SERVICE_URL + '/user/' + userId + '/lists')
+      $http.get(PLACES_SERVICE_URL + '/user/' + userId + '/lists/created')
+      .then(function(response) {
+        resolve(response.data);
+      }, function(err) {
+        reject(err);
+      });
+    });
+  }
+
+  ListService.getListsFollowedByUser = function(userId) {
+    return new Promise(function(resolve, reject) {
+      $http.get(PLACES_SERVICE_URL + '/user/' + userId + '/lists/followed')
+      .then(function(response) {
+        resolve(response.data);
+      }, function(err) {
+        reject(err);
+      });
+    });
+  }
+
+  ListService.getPopularLists = function() {
+    return new Promise(function(resolve, reject) {
+      $http.get(PLACES_SERVICE_URL + '/lists/popular')
+      .then(function(response) {
+        resolve(response.data);
+      }, function(err) {
+        reject(err);
+      });
+    });
+  }
+
+  ListService.follow = function(userId, listId) {
+    return new Promise(function(resolve, reject) {
+      $http.post(PLACES_SERVICE_URL + '/user/' + userId + '/list/' + listId)
+      .then(function(response) {
+        resolve(response.data);
+      }, function(err) {
+        reject(err);
+      });
+    });
+  }
+
+  ListService.unfollow = function(userId, listId) {
+    return new Promise(function(resolve, reject) {
+      $http.delete(PLACES_SERVICE_URL + '/user/' + userId + '/list/' + listId)
       .then(function(response) {
         resolve(response.data);
       }, function(err) {

@@ -1,0 +1,22 @@
+list-tile {
+  div.list {
+    margin: 10px 0;
+    padding: 10px 5px;
+    border-top: 1px solid #bcbec0;
+    &:last-child {
+      border-bottom: 1px solid #bcbec0;
+    }
+    .list-name {
+      font-size: 16px;
+      font-weight: 500;
+      color: #45c5ff;
+    }
+    .highlight {
+      color: $green !important;
+      font-weight: 700;
+    }
+    .list-description {
+
+    }
+  }
+}

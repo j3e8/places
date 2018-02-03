@@ -1,27 +1,37 @@
-<div class="flex-row new-list-page">
-  <div class="flex-cell map-cell" id="list-map">
-
+<div class="flex-column list-page">
+  <div class="flex-cell fixed list-info">
+    <h1>{{ list.listName }}</h1>
+    <div>{{ list.description }}</div>
+    <div class="gap">
+      <input id="followed" type="checkbox" ng-model="list.isFollowed" ng-change="handleFollowChange(list)"> <label for="followed">Follow this list</label>
+    </div>
   </div>
-  <div class="flex-cell list-cell">
 
-    <div class="flex-column">
-      <div class="flex-cell fixed">
-        <div class="content">
-          <h1>{{ list.listName }}</h1>
-          <div>{{ list.description }}</div>
-        </div>
+  <div class="flex-cell content-fill-height">
+    <div class="flex-row wrap mobile-wrap" id="map-and-list">
+      <div class="flex-cell map-cell" id="list-map">
       </div>
-      <div class="flex-cell place-list">
-        <div class="content">
-          <ul ng-show="list.places.length">
-            <li ng-repeat="place in list.places">
-              <input id="place_{{ place.id }}" type="checkbox" ng-model="place.isChecked" ng-change="handleCheckboxClick(place)"> <label for="place_{{ place.id }}"></label>
-              {{ place.placeName }}
-            </li>
-          </ul>
+      <div class="flex-cell list-cell">
+
+        <div class="flex-column">
+          <div class="flex-cell fixed">
+            <div class="content">
+              <h2>Places</h2>
+            </div>
+          </div>
+          <div class="flex-cell place-list">
+            <div class="content">
+              <ul ng-show="list.places.length">
+                <li ng-repeat="place in list.places">
+                  <input id="place_{{ place.id }}" type="checkbox" ng-model="place.isChecked" ng-change="handleCheckboxClick(place)"> <label for="place_{{ place.id }}"></label>
+                  {{ place.placeName }}
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
+
       </div>
     </div>
-
   </div>
 </div>

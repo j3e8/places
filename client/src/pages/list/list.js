@@ -26,6 +26,32 @@ function($scope, $routeParams, MapService, PlaceService, ListService, UserServic
     console.error(err);
   });
 
+  $scope.handleFollowChange = function(list) {
+    if (!user || !user.id) {
+      return;
+    }
+    if (list.isFollowed) {
+      ListService.follow(user.id, list.id)
+      .then(function() {
+        $scope.$apply();
+      })
+      .catch(function(err) {
+        console.error(err);
+        $scope.$apply();
+      });
+    }
+    else {
+      ListService.unfollow(user.id, list.id)
+      .then(function() {
+        $scope.$apply();
+      })
+      .catch(function(err) {
+        console.error(err);
+        $scope.$apply();
+      });
+    }
+  }
+
   $scope.handleCheckboxClick = function(place) {
     var p = Object.assign({}, place);
     p.gmObject = undefined;

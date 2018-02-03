@@ -1,0 +1,17 @@
+<div class="home-page">
+  <div class="content">
+    <div class="flex-row spaced vertical-bottom">
+      <div class="flex-cell">
+        <h1>Popular Lists</h1>
+      </div>
+      <div class="flex-cell fixed">
+        <i class="material-icons clickable" ng-click="toggleSearch()">search</i>
+      </div>
+    </div>
+
+    <div>
+      <list-tile ng-repeat="list in popularLists" list="list"></list-tile>
+    </div>
+
+  </div>
+</div>

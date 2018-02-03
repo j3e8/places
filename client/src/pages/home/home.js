@@ -1,11 +1,11 @@
 app.controller("homeController", ["$scope", "ListService", "UserService", function($scope, ListService, UserService) {
   $scope.user = UserService.getUser();
   $scope.followedLists = [];
-  $scope.createdLists = [];
 
-  ListService.getListsForUser($scope.user.id)
-  .then(function(createdLists) {
-    $scope.createdLists = createdLists;
+  ListService.getListsFollowedByUser($scope.user.id)
+  .then(function(lists) {
+    $scope.completedLists = lists.filter(function(l) { return l.numberOfPlaces == l.numberOfVisited; });
+    $scope.followedLists = lists.filter(function(l) { return l.numberOfPlaces != l.numberOfVisited; });
     $scope.$apply();
   })
   .catch(function(err) {

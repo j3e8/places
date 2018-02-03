@@ -12,6 +12,10 @@ app.config(["$routeProvider", "$locationProvider", function($routeProvider, $loc
     templateUrl: '/pages/home/home.html',
     controller: 'homeController'
   })
+  .when('/lists', {
+    templateUrl: '/pages/lists/lists.html',
+    controller: 'listsController'
+  })
   .when('/admin', {
     templateUrl: '/pages/admin/dashboard/dashboard.html',
     controller: 'adminDashboardController'
