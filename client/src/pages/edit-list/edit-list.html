@@ -13,7 +13,16 @@
       </div>
       <div class="flex-cell fixed">
         <div class="content">
-          <h3>Places <i class="material-icons" ng-click="showNewPlaceDialog()">add_circle</i></h3>
+          <div class="flex-row">
+            <div class="flex-cell">
+              <h3>Places <i class="material-icons" ng-click="showNewPlaceDialog()">add_circle</i></h3>
+            </div>
+            <div class="flex-cell fixed subtle">
+              {{ list.places.length }}
+              <span ng-show="list.places.length == 1">place</span>
+              <span ng-show="list.places.length != 1">places</span>
+            </div>
+          </div>
           <div id="place-search">
             <input id="search-box" type="text" ng-model="placeSearch" ng-change="searchPlaces(placeSearch)">
             <div id="place-search-results" ng-show="placeSearch && placeSearchResults.length">
@@ -28,21 +37,26 @@
         <div class="content">
           <ul ng-show="list.places.length">
             <li ng-repeat="place in list.places">
-              <div class="flex-row spaced">
-                <div class="flex-cell">{{ place.placeName }}</div>
-                <div class="flex-cell fixed place-type">{{ place.placeType }}</div>
+              <div class="flex-row spaced vertical-center">
+                <div class="flex-cell">
+                  {{ place.placeName }}
+                  <div class="place-type">{{ place.placeType }}</div>
+                </div>
+                <div class="flex-cell fixed"><i class="material-icons remove" ng-click="removePlace(place)">close</i></div>
               </div>
             </li>
           </ul>
         </div>
       </div>
       <div class="flex-cell fixed text-center" id="save-buttons">
-        <div class="content" ng-hide="isSaving">
-          <button class="inverse" ng-click="saveList()">Save</button>
-          <button class="cancel inverse" ng-click="cancelList()">Cancel</button>
-          <div class="warning" ng-show="saveError">{{ saveError }}</div>
+        <div class="content">
+          <div ng-hide="isSaving">
+            <button class="inverse" ng-click="saveList()">Save</button>
+            <button class="cancel inverse" ng-click="cancelList()">Cancel</button>
+            <div class="warning" ng-show="saveError">{{ saveError }}</div>
+          </div>
+          <wait-indicator ng-show="isSaving"></wait-indicator>
         </div>
-        <wait-indicator ng-show="isSaving"></wait-indicator>
       </div>
     </div>
 

@@ -1,23 +1,33 @@
 <div class="list">
-  <div class="flex-row spaced">
+  <div class="flex-row spaced vertical-center">
+
     <div class="flex-cell">
-      <a class="list-name" ng-href="/list/{{ list.id }}">{{ list.listName }}</a>
+      <div class="flex-row spaced">
+        <div class="flex-cell">
+          <a class="list-name" ng-href="/list/{{ list.id }}">{{ list.listName }}</a>
+        </div>
+        <div class="flex-cell fixed">
+          <span class="subtle">Created by</span> <a ng-href="/user/{{ list.creatorUserId }}">{{ list.username }}</a>
+        </div>
+      </div>
+
+      <div class="list-description">{{ list.description }}</div>
+
+      <div ng-show="list.dateFollowed && list.numberOfVisited">
+        <span class="subtle">Visited <span class="highlight">{{ list.numberOfVisited }}/{{ list.numberOfPlaces }}</span> places</span>
+      </div>
+
+      <div ng-show="list.numberOfPlaces && list.numberOfFollowers">
+        <span class="subtle">
+          {{ list.numberOfPlaces }} <span ng-show="list.numberOfPlaces == 1">place</span><span ng-show="list.numberOfPlaces != 1">places</span>.
+          Followed by <span class="highlight">{{ list.numberOfFollowers }} <span ng-show="list.numberOfFollowers == 1">member</span><span ng-show="list.numberOfFollowers != 1">members</span></span>.
+        </span>
+      </div>
     </div>
-    <div class="flex-cell fixed">
-      <span class="subtle">Created by</span> <a ng-href="/user/{{ list.creatorUserId }}">{{ list.username }}</a>
+
+    <div class="flex-cell fixed" ng-show="editable">
+      <a href="/list/{{ list.id }}/edit"><i class="material-icons">edit</i></a>
     </div>
-  </div>
 
-  <div class="list-description">{{ list.description }}</div>
-
-  <div ng-show="list.dateFollowed && list.numberOfVisited">
-    <span class="subtle">Visited <span class="highlight">{{ list.numberOfVisited }}/{{ list.numberOfPlaces }}</span> places</span>
-  </div>
-
-  <div ng-show="list.numberOfPlaces && list.numberOfFollowers">
-    <span class="subtle">
-      {{ list.numberOfPlaces }} <span ng-show="list.numberOfPlaces == 1">place</span><span ng-show="list.numberOfPlaces != 1">places</span>.
-      Followed by <span class="highlight">{{ list.numberOfFollowers }} <span ng-show="list.numberOfFollowers == 1">member</span><span ng-show="list.numberOfFollowers != 1">members</span></span>.
-    </span>
   </div>
 </div>

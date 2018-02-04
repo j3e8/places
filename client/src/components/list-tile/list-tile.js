@@ -5,8 +5,11 @@ app.directive("listTile", [function() {
       list: '='
     },
     templateUrl: '/components/list-tile/list-tile.html',
-    link: function($scope, $elem, $attr) {
-
+    link: function($scope, elem, attrs) {
+      $scope.editable = false;
+      if (attrs.$attr.editable !== undefined) {
+        $scope.editable = true;
+      }
     }
   }
 }])

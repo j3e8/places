@@ -1,11 +1,8 @@
 list-tile {
   div.list {
-    margin: 10px 0;
+    margin: 0;
     padding: 10px 5px;
     border-top: 1px solid #bcbec0;
-    &:last-child {
-      border-bottom: 1px solid #bcbec0;
-    }
     .list-name {
       font-size: 16px;
       font-weight: 500;
@@ -13,6 +10,11 @@ list-tile {
     }
     .list-description {
 
+    }
+  }
+  &:last-child {
+    div.list {
+      border-bottom: 1px solid #bcbec0;
     }
   }
 }

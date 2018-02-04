@@ -1,0 +1,30 @@
+<div class="created-lists-page">
+  <div class="content">
+
+    <section ng-show="createdLists.length">
+      <div class="flex-row vertical-bottom">
+        <div class="flex-cell">
+          <h1>
+            Created lists
+            <a ng-href="/list/new"><i class="material-icons">add_circle</i></a>
+          </h1>
+        </div>
+        <div class="flex-cell fixed subtle">
+          {{ createdLists.length }}
+          <span ng-show="createdLists.length == 1">list</span>
+          <span ng-show="createdLists.length != 1">lists</span>
+        </div>
+      </div>
+
+      <div>
+        <list-tile ng-repeat="list in createdLists" list="list" editable></list-tile>
+      </div>
+    </section>
+
+
+    <section ng-show="!createdLists.length" class="subtle">
+      <i>You haven't created any lists yet. <a href="/list">Make one now</a>.</i>
+    </section>
+
+  </div>
+</div>

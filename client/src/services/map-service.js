@@ -29,12 +29,14 @@ app.service("MapService", ["$rootScope", function($rootScope) {
     });
   }
 
-  MapService.addPlaceToMap = function(map, place) {
+  MapService.addPlaceToMap = function(map, place, clickHandler) {
     var gmObject;
     switch(place.shapeType) {
       case 'point':
         var icon = {
-          url: place.isChecked ? '/assets/images/marker-been-there.png' : '/assets/images/marker.png',
+          url: place.highlighted
+            ? '/assets/images/marker-highlighted.png'
+            : (place.isChecked ? '/assets/images/marker-been-there.png' : '/assets/images/marker.png'),
           size: new google.maps.Size(44, 60),
           origin: new google.maps.Point(0, 0),
           anchor: new google.maps.Point(11, 29),
@@ -64,9 +66,18 @@ app.service("MapService", ["$rootScope", function($rootScope) {
         break;
     }
     if (gmObject) {
-      // google.maps.event.addListener(gmObject, "click", shapeClick);
       place.gmObject = gmObject;
+      if (clickHandler) {
+        google.maps.event.addListener(place.gmObject, "click", clickHandler);
+      }
     }
+  }
+
+  MapService.removePlaceFromMap = function(map, place) {
+    if (place && place.gmObject) {
+      place.gmObject.setMap(null);
+    }
+    place.gmObject = undefined;
   }
 
   MapService.setMapToContainList = function(map, listBounds) {
@@ -83,7 +94,9 @@ app.service("MapService", ["$rootScope", function($rootScope) {
     switch(place.shapeType) {
       case 'point':
         var icon = {
-          url: place.isChecked ? '/assets/images/marker-been-there.png' : '/assets/images/marker.png',
+          url: place.highlighted
+            ? '/assets/images/marker-highlighted.png'
+            : (place.isChecked ? '/assets/images/marker-been-there.png' : '/assets/images/marker.png'),
           size: new google.maps.Size(44, 60),
           origin: new google.maps.Point(0, 0),
           anchor: new google.maps.Point(11, 29),

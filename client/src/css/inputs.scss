@@ -137,6 +137,7 @@ input[type=checkbox] {
     border: 2px solid #ddd;
     width: 15px;
     height: 15px;
+    background-color: #fff;
   }
   &:checked {
     & + label:before {

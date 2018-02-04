@@ -58,6 +58,15 @@
             color: #888;
             font-size: 13px;
           }
+          i.remove {
+            color: #aaa;
+            font-size: 1.25em;
+            cursor: pointer;
+            transition: 0.5s;
+            &:hover {
+              color: $red;
+            }
+          }
         }
       }
     }

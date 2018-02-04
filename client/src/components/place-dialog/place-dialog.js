@@ -46,7 +46,7 @@ app.directive("placeDialog", ["Shape", "MapService", "PlaceService", "$timeout",
             google.maps.event.trigger(map, "resize");
             map.setCenter(new google.maps.LatLng($scope.center));
             map.setZoom($scope.zoom);
-          }, 0);
+          }, 20);
         }
       });
 

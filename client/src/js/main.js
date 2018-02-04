@@ -8,6 +8,10 @@ app.config(["$routeProvider", "$locationProvider", function($routeProvider, $loc
     templateUrl: '/pages/signin/signin.html',
     controller: 'signinController'
   })
+  .when('/created-lists', {
+    templateUrl: '/pages/created-lists/created-lists.html',
+    controller: 'createdListsController'
+  })
   .when('/home', {
     templateUrl: '/pages/home/home.html',
     controller: 'homeController'

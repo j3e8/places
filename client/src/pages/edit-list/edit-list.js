@@ -22,9 +22,11 @@ function($scope, $routeParams, MapService, PlaceService, ListService, alert, $ti
     if ($routeParams.listId) {
       ListService.get($routeParams.listId)
       .then(function(list) {
+        console.log('here');
         $scope.list = list;
         $scope.list.places.forEach(function(place) {
-          MapService.addPlaceToMap(map, place);
+          console.log('.');
+          MapService.addPlaceToMap(map, place, $scope.placeClicked);
         });
         var listBounds = ListService.calculateBounds($scope.list);
         MapService.setMapToContainList(map, listBounds);
@@ -39,6 +41,14 @@ function($scope, $routeParams, MapService, PlaceService, ListService, alert, $ti
   .catch(function(err) {
     console.error(err);
   });
+
+  $scope.placeClicked = function(e) {
+    console.log('placeClicked', e);
+    // find which place was clicked
+    // update the marker for the currently highlighted place (remove highlight from previous)
+    // highlight the correct place on the list
+    // scroll to the place on the list
+  }
 
   var searchTimeout = null;
   $scope.searchPlaces = function(str) {
@@ -74,7 +84,14 @@ function($scope, $routeParams, MapService, PlaceService, ListService, alert, $ti
 
   $scope.addPlaceToList = function(place) {
     $scope.list.places.push(place);
-    MapService.addPlaceToMap(map, place);
+    MapService.addPlaceToMap(map, place, $scope.placeClicked);
+    var listBounds = ListService.calculateBounds($scope.list);
+    MapService.setMapToContainList(map, listBounds);
+  }
+
+  $scope.removePlace = function(place) {
+    $scope.list.places.splice($scope.list.places.indexOf(place), 1);
+    MapService.removePlaceFromMap(map, place);
     var listBounds = ListService.calculateBounds($scope.list);
     MapService.setMapToContainList(map, listBounds);
   }
@@ -98,7 +115,7 @@ function($scope, $routeParams, MapService, PlaceService, ListService, alert, $ti
     .then(function(list) {
       $scope.isSaving = false;
       if (list.id && !$scope.list.id) {
-        $location.path('/list/' + list.id);
+        $location.path('/list/' + list.id + '/edit');
       }
       else {
         $scope.list = list;

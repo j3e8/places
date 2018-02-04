@@ -42,8 +42,10 @@
       }
     }
 
-    .place-list {
+    #place-list {
+      position: relative;
       overflow-y: scroll;
+      transition: 0.5s;
       @media (max-width: 800px) {
         overflow-y: auto;
         flex: 1 1 auto;
@@ -63,6 +65,9 @@
           border-top: 1px solid $blue;
           &:last-child {
             border-bottom: 1px solid $blue;
+          }
+          &.highlighted {
+            background-color: #fffcd3;
           }
           .place-type {
             color: #888;
