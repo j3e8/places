@@ -1,4 +1,4 @@
-app.service("ListService", ["$http", "PLACES_SERVICE_URL", function($http, PLACES_SERVICE_URL) {
+app.service("ListService", ["$http", "PLACES_SERVICE_URL", "PlaceService", function($http, PLACES_SERVICE_URL, PlaceService) {
   var ListService = {};
 
   ListService.create = function(list) {
@@ -92,45 +92,13 @@ app.service("ListService", ["$http", "PLACES_SERVICE_URL", function($http, PLACE
   ListService.calculateBounds = function(list) {
     var bounds = {};
     list.places.forEach(function(place) {
-      var minLat, maxLat, minLng, maxLng;
-      if (Object.prototype.toString.call(place.shapeData) == '[object Array]') {
-        minLat = findMinProperty(place.shapeData, 'lat');
-        maxLat = findMaxProperty(place.shapeData, 'lat');
-        minLng = findMinProperty(place.shapeData, 'lng');
-        maxLng = findMaxProperty(place.shapeData, 'lng');
-      }
-      else {
-        minLat = place.shapeData.lat;
-        maxLat = place.shapeData.lat;
-        minLng = place.shapeData.lng;
-        maxLng = place.shapeData.lng;
-      }
-      if (bounds.minLat === undefined || minLat < bounds.minLat) bounds.minLat = minLat;
-      if (bounds.maxLat === undefined || maxLat > bounds.maxLat) bounds.maxLat = maxLat;
-      if (bounds.minLng === undefined || minLng < bounds.minLng) bounds.minLng = minLng;
-      if (bounds.maxLng === undefined || maxLng > bounds.maxLng) bounds.maxLng = maxLng;
+      var p = PlaceService.calculateBounds(place);
+      if (bounds.minLat === undefined || p.minLat < bounds.minLat) bounds.minLat = p.minLat;
+      if (bounds.maxLat === undefined || p.maxLat > bounds.maxLat) bounds.maxLat = p.maxLat;
+      if (bounds.minLng === undefined || p.minLng < bounds.minLng) bounds.minLng = p.minLng;
+      if (bounds.maxLng === undefined || p.maxLng > bounds.maxLng) bounds.maxLng = p.maxLng;
     });
     return bounds;
-  }
-
-  function findMinProperty(arr, prop) {
-    var val;
-    arr.forEach(function(item) {
-      if (item[prop] !== undefined && (val === undefined || item[prop] < val)) {
-        val = item[prop];
-      }
-    });
-    return val;
-  }
-
-  function findMaxProperty(arr, prop) {
-    var val;
-    arr.forEach(function(item) {
-      if (item[prop] !== undefined && (val === undefined || item[prop] > val)) {
-        val = item[prop];
-      }
-    });
-    return val;
   }
 
   return ListService;

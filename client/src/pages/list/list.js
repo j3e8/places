@@ -3,6 +3,7 @@ function($scope, $routeParams, MapService, PlaceService, ListService, UserServic
   var map;
 
   $scope.user = UserService.getUser();
+  $scope.placeDialogIsDisplayed = undefined;
 
   MapService.load()
   .then(function() {
@@ -26,19 +27,32 @@ function($scope, $routeParams, MapService, PlaceService, ListService, UserServic
     console.error(err);
   });
 
-  $scope.placeClicked = function(gmObject) {
-    console.log('placeClicked', gmObject);
+  $scope.displayPlaceDialog = function(place) {
+    $scope.placeToEdit = place;
+    $scope.placeDialogIsDisplayed = true;
+  }
 
-    var lat = gmObject.latLng.lat();
-    var lng = gmObject.latLng.lng();
+  $scope.closePlaceDialog = function() {
+    $scope.placeToEdit = null;
+    $scope.placeDialogIsDisplayed = false;
+  }
 
+  $scope.afterPlaceSave = function() {
+
+  }
+
+  $scope.placeClicked = function(gmEvent) {
+    var gmObject = this;
     $scope.unhighlightAllPlaces();
 
-    var clickedPlace = findPlaceByLatLng(lat, lng);
+    var clickedPlace = $scope.list.places.find(function(place) {
+      return place.id == gmObject.shapeId;
+    });
+
     if (clickedPlace) {
       clickedPlace.highlighted = true;
       MapService.updatePlaceOnMap(map, clickedPlace);
-      
+
       // scroll to the place on the list
       var li = document.getElementById('place_' + clickedPlace.id);
       if (li) {
@@ -117,6 +131,12 @@ function($scope, $routeParams, MapService, PlaceService, ListService, UserServic
       gestureHandling: 'greedy'
     });
     map.setOptions({ styles: CUSTOM_MAP_STYLES });
+    google.maps.event.addListener(map, "click", mapClick);
+  }
+
+  function mapClick() {
+    $scope.unhighlightAllPlaces();
+    $scope.$apply();
   }
 
 }]);

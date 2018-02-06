@@ -38,7 +38,7 @@
       }
     }
 
-    .place-list {
+    #place-list {
       overflow-y: scroll;
       & > .content {
         padding-top: 0;
@@ -54,11 +54,14 @@
           &:last-child {
             border-bottom: 1px solid $blue;
           }
+          &.highlighted {
+            background-color: #fffcd3;
+          }
           .place-type {
             color: #888;
             font-size: 13px;
           }
-          i.remove {
+          i.tools {
             color: #aaa;
             font-size: 1.25em;
             cursor: pointer;

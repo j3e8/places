@@ -6,7 +6,6 @@ function($scope, $routeParams, MapService, PlaceService, ListService, alert, $ti
   };
 
   var map;
-  var drawingManager;
 
   var DEFAULT_COORDS = { lat: 39.5464, lng: -97.3296 };
   var DEFAULT_ZOOM = 4;
@@ -14,40 +13,62 @@ function($scope, $routeParams, MapService, PlaceService, ListService, alert, $ti
   var shapeList = [];
 
   $scope.centerCoords = DEFAULT_COORDS;
-  $scope.zoom = DEFAULT_ZOOM;
 
   MapService.load()
   .then(function() {
     initMap();
     if ($routeParams.listId) {
-      ListService.get($routeParams.listId)
-      .then(function(list) {
-        console.log('here');
-        $scope.list = list;
-        $scope.list.places.forEach(function(place) {
-          console.log('.');
-          MapService.addPlaceToMap(map, place, $scope.placeClicked);
-        });
-        var listBounds = ListService.calculateBounds($scope.list);
-        MapService.setMapToContainList(map, listBounds);
-        $scope.$apply();
-      })
-      .catch(function(err) {
-        console.error("Couldn't load list", err);
-        $scope.$apply();
-      });
+      loadList($routeParams.listId);
     }
   })
   .catch(function(err) {
     console.error(err);
   });
 
-  $scope.placeClicked = function(e) {
-    console.log('placeClicked', e);
-    // find which place was clicked
-    // update the marker for the currently highlighted place (remove highlight from previous)
-    // highlight the correct place on the list
-    // scroll to the place on the list
+  function loadList(listId) {
+    ListService.get(listId)
+    .then(function(list) {
+      $scope.list = list;
+      $scope.list.places.forEach(function(place) {
+        MapService.addPlaceToMap(map, place, $scope.placeClicked);
+      });
+      var listBounds = ListService.calculateBounds($scope.list);
+      MapService.setMapToContainList(map, listBounds);
+      $scope.$apply();
+    })
+    .catch(function(err) {
+      console.error("Couldn't load list", err);
+      $scope.$apply();
+    });
+  }
+
+  $scope.placeClicked = function(gmEvent) {
+    var gmObject = this;
+    $scope.unhighlightAllPlaces();
+
+    var clickedPlace = $scope.list.places.find(function(place) {
+      return place.id == gmObject.shapeId;
+    });
+
+    if (clickedPlace) {
+      clickedPlace.highlighted = true;
+      MapService.updatePlaceOnMap(map, clickedPlace);
+
+      // scroll to the place on the list
+      var li = document.getElementById('place_' + clickedPlace.id);
+      if (li) {
+        var placeList = document.getElementById('place-list');
+        placeList.scrollTo(0, li.offsetTop);
+      }
+    }
+    $scope.$apply();
+  }
+
+  $scope.unhighlightAllPlaces = function() {
+    $scope.list.places.forEach(function(place) {
+      place.highlighted = false;
+      MapService.updatePlaceOnMap(map, place);
+    });
   }
 
   var searchTimeout = null;
@@ -69,6 +90,12 @@ function($scope, $routeParams, MapService, PlaceService, ListService, alert, $ti
     var latlng = map.getCenter();
     $scope.centerCoords = { lat: latlng.lat(), lng: latlng.lng() };
     $scope.zoom = map.getZoom();
+    $scope.placeToEditId = null;
+    $scope.newPlaceDialogIsDisplayed = true;
+  }
+
+  $scope.editPlace = function(place) {
+    $scope.placeToEditId = place.id;
     $scope.newPlaceDialogIsDisplayed = true;
   }
 
@@ -83,7 +110,14 @@ function($scope, $routeParams, MapService, PlaceService, ListService, alert, $ti
   }
 
   $scope.addPlaceToList = function(place) {
-    $scope.list.places.push(place);
+    var existing = $scope.list.places.find(function(p) { return p.id == place.id; });
+    if (existing) {
+      existing.gmObject.setMap(null);
+      $scope.list.places.splice($scope.list.places.indexOf(existing), 1, place);
+    }
+    else {
+      $scope.list.places.push(place);
+    }
     MapService.addPlaceToMap(map, place, $scope.placeClicked);
     var listBounds = ListService.calculateBounds($scope.list);
     MapService.setMapToContainList(map, listBounds);
@@ -97,6 +131,7 @@ function($scope, $routeParams, MapService, PlaceService, ListService, alert, $ti
   }
 
   $scope.closeNewPlaceDialog = function() {
+    $scope.placeToEditId = null;
     $scope.newPlaceDialogIsDisplayed = false;
   }
 
@@ -143,19 +178,24 @@ function($scope, $routeParams, MapService, PlaceService, ListService, alert, $ti
       return ListService.update(list.id, list);
     }
     else {
-      console.log('create', list);
       return ListService.create(list);
     }
   }
 
   function initMap() {
     map = new google.maps.Map(document.getElementById('list-map'), {
-      zoom: $scope.zoom,
+      zoom: DEFAULT_ZOOM,
       center: new google.maps.LatLng($scope.centerCoords),
       mapTypeId: 'roadmap',
       gestureHandling: 'greedy'
     });
     map.setOptions({ styles: CUSTOM_MAP_STYLES });
+    google.maps.event.addListener(map, "click", mapClick);
+  }
+
+  function mapClick() {
+    $scope.unhighlightAllPlaces();
+    $scope.$apply();
   }
 
 }]);

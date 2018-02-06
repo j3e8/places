@@ -1,12 +1,18 @@
-module.exports = function(minmax, prop, shapeData) {
+module.exports = function getValue(minmax, prop, shapeData) {
   if (Object.prototype.toString.call(shapeData) == '[object Array]') {
     let val;
     shapeData.forEach((s) => {
-      if (minmax == 'max' && (val === undefined || s[prop] > val)) {
-        val = s[prop];
+      var thisVal = s[prop];
+
+      if (Object.prototype.toString.call(s) == '[object Array]') {
+        thisVal = getValue(minmax, prop, s);
       }
-      else if (minmax == 'min' && (val === undefined || s[prop] < val)) {
-        val = s[prop];
+
+      if (minmax == 'max' && (val === undefined || thisVal > val)) {
+        val = thisVal;
+      }
+      else if (minmax == 'min' && (val === undefined || thisVal < val)) {
+        val = thisVal;
       }
     });
     return val;

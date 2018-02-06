@@ -6,8 +6,33 @@ app.service("Shape", function() {
   Shape.POLYLINE = 'polyline';
 
   Shape.polygonFromGMPolygon = function(gmPolygon) {
+    if (Object.prototype.toString.call(gmPolygon) == '[object Array]') {
+      console.log('array of polygons');
+      return gmPolygon.map(function(gmp) {
+        var pts = [];
+        gmp.getPath().forEach(function(latLng) {
+          pts.push({ lat: latLng.lat(), lng: latLng.lng() });
+        });
+        return pts;
+      });
+    }
+    else {
+      console.log('single polygon');
+      var paths = [];
+      gmPolygon.getPaths().forEach(function(p) {
+        var pts = [];
+        p.forEach(function(latLng) {
+          pts.push({ lat: latLng.lat(), lng: latLng.lng() });
+        });
+        paths.push(pts);
+      });
+      return paths;
+    }
+  }
+
+  Shape.polylineFromGMPolyline = function(gmPolyline) {
     var pts = [];
-    gmPolygon.getPath().forEach(function(latLng) {
+    gmPolyline.getPath().forEach(function(latLng) {
       pts.push({
         lat: latLng.lat(),
         lng: latLng.lng()

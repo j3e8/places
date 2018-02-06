@@ -62,8 +62,7 @@ app.service("MapService", ["$rootScope", function($rootScope) {
           map: map
         });
         break;
-      default:
-        break;
+      default: break;
     }
     if (gmObject) {
       place.gmObject = gmObject;
@@ -81,6 +80,9 @@ app.service("MapService", ["$rootScope", function($rootScope) {
   }
 
   MapService.setMapToContainList = function(map, listBounds) {
+    if (!listBounds || !listBounds.minLat || !listBounds.maxLat || !listBounds.minLng || !listBounds.maxLng) {
+      return;
+    }
     var bounds = new google.maps.LatLngBounds();
     bounds.extend({ lat: listBounds.minLat, lng: listBounds.minLng });
     bounds.extend({ lat: listBounds.maxLat, lng: listBounds.maxLng });
@@ -105,8 +107,14 @@ app.service("MapService", ["$rootScope", function($rootScope) {
         place.gmObject.setIcon(icon);
         break;
       case 'polygon':
-        place.gmObject.setStrokeColor(place.isChecked ? '#2fb0dd' : '#c67788');
-        place.gmObject.setFillColor(place.isChecked ? '#45c5ff' : '#ef8f9f');
+        place.gmObject.setOptions({
+          strokeColor: place.highlighted
+            ? '#ddc937'
+            : (place.isChecked ? '#2fb0dd' : '#c67788'),
+          fillColor: place.highlighted
+            ? '#ffed48'
+            : (place.isChecked ? '#45c5ff' : '#ef8f9f')
+        });
         break;
       default: break;
     }

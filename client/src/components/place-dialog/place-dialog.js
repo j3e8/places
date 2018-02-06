@@ -3,7 +3,7 @@ app.directive("placeDialog", ["Shape", "MapService", "PlaceService", "$timeout",
     restrict: 'E',
     scope: {
       'show': '=',
-      'place': '=?',
+      'placeId': '=',
       'center': '=',
       'zoom': '=',
       'onCancel': '=',
@@ -34,25 +34,52 @@ app.directive("placeDialog", ["Shape", "MapService", "PlaceService", "$timeout",
         console.error(err);
       });
 
-      $scope.$watch("place", function() {
-        if (!$scope.place) {
+      $scope.$watch("placeId", function() {
+        if ($scope.placeId) {
+          PlaceService.getPlace($scope.placeId)
+          .then(function(place) {
+            $scope.place = place;
+            $timeout(function() {
+              MapService.addPlaceToMap(map, $scope.place, null);
+              $scope.place.gmObject.setEditable(true);
+              if ($scope.place.shapeType == 'polygon') {
+                console.log('polygon');
+                var p = $scope.place.gmObject.getPath();
+                console.log('path', p);
+                google.maps.event.addListener(p, 'insert_at', polygonEdited);
+                google.maps.event.addListener(p, 'remove_at', polygonEdited);
+                google.maps.event.addListener(p, 'set_at', polygonEdited);
+              }
+              var placeBounds = PlaceService.calculateBounds($scope.place);
+              var bounds = new google.maps.LatLngBounds();
+              bounds.extend({ lat: placeBounds.minLat, lng: placeBounds.minLng });
+              bounds.extend({ lat: placeBounds.maxLat, lng: placeBounds.maxLng });
+              map.fitBounds(bounds);
+            }, 1);
+            $scope.$apply();
+          });
+        }
+        else {
+          $scope.place = null;
           $scope.reset();
         }
       });
 
       $scope.$watch("show", function() {
-        if ($scope.show) {
+        if ($scope.show && map) {
           $timeout(function() {
             google.maps.event.trigger(map, "resize");
-            map.setCenter(new google.maps.LatLng($scope.center));
-            map.setZoom($scope.zoom);
+            if ($scope.center && !$scope.placeId) {
+              map.setCenter(new google.maps.LatLng($scope.center));
+            }
           }, 20);
         }
       });
 
       $scope.reset = function() {
+        console.log('reset');
         if ($scope.place && $scope.place.gmObject) {
-          $scope.place.gmObject.setMap(null);
+          removeShapesFromMap($scope.place.gmObject);
         }
         $scope.place = {
           'shapeType': 'Point',
@@ -60,6 +87,9 @@ app.directive("placeDialog", ["Shape", "MapService", "PlaceService", "$timeout",
           'placeTypeId': $scope.placeTypes ? $scope.placeTypes.find(function(pt) { return pt.placeType.toLowerCase() == 'point of interest'; }).id : null
         }
         document.getElementById('gm-input').value = '';
+        if (map) {
+          map.setZoom(DEFAULT_ZOOM);
+        }
       }
 
       PlaceService.loadPlaceTypes()
@@ -77,15 +107,14 @@ app.directive("placeDialog", ["Shape", "MapService", "PlaceService", "$timeout",
 
       $scope.save = function() {
         var createOrUpdate = $scope.place.id ? PlaceService.update : PlaceService.create;
-        var p = Object.assign({}, $scope.place);
-        p.gmObject = undefined;
-        createOrUpdate(p)
+        $scope.place.shapeData = makeShapeDataFromMapObject($scope.place.gmObject);
+        var gmObject = $scope.place.gmObject;
+        $scope.place.gmObject = undefined;
+        createOrUpdate($scope.place)
         .then(function(place) {
           if ($scope.onSave) {
             place.shapeData = JSON.parse(place.shapeData);
-            if (place.gmObject) {
-              place.gmObject.setMap(null);
-            }
+            removeShapesFromMap(gmObject);
             $scope.onSave(place);
             $scope.reset();
           }
@@ -98,6 +127,9 @@ app.directive("placeDialog", ["Shape", "MapService", "PlaceService", "$timeout",
       }
 
       $scope.cancel = function() {
+        if ($scope.place.gmObject) {
+          $scope.place.gmObject.setMap(null);
+        }
         $scope.place = null;
         if ($scope.onCancel) {
           $scope.onCancel();
@@ -112,7 +144,6 @@ app.directive("placeDialog", ["Shape", "MapService", "PlaceService", "$timeout",
       }
 
       function initMap() {
-        console.log('initMap', $scope.center);
         var zoom = DEFAULT_ZOOM;
         map = new google.maps.Map(document.getElementById('place-dialog-map'), {
           zoom: zoom,
@@ -131,6 +162,10 @@ app.directive("placeDialog", ["Shape", "MapService", "PlaceService", "$timeout",
           drawingControlOptions: {
             position: google.maps.ControlPosition.TOP_CENTER,
             drawingModes: ['marker', 'polygon', 'polyline']
+          },
+          polygonOptions: {
+            strokeColor: '#c67788',
+            fillColor: '#ef8f9f'
           }
         });
         drawingManager.setMap(map);
@@ -148,7 +183,6 @@ app.directive("placeDialog", ["Shape", "MapService", "PlaceService", "$timeout",
         });
         searchBox.addListener('places_changed', function() {
           var places = searchBox.getPlaces();
-          console.log(places);
           if (places.length == 1) {
             var lat = places[0].geometry.location.lat();
             var lng = places[0].geometry.location.lng();
@@ -158,26 +192,67 @@ app.directive("placeDialog", ["Shape", "MapService", "PlaceService", "$timeout",
         });
       }
 
+      function makeShapeDataFromMapObject(gmObject) {
+        switch ($scope.place.shapeType) {
+          case Shape.POLYGON:
+            return Shape.polygonFromGMPolygon(gmObject);
+          case Shape.POLYLINE:
+            return Shape.polylineFromGMPolyline(gmObject);
+          case Shape.POINT:
+            return Shape.pointFromGMMarker(gmObject);
+          default: return;
+        }
+      }
+
+      function removeShapesFromMap(gmObject) {
+        if (gmObject) {
+          if (Object.prototype.toString.call(gmObject) == '[object Array]') {
+            gmObject.forEach(function(o) {
+              o.setMap(null);
+            });
+          }
+          else {
+            gmObject.setMap(null);
+          }
+        }
+      }
+
       function markerComplete(gmMarker) {
+        if ($scope.place.gmObject) {
+          $scope.place.gmObject.setMap(null);
+        }
         $scope.place.shapeType = Shape.POINT;
-        gmObject = gmMarker;
-        $scope.place.gmObject = gmObject;
-        $scope.place.shapeData = Shape.pointFromGMMarker(gmMarker);
+        $scope.place.gmObject = gmMarker;
+        // $scope.place.shapeData = Shape.pointFromGMMarker(gmMarker);
         drawingManager.setDrawingMode(null);
         gmMarker.setDraggable(true);
       }
 
       function polygonComplete(gmPolygon) {
+        if ($scope.place.shapeType != Shape.POLYGON) {
+          $scope.place.gmObject = [];
+        }
+        if (!$scope.place.gmObject) {
+          $scope.place.gmObject = [];
+        }
         $scope.place.shapeType = Shape.POLYGON;
-        gmObject = gmPolygon;
-        $scope.place.shapeData = Shape.polygonFromGMPolygon(gmPolygon);
+        $scope.place.gmObject.push(gmPolygon);
+        // $scope.place.shapeData = Shape.polygonFromGMPolygon($scope.place.gmObject);
         drawingManager.setDrawingMode(null);
         gmPolygon.setEditable(true);
       }
 
+      function polygonEdited(i) {
+        // $scope.place.shapeData = Shape.polygonFromGMPolygon($scope.place.gmObject);
+      }
+
       function polylineComplete(gmPolyline) {
+        if ($scope.place.shapeType != Shape.POLYLINE) {
+          $scope.place.gmObject = null;
+        }
         $scope.place.shapeType = Shape.POLYLINE;
-        gmObject = gmPolyline;
+        $scope.place.gmObject = gmPolyline;
+        // $scope.place.shapeData = Shape.polylineFromGMPolyline($scope.place.gmObject);
         drawingManager.setDrawingMode(null);
         gmPolyline.setEditable(true);
       }
