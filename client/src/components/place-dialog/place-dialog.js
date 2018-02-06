@@ -42,14 +42,14 @@ app.directive("placeDialog", ["Shape", "MapService", "PlaceService", "$timeout",
             $timeout(function() {
               MapService.addPlaceToMap(map, $scope.place, null);
               $scope.place.gmObject.setEditable(true);
-              if ($scope.place.shapeType == 'polygon') {
-                console.log('polygon');
-                var p = $scope.place.gmObject.getPath();
-                console.log('path', p);
-                google.maps.event.addListener(p, 'insert_at', polygonEdited);
-                google.maps.event.addListener(p, 'remove_at', polygonEdited);
-                google.maps.event.addListener(p, 'set_at', polygonEdited);
-              }
+              // if ($scope.place.shapeType == 'polygon') {
+              //   console.log('polygon');
+              //   var p = $scope.place.gmObject.getPath();
+              //   console.log('path', p);
+              //   google.maps.event.addListener(p, 'insert_at', polygonEdited);
+              //   google.maps.event.addListener(p, 'remove_at', polygonEdited);
+              //   google.maps.event.addListener(p, 'set_at', polygonEdited);
+              // }
               var placeBounds = PlaceService.calculateBounds($scope.place);
               var bounds = new google.maps.LatLngBounds();
               bounds.extend({ lat: placeBounds.minLat, lng: placeBounds.minLng });
@@ -223,27 +223,36 @@ app.directive("placeDialog", ["Shape", "MapService", "PlaceService", "$timeout",
         }
         $scope.place.shapeType = Shape.POINT;
         $scope.place.gmObject = gmMarker;
-        // $scope.place.shapeData = Shape.pointFromGMMarker(gmMarker);
         drawingManager.setDrawingMode(null);
         gmMarker.setDraggable(true);
       }
 
       function polygonComplete(gmPolygon) {
-        if ($scope.place.shapeType != Shape.POLYGON) {
-          $scope.place.gmObject = [];
+        if ($scope.place.shapeType != Shape.POLYGON || !$scope.place.gmObject) {
+          $scope.place.gmObject = gmPolygon;
         }
-        if (!$scope.place.gmObject) {
-          $scope.place.gmObject = [];
+        else {
+          var poly = Shape.polygonFromGMPolygon($scope.place.gmObject);
+          if (!isArrayOfArrays(poly)) {
+            poly = [ poly ];
+          }
+          var newpoly = Shape.polygonFromGMPolygon(gmPolygon);
+          poly = poly.concat(newpoly);
+          $scope.place.gmObject.setPaths(poly); // add the new polygon to the existing one
+          gmPolygon.setMap(null); // remove this new polygon from the map
         }
         $scope.place.shapeType = Shape.POLYGON;
-        $scope.place.gmObject.push(gmPolygon);
-        // $scope.place.shapeData = Shape.polygonFromGMPolygon($scope.place.gmObject);
         drawingManager.setDrawingMode(null);
         gmPolygon.setEditable(true);
       }
 
-      function polygonEdited(i) {
-        // $scope.place.shapeData = Shape.polygonFromGMPolygon($scope.place.gmObject);
+      function isArrayOfArrays(arr) {
+        if (Object.prototype.toString.call(arr) == '[object Array]') {
+          if (Object.prototype.toString.call(arr[0]) == '[object Array]') {
+            return true;
+          }
+        }
+        return false;
       }
 
       function polylineComplete(gmPolyline) {
@@ -252,7 +261,6 @@ app.directive("placeDialog", ["Shape", "MapService", "PlaceService", "$timeout",
         }
         $scope.place.shapeType = Shape.POLYLINE;
         $scope.place.gmObject = gmPolyline;
-        // $scope.place.shapeData = Shape.polylineFromGMPolyline($scope.place.gmObject);
         drawingManager.setDrawingMode(null);
         gmPolyline.setEditable(true);
       }
