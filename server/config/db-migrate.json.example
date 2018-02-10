@@ -1,0 +1,11 @@
+{
+  "dev": {
+    "host": "parakeet",
+    "user": "root",
+    "password" : "Tortuga01",
+    "database": "places",
+    "driver": "mysql",
+    "multipleStatements": true,
+    "timezone": "UTC+0"
+  }
+}

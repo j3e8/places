@@ -1,0 +1,28 @@
+{
+  "database": {
+    "host": "parakeet",
+    "user": "root",
+    "password" : "Tortuga01",
+    "database": "places",
+    "driver": "mysql",
+    "multipleStatements": true,
+    "timezone": "UTC+0"
+  },
+
+  "https": {
+    "cert": "/Users/jacobjenne/.ssh/careerstep.crt",
+    "key": "/Users/jacobjenne/.ssh/careerstep.key"
+  },
+
+  "jwt": {
+    "publicKey": "-----BEGIN PUBLIC KEY-----\nMIIBIDAQAB\n-----END PUBLIC KEY-----",
+    "privateKey": "-----BEGIN RSA PRIVATE KEY-----\nMIIEpAd24zT+b/w==\n-----END RSA PRIVATE KEY-----"
+  },
+
+  "server": {
+    "hostname": "parakeet",
+    "port": 4002,
+    "protocol": "https:"
+  }
+
+}
