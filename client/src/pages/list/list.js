@@ -14,6 +14,9 @@ function($scope, $routeParams, MapService, PlaceService, ListService, UserServic
       $scope.list.places.forEach(function(place) {
         MapService.addPlaceToMap(map, place, $scope.placeClicked);
       });
+      if (ListService.listHasPolylines($scope.list)) {
+        MapService.toggleRoads(map, false);
+      }
       var listBounds = ListService.calculateBounds($scope.list);
       MapService.setMapToContainList(map, listBounds);
       $scope.$apply();

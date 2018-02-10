@@ -29,7 +29,13 @@ module.exports = function(app) {
   });
 
   app.get('/api/place', function(req, res) {
-    Place.searchPlaces(req.query.search)
+    Place.searchPlaces(req.query)
+    .then((result) => res.json(result))
+    .catch((err) => ErrorHandler.respondWithError(res, err));
+  });
+
+  app.get('/api/places/popular', function(req, res) {
+    Place.getPopularPlaces()
     .then((result) => res.json(result))
     .catch((err) => ErrorHandler.respondWithError(res, err));
   });

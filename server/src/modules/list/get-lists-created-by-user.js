@@ -3,7 +3,7 @@ const db = require('../../connections/db');
 module.exports = function(userId) {
   let _userId = db.escape(userId);
   return db.query(`SELECT l.id, l.listName, l.description, l.dateCreated, l.dateModified, l.creatorUserId,
-    u.username, u.prominence, tmp.numberOfPlaces
+    CASE WHEN u.userType = 'admin' THEN 'kulana' ELSE u.username END AS username, u.prominence, tmp.numberOfPlaces
     FROM lists as l
     INNER JOIN users as u ON l.creatorUserId=u.id
     INNER JOIN (

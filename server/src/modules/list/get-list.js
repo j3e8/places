@@ -1,5 +1,5 @@
 const db = require('../../connections/db');
-const getPlacesOnList = require('./get-places-on-list');
+const PlaceModule = require('../place');
 
 module.exports = function(listId, userId) {
   let list;
@@ -7,7 +7,7 @@ module.exports = function(listId, userId) {
   let _userId = db.escape(userId);
 
   return db.query(`SELECT l.id, l.listName, l.description, l.dateCreated, l.dateModified, l.creatorUserId,
-    u.username, u.prominence,
+    CASE WHEN u.userType = 'admin' THEN 'kulana' ELSE u.username END AS username, u.prominence,
     me.dateFollowed, CASE WHEN me.dateFollowed iS NOT NULL THEN 1 ELSE 0 END AS isFollowed,
     COUNT(distinct ul.userId) as numberOfFollowers
     FROM lists as l
@@ -20,7 +20,7 @@ module.exports = function(listId, userId) {
     if (rows && rows.length) {
       list = rows[0];
       list.isFollowed = list.isFollowed ? true : false;
-      return getPlacesOnList(listId, userId)
+      return PlaceModule.getPlacesOnList(listId, userId)
       .then((places) => {
         list.places = places;
         return Promise.resolve(list);

@@ -74,7 +74,7 @@ var CUSTOM_MAP_STYLES = [
     "elementType": "geometry",
     "stylers": [
       {
-        "color": "#fffde6"
+        "color": "#fcfae2"
       }
     ]
   },
@@ -97,6 +97,15 @@ var CUSTOM_MAP_STYLES = [
     ]
   },
   {
+    "featureType": "poi.government",
+    "elementType": "geometry.fill",
+    "stylers": [
+      {
+        "color": "#bff5de"
+      }
+    ]
+  },
+  {
     "featureType": "poi.park",
     "elementType": "geometry.fill",
     "stylers": [
@@ -115,6 +124,33 @@ var CUSTOM_MAP_STYLES = [
     ]
   },
   {
+    "featureType": "poi.place_of_worship",
+    "elementType": "geometry.fill",
+    "stylers": [
+      {
+        "color": "#bff5de"
+      }
+    ]
+  },
+  {
+    "featureType": "poi.school",
+    "elementType": "geometry.fill",
+    "stylers": [
+      {
+        "color": "#bff5de"
+      }
+    ]
+  },
+  {
+    "featureType": "poi.sports_complex",
+    "elementType": "geometry.fill",
+    "stylers": [
+      {
+        "color": "#bff5de"
+      }
+    ]
+  },
+  {
     "featureType": "road",
     "elementType": "geometry",
     "stylers": [
@@ -128,7 +164,7 @@ var CUSTOM_MAP_STYLES = [
     "elementType": "geometry",
     "stylers": [
       {
-        "color": "#fdfcf8"
+        "color": "#ffffff"
       }
     ]
   },
@@ -146,7 +182,7 @@ var CUSTOM_MAP_STYLES = [
     "elementType": "geometry.stroke",
     "stylers": [
       {
-        "color": "#dbcf60"
+        "color": "#ebdf73"
       }
     ]
   },
@@ -164,7 +200,7 @@ var CUSTOM_MAP_STYLES = [
     "elementType": "geometry.stroke",
     "stylers": [
       {
-        "color": "#ffb388"
+        "color": "#ffbc95"
       }
     ]
   },

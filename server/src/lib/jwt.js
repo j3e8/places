@@ -3,7 +3,7 @@ let jwt = require('jsonwebtoken');
 let publicKey, privateKey;
 let options = {
   'algorithm': 'RS256',
-  'duration': 15 * 60 * 1000
+  'duration': 24 * 60 * 60 * 1000
 }
 
 let JWT = {};

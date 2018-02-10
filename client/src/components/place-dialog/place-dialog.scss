@@ -1,8 +1,16 @@
 place-dialog {
   #place-dialog-map {
-    /* height: 60vh; */
     height: 500px;
     width: 100%;
+  }
+  #geojson {
+    height: 500px;
+    width: 100%;
+    textarea {
+      height: 100%;
+      font-family: monospace;
+      tab-size: 2;
+    }
   }
 
   h2 {

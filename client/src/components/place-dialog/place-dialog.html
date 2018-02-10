@@ -1,31 +1,48 @@
 <div class="dialog-shadow" ng-show="show" ng-class="{ 'open': show, 'closed': show === false }"></div>
 <div class="dialog-box" ng-show="show" ng-class="{ 'open': show, 'closed': show === false }">
-  <h2><input type="text" ng-model="place.placeName"></h2>
 
-  <div class="breathe">
-    <label>Place category</label>
-    <select ng-model="place.placeTypeId" ng-options="pt.id as pt.placeType for pt in placeTypes"></select>
-  </div>
+  <div ng-hide="geoJSONIsDisplayed">
+    <h2><input type="text" ng-model="place.placeName"></h2>
 
-  <div class="breathe">
-    <div class="tools">
-      <div class="flex-row spaced">
-        <div class="flex-cell fixed">
-          <img src="/assets/images/pan.svg" ng-click="setDrawingMode('pan')">
-          <img src="/assets/images/marker.svg" ng-click="setDrawingMode('marker')">
-          <img src="/assets/images/polygon.svg" ng-click="setDrawingMode('polygon')">
-          <img src="/assets/images/polyline.svg" ng-click="setDrawingMode('polyline')">
-        </div>
-        <div class="flex-cell">
-          <input type="text" id="gm-input" placeholder="Search">
+    <div class="breathe">
+      <label>Place category</label>
+      <select ng-model="place.placeTypeId" ng-options="pt.id as pt.placeType for pt in placeTypes"></select>
+    </div>
+
+    <div class="breathe">
+      <div class="tools">
+        <div class="flex-row spaced vertical-center">
+          <div class="flex-cell fixed">
+            <img src="/assets/images/pan.svg" ng-click="setDrawingMode('pan')">
+            <img src="/assets/images/marker.svg" ng-click="setDrawingMode('marker')">
+            <img src="/assets/images/polygon.svg" ng-click="setDrawingMode('polygon')">
+            <img src="/assets/images/polyline.svg" ng-click="setDrawingMode('polyline')">
+          </div>
+          <div class="flex-cell">
+            <input type="text" id="gm-input" placeholder="Search">
+          </div>
+          <div class="flex-cell fixed">
+            <span ng-click="toggleGeoJSON()" class="clickable">GeoJSON</span>
+          </div>
         </div>
       </div>
+      <div id="place-dialog-map" ng-hide="geoJSONIsDisplayed"></div>
     </div>
-    <div id="place-dialog-map"></div>
+
+    <div class="breathe text-center">
+      <button ng-click="save()">Save</button>
+      <button class="cancel" ng-click="cancel()">Cancel</button>
+    </div>
   </div>
 
-  <div class="breathe text-center">
-    <button ng-click="save()">Save</button>
-    <button class="cancel" ng-click="cancel()">Cancel</button>
+  <div ng-show="geoJSONIsDisplayed">
+    <div id="geojson" ng-show="geoJSONIsDisplayed">
+      <textarea ng-model="geojson"></textarea>
+    </div>
+    <div class="breathe text-center">
+      <button ng-click="applyGeoJSON()" ng-hide="isParsing">Apply</button>
+      <button class="cancel" ng-click="toggleGeoJSON()" ng-hide="isParsing">Cancel</button>
+      <wait-indicator color="white" ng-show="isParsing"></wait-indicator>
+    </div>
   </div>
 </div>

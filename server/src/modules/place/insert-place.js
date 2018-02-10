@@ -13,6 +13,7 @@ module.exports = function(user, place) {
     'maxLatitude': maxLatitude,
     'maxLongitude': maxLongitude,
     'placeTypeId': place.placeTypeId,
+    'region': place.region,
     'shapeType': place.shapeType,
     'shapeData': JSON.stringify(place.shapeData),
     'creatorUserId': user.id

@@ -56,6 +56,13 @@ app.service("ListService", ["$http", "PLACES_SERVICE_URL", "PlaceService", funct
     });
   }
 
+  ListService.listHasPolylines = function(list) {
+    var pl = list.places.find(function(place) {
+      return place.shapeType == 'polyline';
+    });
+    return pl ? true : false;
+  }
+
   ListService.follow = function(userId, listId) {
     return new Promise(function(resolve, reject) {
       $http.post(PLACES_SERVICE_URL + '/user/' + userId + '/list/' + listId)

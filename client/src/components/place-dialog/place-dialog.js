@@ -1,4 +1,4 @@
-app.directive("placeDialog", ["Shape", "MapService", "PlaceService", "$timeout", function(Shape, MapService, PlaceService, $timeout) {
+app.directive("placeDialog", ["Shape", "MapService", "PlaceService", "$timeout", "alert", function(Shape, MapService, PlaceService, $timeout, alert) {
   return {
     restrict: 'E',
     scope: {
@@ -41,15 +41,9 @@ app.directive("placeDialog", ["Shape", "MapService", "PlaceService", "$timeout",
             $scope.place = place;
             $timeout(function() {
               MapService.addPlaceToMap(map, $scope.place, null);
-              $scope.place.gmObject.setEditable(true);
-              // if ($scope.place.shapeType == 'polygon') {
-              //   console.log('polygon');
-              //   var p = $scope.place.gmObject.getPath();
-              //   console.log('path', p);
-              //   google.maps.event.addListener(p, 'insert_at', polygonEdited);
-              //   google.maps.event.addListener(p, 'remove_at', polygonEdited);
-              //   google.maps.event.addListener(p, 'set_at', polygonEdited);
-              // }
+              if ($scope.place.gmObject.setEditable) {
+                $scope.place.gmObject.setEditable(true);
+              }
               var placeBounds = PlaceService.calculateBounds($scope.place);
               var bounds = new google.maps.LatLngBounds();
               bounds.extend({ lat: placeBounds.minLat, lng: placeBounds.minLng });
@@ -106,11 +100,17 @@ app.directive("placeDialog", ["Shape", "MapService", "PlaceService", "$timeout",
       });
 
       $scope.save = function() {
+        var gmObject = $scope.place.gmObject;
         var createOrUpdate = $scope.place.id ? PlaceService.update : PlaceService.create;
         $scope.place.shapeData = makeShapeDataFromMapObject($scope.place.gmObject);
-        var gmObject = $scope.place.gmObject;
-        $scope.place.gmObject = undefined;
-        createOrUpdate($scope.place)
+
+        MapService.findContainingRegion($scope.place.shapeData)
+        .then(function(region) {
+          console.log('containing region', region);
+          $scope.place.region = region;
+          $scope.place.gmObject = undefined;
+          return createOrUpdate($scope.place)
+        })
         .then(function(place) {
           if ($scope.onSave) {
             place.shapeData = JSON.parse(place.shapeData);
@@ -141,6 +141,43 @@ app.directive("placeDialog", ["Shape", "MapService", "PlaceService", "$timeout",
           tool = null;
         }
         drawingManager.setDrawingMode(tool);
+      }
+
+      $scope.toggleGeoJSON = function() {
+        $scope.geojson = null;
+        $scope.geoJSONIsDisplayed = $scope.geoJSONIsDisplayed ? false : true;
+      }
+
+      $scope.applyGeoJSON = function() {
+        $scope.isParsing = true;
+        try {
+          var data = JSON.parse($scope.geojson);
+          var shapeData = Shape.shapeDataFromGeoJson(data);
+          var gmObject = Shape.gmPolygonFromPolygon(shapeData);
+          $scope.place.shapeType = Shape.POLYGON;
+          $scope.place.gmObject = gmObject;
+          if (data && data.properties) {
+            var nameFromJson = data.properties.name || data.properties.admin;
+            $scope.place.placeName = nameFromJson || $scope.place.placeName;
+          }
+
+          $scope.toggleGeoJSON();
+
+          gmObject.setMap(map);
+          gmObject.setEditable(true);
+
+          var bounds = Shape.calculateBounds(shapeData);
+          var center = {
+            lat: (bounds.minLat+bounds.maxLat) / 2,
+            lng: (bounds.minLng+bounds.maxLng) / 2
+          }
+          map.setCenter(new google.maps.LatLng(center));
+          $scope.isParsing = false;
+        } catch(err) {
+          alert('Invalid JSON', true);
+          $scope.isParsing = false;
+          console.error(err);
+        }
       }
 
       function initMap() {
@@ -256,8 +293,8 @@ app.directive("placeDialog", ["Shape", "MapService", "PlaceService", "$timeout",
       }
 
       function polylineComplete(gmPolyline) {
-        if ($scope.place.shapeType != Shape.POLYLINE) {
-          $scope.place.gmObject = null;
+        if ($scope.place.gmObject) {
+          $scope.place.gmObject.setMap(null);
         }
         $scope.place.shapeType = Shape.POLYLINE;
         $scope.place.gmObject = gmPolyline;

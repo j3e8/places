@@ -36,6 +36,14 @@ app.config(["$routeProvider", "$locationProvider", function($routeProvider, $loc
     templateUrl: '/pages/list/list.html',
     controller: 'listController'
   })
+  .when('/places', {
+    templateUrl: '/pages/places/places.html',
+    controller: 'placesController'
+  })
+  .when('/place/:placeId', {
+    templateUrl: '/pages/place/place.html',
+    controller: 'placeController'
+  })
   .when('/signin', {
     templateUrl: '/pages/signin/signin.html',
     controller: 'signinController'

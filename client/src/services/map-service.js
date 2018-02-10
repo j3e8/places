@@ -1,4 +1,4 @@
-app.service("MapService", ["$rootScope", function($rootScope) {
+app.service("MapService", ["$rootScope", "Shape", function($rootScope, Shape) {
   var MapService = {
     loaded: false
   };
@@ -62,6 +62,16 @@ app.service("MapService", ["$rootScope", function($rootScope) {
           map: map
         });
         break;
+      case 'polyline':
+        gmObject = new google.maps.Polyline({
+          shapeId: place.id,
+          path: place.shapeData,
+          strokeColor: place.isChecked ? '#2fb0dd' : '#c67788',
+          strokeOpacity: 0.9,
+          strokeWeight: 4,
+          map: map
+        });
+        break;
       default: break;
     }
     if (gmObject) {
@@ -70,6 +80,61 @@ app.service("MapService", ["$rootScope", function($rootScope) {
         google.maps.event.addListener(place.gmObject, "click", clickHandler);
       }
     }
+  }
+
+  MapService.findContainingRegion = function(shapeData) {
+    return new Promise(function(resolve, reject) {
+      var geocoder = new google.maps.Geocoder();
+      var shapeBounds = Shape.calculateBounds(shapeData);
+      var center = Shape.getCenterOfShape(shapeData);
+      var coord = new google.maps.LatLng(center.lat, center.lng);
+      geocoder.geocode({'latLng': coord}, function(results, status) {
+        if (status == google.maps.GeocoderStatus.OK && results && results.length) {
+          var regions = results.filter(function(r) {
+            if (!r.geometry.bounds) {
+              return false;
+            }
+            var ne = r.geometry.bounds.getNorthEast();
+            var sw = r.geometry.bounds.getSouthWest();
+            var regionBounds = {
+              minLat: sw.lat(),
+              maxLat: ne.lat(),
+              maxLng: ne.lng(),
+              minLng: sw.lng()
+            }
+            if (Shape.boundsContains(regionBounds, shapeBounds)) {
+              return true;
+            }
+            return false;
+          });
+          return resolve(formatRegion(regions));
+        }
+        resolve();
+      });
+    });
+  }
+
+  function formatRegion(regions) {
+    if (!regions || !regions.length) {
+      return '';
+    }
+
+    var r = regions[0];
+    var first = r.address_components.find(function(a) { return a.types.indexOf('locality') > -1; });
+    var second = r.address_components.find(function(a) { return a.types.indexOf('administrative_area_level_1') > -1; });
+    var third = r.address_components.find(function(a) { return a.types.indexOf('country') > -1; });
+
+    var parts = [];
+    if (first) {
+      parts.push(first.short_name || first.long_name);
+    }
+    if (second) {
+      parts.push(second.short_name || second.long_name);
+    }
+    if (third) {
+      parts.push(third.short_name || third.long_name);
+    }
+    return parts.join(', ');
   }
 
   MapService.removePlaceFromMap = function(map, place) {
@@ -87,6 +152,18 @@ app.service("MapService", ["$rootScope", function($rootScope) {
     bounds.extend({ lat: listBounds.minLat, lng: listBounds.minLng });
     bounds.extend({ lat: listBounds.maxLat, lng: listBounds.maxLng });
     map.fitBounds(bounds);
+  }
+
+  MapService.toggleRoads = function(map, on) {
+    var styleArray = [
+      {
+        featureType: "road",
+        stylers: [
+          { visibility: (on ? "on" : "off") }
+        ]
+      }
+    ];
+    map.setOptions({styles: styleArray});
   }
 
   MapService.updatePlaceOnMap = function(map, place) {
@@ -114,6 +191,13 @@ app.service("MapService", ["$rootScope", function($rootScope) {
           fillColor: place.highlighted
             ? '#ffed48'
             : (place.isChecked ? '#45c5ff' : '#ef8f9f')
+        });
+        break;
+      case 'polyline':
+        place.gmObject.setOptions({
+          strokeColor: place.highlighted
+            ? '#ddc937'
+            : (place.isChecked ? '#2fb0dd' : '#c67788')
         });
         break;
       default: break;

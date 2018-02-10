@@ -1,8 +1,7 @@
 app.directive('waitIndicator', [function() {
   return {
     scope: {
-      color: '=',
-      size: '@'
+      color: '@'
     },
     templateUrl: '/components/wait-indicator/wait-indicator.html'
   }

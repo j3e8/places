@@ -1,0 +1,41 @@
+<div class="places-page">
+  <div class="content" ng-show="!isDeterminingLocation && !isLoading">
+
+    <section ng-show="nearbyPlaces.length">
+      <div class="flex-row spaced vertical-bottom">
+        <div class="flex-cell">
+          <h1>Nearby Places</h1>
+        </div>
+        <div class="flex-cell fixed">
+          <i class="material-icons clickable" ng-click="toggleSearch()">search</i>
+        </div>
+      </div>
+
+      <div>
+        <place-tile ng-repeat="place in nearbyPlaces" place="place" on-edit="editPlace"></place-tile>
+      </div>
+    </section>
+
+    <section ng-show="popularPlaces.length">
+      <div class="flex-row spaced vertical-bottom">
+        <div class="flex-cell">
+          <h1>Popular Places</h1>
+        </div>
+        <div class="flex-cell fixed">
+          <i class="material-icons clickable" ng-click="toggleSearch()">search</i>
+        </div>
+      </div>
+
+      <div>
+        <place-tile ng-repeat="place in popularPlaces" place="place" on-edit="editPlace"></place-tile>
+      </div>
+    </section>
+
+  </div>
+
+  <div class="breathe text-center" ng-show="isDeterminingLocation || isLoading">
+    <wait-indicator></wait-indicator>
+  </div>
+</div>
+
+<place-dialog ng-show="newPlaceDialogIsDisplayed" show="newPlaceDialogIsDisplayed" center="centerCoords" place-id="placeToEditId" on-save="afterPlaceSave" on-cancel="closeNewPlaceDialog"></place-dialog>

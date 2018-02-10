@@ -5,7 +5,6 @@ module.exports = {
   getList: require('./get-list'),
   getListsCreatedByUser: require('./get-lists-created-by-user'),
   getListsFollowedByUser: require('./get-lists-followed-by-user'),
-  getPlacesOnList: require('./get-places-on-list'),
   getPopularLists: require('./get-popular-lists'),
   followList: require('./follow-list'),
   unfollowList: require('./unfollow-list'),

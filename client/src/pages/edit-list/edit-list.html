@@ -27,6 +27,7 @@
             <div id="place-search-results" ng-show="placeSearch && placeSearchResults.length">
               <div class="place-search-result" ng-repeat="result in placeSearchResults" ng-click="handlePlaceResultClick(result)">
                 {{ result.placeName }}
+                <div class="subtle">{{ result.region }}</div>
               </div>
             </div>
           </div>
@@ -39,7 +40,7 @@
               <div class="flex-row spaced vertical-center">
                 <div class="flex-cell">
                   {{ place.placeName }}
-                  <div class="place-type">{{ place.placeType }}</div>
+                  <div class="subtle">{{ place.region }}</div>
                 </div>
                 <div class="flex-cell fixed" ng-show="place.creatorUserId == user.id"><i class="material-icons tools clickable" ng-click="editPlace(place)">edit</i></div>
                 <div class="flex-cell fixed"><i class="material-icons tools" ng-click="removePlace(place)">close</i></div>
@@ -55,7 +56,7 @@
             <button class="cancel inverse" ng-click="cancelList()">Cancel</button>
             <div class="warning" ng-show="saveError">{{ saveError }}</div>
           </div>
-          <wait-indicator ng-show="isSaving"></wait-indicator>
+          <wait-indicator color="white" ng-show="isSaving"></wait-indicator>
         </div>
       </div>
     </div>
