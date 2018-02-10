@@ -52,7 +52,7 @@ function createUsersTable(db) {
       (
         id int NOT NULL PRIMARY KEY auto_increment,
         username varchar(100) NOT NULL,
-        email varchar(255) NOT NULL,
+        email varchar(100) NOT NULL,
         password varchar(64) NOT NULL,
         dateCreated datetime NOT NULL default NOW(),
         userType enum('user','admin') NOT NULL DEFAULT 'user',
@@ -99,7 +99,7 @@ function createPlacesTable(db) {
         maxLongitude decimal(10,7) NOT NULL,
         placeTypeId int NOT NULL,
         shapeType enum('point','polygon','polyline') NOT NULL DEFAULT 'point',
-        shapeData JSON NOT NULL,
+        shapeData text NOT NULL,
         creatorUserId int NOT NULL,
         dateCreated datetime NOT NULL default NOW(),
         status enum('active','deleted') NOT NULL DEFAULT 'active',
