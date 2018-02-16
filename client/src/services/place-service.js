@@ -80,7 +80,7 @@ app.service("PlaceService", ["$http", "PLACES_SERVICE_URL", "Shape", function($h
 
   PlaceService.searchPlacesByLocation = function(coords) {
     return new Promise(function(resolve, reject) {
-      $http.get(PLACES_SERVICE_URL + '/place?lat=' + coords.lat + '&lng=' + coords.lng)
+      $http.get(PLACES_SERVICE_URL + '/place?minLat=' + coords.minLat + '&maxLat=' + coords.maxLat + '&minLng=' + coords.minLng + '&maxLng=' + coords.maxLng)
       .then(function(response) {
         resolve(response.data);
       }, function(err) {

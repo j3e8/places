@@ -1,6 +1,8 @@
 app.service("ListService", ["$http", "PLACES_SERVICE_URL", "PlaceService", function($http, PLACES_SERVICE_URL, PlaceService) {
   var ListService = {};
 
+  ListService.ALPHABETICALLY = 0;
+
   ListService.create = function(list) {
     return new Promise(function(resolve, reject) {
       $http.post(PLACES_SERVICE_URL + '/list', list)
@@ -72,6 +74,18 @@ app.service("ListService", ["$http", "PLACES_SERVICE_URL", "PlaceService", funct
         reject(err);
       });
     });
+  }
+
+  ListService.sortList = function(list, sort) {
+    if (!list || !list.places) {
+      return;
+    }
+    if (sort == ListService.ALPHABETICALLY) {
+      list.places.sort(function(a, b) {
+        if (a.placeName == b.placeName) return 0;
+        return a.placeName < b.placeName ? -1 : 1;
+      });
+    }
   }
 
   ListService.unfollow = function(userId, listId) {

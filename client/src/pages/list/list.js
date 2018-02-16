@@ -1,9 +1,10 @@
-app.controller("listController", ["$scope", "$routeParams", "MapService", "PlaceService", "ListService", "UserService", "alert", "$timeout", "$location",
-function($scope, $routeParams, MapService, PlaceService, ListService, UserService, alert, $timeout, $location) {
+app.controller("listController", ["$scope", "$routeParams", "MapService", "PlaceService", "ListService", "UserService", "alert", "$timeout", "$location", function($scope, $routeParams, MapService, PlaceService, ListService, UserService, alert, $timeout, $location) {
   var map;
+  var DEFAULT_COORDS = { lat: 39.5464, lng: -97.3296 };
 
   $scope.user = UserService.getUser();
   $scope.placeDialogIsDisplayed = undefined;
+  $scope.centerCoords = DEFAULT_COORDS;
 
   MapService.load()
   .then(function() {
@@ -11,6 +12,7 @@ function($scope, $routeParams, MapService, PlaceService, ListService, UserServic
     ListService.get($routeParams.listId)
     .then(function(list) {
       $scope.list = list;
+      ListService.sortList($scope.list, ListService.ALPHABETICALLY)
       $scope.list.places.forEach(function(place) {
         MapService.addPlaceToMap(map, place, $scope.placeClicked);
       });
@@ -31,16 +33,16 @@ function($scope, $routeParams, MapService, PlaceService, ListService, UserServic
   });
 
   $scope.displayPlaceDialog = function(place) {
-    $scope.placeToEdit = place;
+    $scope.placeToEditId = place.id;
     $scope.placeDialogIsDisplayed = true;
   }
 
   $scope.closePlaceDialog = function() {
-    $scope.placeToEdit = null;
+    $scope.placeToEditId = null;
     $scope.placeDialogIsDisplayed = false;
   }
 
-  $scope.afterPlaceSave = function() {
+  $scope.afterPlaceSave = function(place) {
 
   }
 
@@ -59,7 +61,6 @@ function($scope, $routeParams, MapService, PlaceService, ListService, UserServic
       // scroll to the place on the list
       var li = document.getElementById('place_' + clickedPlace.id);
       if (li) {
-        console.log(li.offsetTop);
         var placeList = document.getElementById('place-list');
         placeList.scrollTo(0, li.offsetTop);
       }
@@ -120,12 +121,6 @@ function($scope, $routeParams, MapService, PlaceService, ListService, UserServic
     });
   }
 
-  function findPlaceByLatLng(lat, lng) {
-    return $scope.list.places.find(function(place) {
-      return Math.abs(place.shapeData.lat - lat) < 0.00000001 && Math.abs(place.shapeData.lng - lng) < 0.00000001;
-    });
-  }
-
   function initMap() {
     map = new google.maps.Map(document.getElementById('list-map'), {
       zoom: $scope.zoom,
@@ -141,5 +136,4 @@ function($scope, $routeParams, MapService, PlaceService, ListService, UserServic
     $scope.unhighlightAllPlaces();
     $scope.$apply();
   }
-
 }]);

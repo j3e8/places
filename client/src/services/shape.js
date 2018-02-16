@@ -5,6 +5,9 @@ app.service("Shape", function() {
   Shape.POLYGON = 'polygon';
   Shape.POLYLINE = 'polyline';
 
+  Shape.M_PER_DEGREE_LAT = 111111;
+  Shape.METERS_PER_MILE = 1609.34;
+
   Shape.polygonFromGMPolygon = function(gmPolygon) {
     if (Object.prototype.toString.call(gmPolygon) == '[object Array]') {
       console.log('array of polygons');
@@ -141,10 +144,20 @@ app.service("Shape", function() {
 
   Shape.getCenterOfShape = function(shapeData) {
     var bounds = Shape.calculateBounds(shapeData);
+    return Shape.getCenterOfBounds(bounds);
+  }
+
+  Shape.getCenterOfBounds = function(bounds) {
     return {
       lat: (bounds.minLat + bounds.maxLat) / 2,
       lng: (bounds.minLng + bounds.maxLng) / 2
     }
+  }
+
+  Shape.calculateDistanceBetweenCoordinates = function(a, b) {
+    var mLat = milesPerLatitude(a.lat);
+    var mLng = milesPerLongitude(a.lat);
+    return Math.sqrt((a.lat - b.lat)*mLat*(a.lat - b.lat)*mLat + (a.lng - b.lng)*mLng*(a.lng - b.lng)*mLng);
   }
 
   function findMinProperty(arr, prop) {
@@ -173,6 +186,16 @@ app.service("Shape", function() {
       }
     });
     return val;
+  }
+
+  function milesPerLatitude(lat) {
+    return Shape.M_PER_DEGREE_LAT / Shape.METERS_PER_MILE;
+  }
+
+  function milesPerLongitude(lat) {
+    let rlat = lat / 180 * Math.PI;
+    let m = Shape.M_PER_DEGREE_LAT * Math.abs(Math.cos(rlat));
+    return m / Shape.METERS_PER_MILE;
   }
 
   return Shape;
