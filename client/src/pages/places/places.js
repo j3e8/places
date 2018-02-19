@@ -1,5 +1,8 @@
-app.controller("placesController", ["$scope", "PlaceService", "MapService", "Shape", "alert", "$timeout", function($scope, PlaceService, MapService, Shape, alert, $timeout) {
+app.controller("placesController", ["$scope", "PlaceService", "MapService", "ListService", "Shape", "alert", "$timeout", function($scope, PlaceService, MapService, ListService, Shape, alert, $timeout) {
   var map;
+  var DEFAULT_ZOOM = 11;
+  var DEFAULT_COORDS = { lat: 39.5464, lng: -97.3296 };
+  var DEFAULT_RADIUS_IN_MILES = 5.0;
 
   $scope.newPlaceDialogIsDisplayed = undefined;
   $scope.isDeterminingLocation = true;
@@ -24,14 +27,10 @@ app.controller("placesController", ["$scope", "PlaceService", "MapService", "Sha
 
   function handlePosition(position) {
     $scope.isDeterminingLocation = false;
-    // map.setCenter(new google.maps.LatLng({ lat: position.coords.latitude, lng: position.coords.longitude }));
-    // map.getBounds();
-    var bounds = {
-      minLat: position.coords.latitude - 1,
-      maxLat: position.coords.latitude + 1,
-      minLng: position.coords.longitude - 1,
-      maxLng: position.coords.longitude + 1
-    };
+    $scope.currentPosition = position;
+    var center = { lat: $scope.currentPosition.coords.latitude, lng: $scope.currentPosition.coords.longitude };
+    map.setCenter(new google.maps.LatLng({ lat: center.lat, lng: center.lng }));
+    var bounds = Shape.getBoundsAroundCenter(center, DEFAULT_RADIUS_IN_MILES);
     $scope.loadNearbyPlaces(bounds);
     $scope.$apply();
   }
@@ -42,12 +41,17 @@ app.controller("placesController", ["$scope", "PlaceService", "MapService", "Sha
   }
 
   $scope.loadPopularPlaces = function() {
+    console.log('loadPopularPlaces');
     $scope.isLoading = true;
     PlaceService.getPopularPlaces()
     .then(function(popularPlaces) {
       $scope.popularPlaces = popularPlaces;
       $scope.isLoading = false;
       addPlacesToMap(popularPlaces);
+      var fauxList = { places: popularPlaces };
+      console.log('fauxList', fauxList);
+      var listBounds = ListService.calculateBounds(fauxList);
+      MapService.setMapToContainList(map, listBounds);
       $scope.$apply();
     })
     .catch(function(err) {
@@ -58,6 +62,7 @@ app.controller("placesController", ["$scope", "PlaceService", "MapService", "Sha
   }
 
   $scope.loadNearbyPlaces = function(bounds) {
+    console.log('loadNearbyPlaces', bounds);
     var center = Shape.getCenterOfBounds(bounds);
     $scope.isLoading = true;
     PlaceService.searchPlacesByLocation(bounds)
@@ -76,7 +81,7 @@ app.controller("placesController", ["$scope", "PlaceService", "MapService", "Sha
         $scope.loadPopularPlaces();
         return;
       }
-      addPlacesToMap(nearbyPlaces);
+      waitToMapNearbyPlaces();
       $scope.$apply();
     })
     .catch(function(err) {
@@ -136,17 +141,9 @@ app.controller("placesController", ["$scope", "PlaceService", "MapService", "Sha
   }
 
   function addPlacesToMap(places) {
-    if (!map) {
-      console.log('map not ready');
-      return $timeout(addPlacesToMap.bind(this, places), 10);
-    }
-    console.log('adding places');
     places.forEach(function(place) {
       MapService.addPlaceToMap(map, place, handlePlaceClick);
     });
-    var fauxList = { places: places };
-    var listBounds = ListService.calculateBounds(fauxList);
-    MapService.setMapToContainList(map, listBounds);
   }
 
   function handlePlaceClick(place) {
@@ -155,17 +152,32 @@ app.controller("placesController", ["$scope", "PlaceService", "MapService", "Sha
 
   function initMap() {
     map = new google.maps.Map(document.getElementById('place-map'), {
-      zoom: $scope.zoom,
-      center: new google.maps.LatLng($scope.centerCoords),
+      zoom: DEFAULT_ZOOM,
+      center: new google.maps.LatLng(DEFAULT_COORDS),
       mapTypeId: 'roadmap',
       gestureHandling: 'greedy'
     });
     map.setOptions({ styles: CUSTOM_MAP_STYLES });
     google.maps.event.addListener(map, "click", mapClick);
+    waitToMapNearbyPlaces();
   }
 
   function mapClick() {
     $scope.unhighlightAllPlaces();
+    $scope.$apply();
+  }
+
+  function waitToMapNearbyPlaces() {
+    if (!map || $scope.isDeterminingLocation || !$scope.currentPosition) {
+      return $timeout(waitToMapNearbyPlaces, 150);
+    }
+
+    if ($scope.hasMappedNearbyPlaces) {
+      return;
+    }
+    $scope.hasMappedNearbyPlaces = true;
+
+    addPlacesToMap($scope.nearbyPlaces);
     $scope.$apply();
   }
 

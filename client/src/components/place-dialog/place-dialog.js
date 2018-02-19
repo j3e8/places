@@ -184,7 +184,7 @@ app.directive("placeDialog", ["Shape", "MapService", "PlaceService", "$timeout",
         var zoom = DEFAULT_ZOOM;
         map = new google.maps.Map(document.getElementById('place-dialog-map'), {
           zoom: zoom,
-          center: new google.maps.LatLng($scope.center),
+          center: new google.maps.LatLng($scope.center || DEFAULT_COORDS),
           mapTypeId: google.maps.MapTypeId.ROADMAP,
           gestureHandling: 'greedy'
         });

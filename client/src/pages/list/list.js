@@ -123,7 +123,6 @@ app.controller("listController", ["$scope", "$routeParams", "MapService", "Place
 
   function initMap() {
     map = new google.maps.Map(document.getElementById('list-map'), {
-      zoom: $scope.zoom,
       center: new google.maps.LatLng($scope.centerCoords),
       mapTypeId: 'roadmap',
       gestureHandling: 'greedy'

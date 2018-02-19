@@ -142,6 +142,18 @@ app.service("Shape", function() {
     }
   }
 
+  Shape.getBoundsAroundCenter = function(center, radius) {
+    var lat = degreesLatitudePerMile(center.lat, radius);
+    var lng = degreesLongitudePerMile(center.lat, radius);
+    var bounds = {
+      minLat: center.lat - lat,
+      maxLat: Number(center.lat) + Number(lat),
+      minLng: center.lng - lng,
+      maxLng: Number(center.lng) + Number(lng)
+    };
+    return bounds;
+  }
+
   Shape.getCenterOfShape = function(shapeData) {
     var bounds = Shape.calculateBounds(shapeData);
     return Shape.getCenterOfBounds(bounds);
@@ -196,6 +208,18 @@ app.service("Shape", function() {
     let rlat = lat / 180 * Math.PI;
     let m = Shape.M_PER_DEGREE_LAT * Math.abs(Math.cos(rlat));
     return m / Shape.METERS_PER_MILE;
+  }
+
+  function degreesLatitudePerMile(lat, miles) {
+    var m = miles * Shape.METERS_PER_MILE;
+    return m / Shape.M_PER_DEGREE_LAT;
+  }
+
+  function degreesLongitudePerMile(lat, miles) {
+    var m = miles * Shape.METERS_PER_MILE;
+    let rlat = lat / 180 * Math.PI;
+    let metersPerDegreeLongitude = Shape.M_PER_DEGREE_LAT * Math.abs(Math.cos(rlat));
+    return m / metersPerDegreeLongitude;
   }
 
   return Shape;

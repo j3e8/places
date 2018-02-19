@@ -1,16 +1,37 @@
-app.controller("placeController", ["$scope", "$routeParams", "MapService", "PlaceService", "ListService", "UserService", "alert", "$timeout", "$location",
-function($scope, $routeParams, MapService, PlaceService, ListService, UserService, alert, $timeout, $location) {
+app.controller("placeController", ["$scope", "$routeParams", "MapService", "PlaceService", "ListService", "UserService", "Shape", "alert", "$timeout", "$location",
+function($scope, $routeParams, MapService, PlaceService, ListService, UserService, Shape, alert, $timeout, $location) {
   var map;
 
   $scope.user = UserService.getUser();
   $scope.placeDialogIsDisplayed = undefined;
+  $scope.placeCenter = null;
 
   MapService.load()
   .then(function() {
     initMap();
-    PlaceService.get($routeParams.placeId)
+    getPlace();
+    getListsForPlace();
+  })
+  .catch(function(err) {
+    console.error(err);
+  });
+
+  $scope.displayPlaceDialog = function() {
+    $scope.placeDialogIsDisplayed = true;
+  }
+
+  $scope.closePlaceDialog = function() {
+    $scope.placeDialogIsDisplayed = false;
+  }
+
+  $scope.afterPlaceSave = function() {
+  }
+
+  function getPlace() {
+    PlaceService.getPlace($routeParams.placeId)
     .then(function(place) {
       $scope.place = place;
+      $scope.placeCenter = Shape.getCenterOfShape($scope.place.shapeData);
       MapService.addPlaceToMap(map, $scope.place, $scope.placeClicked);
       if ($scope.place.shapeType == 'polyline') {
         MapService.toggleRoads(map, false);
@@ -23,46 +44,16 @@ function($scope, $routeParams, MapService, PlaceService, ListService, UserServic
       console.error("Couldn't load place", err);
       $scope.$apply();
     });
-  })
-  .catch(function(err) {
-    console.error(err);
-  });
-
-  $scope.displayPlaceDialog = function(place) {
-    $scope.placeToEdit = place;
-    $scope.placeDialogIsDisplayed = true;
   }
 
-  $scope.closePlaceDialog = function() {
-    $scope.placeToEdit = null;
-    $scope.placeDialogIsDisplayed = false;
-  }
-
-  $scope.afterPlaceSave = function() {
-    $scope.place = $scope.placeToEdit;
-    $scope.placeToEdit = null;
-  }
-
-  $scope.placeClicked = function(gmEvent) {
-    var gmObject = this;
-    $scope.place.highlighted = true;
-    MapService.updatePlaceOnMap(map, $scope.place);
-  }
-
-  $scope.handleCheckboxClick = function(place) {
-    var p = Object.assign({}, place);
-    p.gmObject = undefined;
-    if (!p.isChecked) {
-      p.dateChecked = undefined;
-    }
-    PlaceService.updateUserPlace($scope.user.id, p)
-    .then(function(p) {
-      place.dateChecked = p.dateChecked;
-      MapService.updatePlaceOnMap(map, place);
+  function getListsForPlace() {
+    ListService.getListsForPlace($routeParams.placeId)
+    .then(function(lists) {
+      $scope.lists = lists;
       $scope.$apply();
     })
     .catch(function(err) {
-      $scope.$apply();
+      console.error("Couldn't load lists for place", err);
     });
   }
 
@@ -74,12 +65,6 @@ function($scope, $routeParams, MapService, PlaceService, ListService, UserServic
       gestureHandling: 'greedy'
     });
     map.setOptions({ styles: CUSTOM_MAP_STYLES });
-    google.maps.event.addListener(map, "click", mapClick);
-  }
-
-  function mapClick() {
-    $scope.place.isChecked = false;
-    $scope.$apply();
   }
 
 }]);
