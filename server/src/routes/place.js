@@ -40,6 +40,12 @@ module.exports = function(app) {
     .catch((err) => ErrorHandler.respondWithError(res, err));
   });
 
+  app.get('/api/user/:userId/places', function(req, res) {
+    Place.getRecentPlacesForUser(req.params.userId)
+    .then((result) => res.json(result))
+    .catch((err) => ErrorHandler.respondWithError(res, err));
+  });
+
   app.get('/api/placetypes', function(req, res) {
     PlaceType.listAll()
     .then((result) => res.json(result))

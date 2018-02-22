@@ -2,6 +2,7 @@
   <div class="flex-row spaced">
     <div class="flex-cell">
       <a class="place-name" ng-href="/place/{{ place.id }}">{{ place.placeName }}</a>
+      <div class="subtle">{{ place.region }}</div>
       <div>
         Appears on <span class="highlight">{{ place.numberOfLists }}
           <span ng-show="place.numberOfLists == 1">list</span>

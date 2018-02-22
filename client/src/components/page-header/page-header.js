@@ -1,4 +1,4 @@
-app.directive("pageHeader", [function() {
+app.directive("pageHeader", ["UserService", "$location", function(UserService, $location) {
   return {
     restrict: 'E',
     scope: {},
@@ -15,6 +15,11 @@ app.directive("pageHeader", [function() {
           $scope.isMenuDisplayed = false;
         }
       });
+
+      $scope.signout = function() {
+        UserService.signOut();
+        $location.path('/signin');
+      }
 
     }
   }

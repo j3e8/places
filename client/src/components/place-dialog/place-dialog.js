@@ -100,13 +100,13 @@ app.directive("placeDialog", ["Shape", "MapService", "PlaceService", "$timeout",
       });
 
       $scope.save = function() {
+        $scope.isSaving = true;
         var gmObject = $scope.place.gmObject;
         var createOrUpdate = $scope.place.id ? PlaceService.update : PlaceService.create;
         $scope.place.shapeData = makeShapeDataFromMapObject($scope.place.gmObject);
 
         MapService.findContainingRegion($scope.place.shapeData)
         .then(function(region) {
-          console.log('containing region', region);
           $scope.place.region = region;
           $scope.place.gmObject = undefined;
           return createOrUpdate($scope.place)
@@ -118,10 +118,12 @@ app.directive("placeDialog", ["Shape", "MapService", "PlaceService", "$timeout",
             $scope.onSave(place);
             $scope.reset();
           }
+          $scope.isSaving = false;
           $scope.$apply();
         })
         .catch(function(err) {
           console.error(err);
+          $scope.isSaving = false;
           $scope.$apply();
         });
       }

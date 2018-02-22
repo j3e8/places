@@ -5,8 +5,8 @@ module.exports = function(query) {
   if (query.search) {
     return PlaceModule.searchPlaces(query.search);
   }
-  else if (query.lat && query.lng) {
-    return PlaceModule.searchPlacesByLocation(query.lat, query.lng, RADIUS);
+  else if (query.minLat && query.maxLat && query.minLng && query.maxLng) {
+    return PlaceModule.searchPlacesByLocation(query.minLat, query.maxLat, query.minLng, query.maxLng);
   }
   else {
     return PlaceModule.getPopularPlaces();

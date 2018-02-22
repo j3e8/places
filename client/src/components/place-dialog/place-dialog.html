@@ -29,9 +29,13 @@
       <div id="place-dialog-map" ng-hide="geoJSONIsDisplayed"></div>
     </div>
 
-    <div class="breathe text-center">
+    <div class="breathe text-center" ng-hide="isSaving">
       <button ng-click="save()">Save</button>
       <button class="cancel" ng-click="cancel()">Cancel</button>
+    </div>
+
+    <div class="text-center" ng-show="isSaving">
+      <wait-indicator></wait-indicator>
     </div>
   </div>
 

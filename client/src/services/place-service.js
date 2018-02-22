@@ -78,6 +78,17 @@ app.service("PlaceService", ["$http", "PLACES_SERVICE_URL", "Shape", function($h
     });
   }
 
+  PlaceService.getRecentPlacesForUser = function(userId) {
+    return new Promise(function(resolve, reject) {
+      $http.get(PLACES_SERVICE_URL + '/user/' + userId + '/places')
+      .then(function(response) {
+        resolve(response.data);
+      }, function(err) {
+        reject(err);
+      });
+    });
+  }
+
   PlaceService.searchPlacesByLocation = function(coords) {
     return new Promise(function(resolve, reject) {
       $http.get(PLACES_SERVICE_URL + '/place?minLat=' + coords.minLat + '&maxLat=' + coords.maxLat + '&minLng=' + coords.minLng + '&maxLng=' + coords.maxLng)

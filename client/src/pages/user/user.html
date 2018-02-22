@@ -1,0 +1,60 @@
+<div class="place-page">
+  <div class="flex-cell fixed place-info">
+    <div class="flex-row">
+      <div class="flex-cell">
+        <h1>
+          {{ user.username }}
+        </h1>
+      </div>
+      <div class="flex-cell fixed subtle text-right">
+        <span class="highlight">{{ user.numberOfFollowers }}</span>
+        <span ng-show="user.numberOfFollowers == 1">follower</span>
+        <span ng-show="user.numberOfFollowers != 1">followers</span>
+        <div class="gap">
+          <button ng-click="handleFollowChange()" ng-show="!user.isFollowed">Follow</button>
+          <button ng-click="handleFollowChange()" class="cancel" ng-show="user.isFollowed">Unfollow</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section>
+    <div class="flex-row wrap mobile-wrap" id="map-and-list">
+      <div class="flex-cell map-cell" id="list-map">
+      </div>
+      <div class="flex-cell list-cell">
+
+        <div class="flex-column">
+          <div class="flex-cell fixed">
+            <div class="content">
+              <h2>Recently visited places</h2>
+            </div>
+          </div>
+          <div class="flex-cell" id="place-list">
+            <div class="content">
+              <place-tile ng-repeat="place in places" place="place" editable></place-tile>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="content">
+    <h2>Lists created by {{ user.username }}</h2>
+    <div>
+      <list-tile ng-repeat="list in createdLists" list="list" editable></list-tile>
+    </div>
+  </section>
+
+  <section class="content">
+    <h2>Lists followed by {{ user.username }}</h2>
+    <div>
+      <list-tile ng-repeat="list in followedLists" list="list" editable></list-tile>
+    </div>
+  </section>
+
+</div>
+
+<place-dialog ng-show="placeDialogIsDisplayed" show="placeDialogIsDisplayed" center="placeCenter" place-id="place.id" on-save="afterPlaceSave" on-cancel="closePlaceDialog"></place-dialog>

@@ -15,7 +15,7 @@ module.exports = function(app) {
     .catch((err) => ErrorHandler.respondWithError(res, err));
   });
 
-  app.get('/api/user/:userId', jwt.requirejwt, function(req, res) {
+  app.get('/api/user/:userId', function(req, res) {
     User.getUser(req.params.userId)
     .then((result) => res.json(result))
     .catch((err) => ErrorHandler.respondWithError(res, err));

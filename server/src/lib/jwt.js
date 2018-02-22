@@ -51,6 +51,9 @@ function init(pubkey, privkey, opt) {
 
   JWT.decode = function(authHeader) {
     let token = parseTokenFromHeader(authHeader);
+    if (!token) {
+      return Promise.reject("No auth token provided");
+    }
     return new Promise((resolve, reject) => {
       jwt.verify(token, publicKey, { 'algorithms': [ options.algorithm ] }, (err, decoded) => {
         if (err) {
@@ -65,6 +68,9 @@ function init(pubkey, privkey, opt) {
 }
 
 function parseTokenFromHeader(header) {
+  if (!header) {
+    return null;
+  }
   if (header.substring(0, 7).toLowerCase() == 'bearer ') {
     return header.substring(7);
   }

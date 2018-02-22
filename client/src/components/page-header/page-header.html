@@ -9,12 +9,14 @@
   </div>
   <nav class="main-menu" ng-class="{ 'open': isMenuDisplayed, 'closed': isMenuDisplayed === false }">
     <ul>
-      <li><a ng-href="/home">Followed lists</a></li>
+      <li ng-if="$root.user"><a ng-href="/home">Followed lists</a></li>
       <li><a ng-href="/lists">Popular lists</a></li>
       <li><a ng-href="/places">Nearby places</a></li>
-      <li><a ng-href="/created-lists">My created lists</a></li>
-      <li><a ng-href="/list/new">Make a list</a></li>
-      <li><a ng-href="/profile">My Profile</a></li>
+      <li ng-if="$root.user"><a ng-href="/created-lists">My created lists</a></li>
+      <li ng-if="$root.user"><a ng-href="/list/new">Make a list</a></li>
+      <li ng-if="$root.user"><a ng-href="/profile">My Profile</a></li>
+      <li ng-if="$root.user"><a ng-click="signout()">Sign out</a></li>
+      <li ng-if="!$root.user"><a ng-href="/signin">Sign in</a></li>
     </ul>
   </nav>
 </header>

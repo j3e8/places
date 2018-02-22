@@ -13,7 +13,7 @@ app.controller("signupController", ["$scope", "$location", "UserService", functi
     if ($scope.signupForm.$valid) {
       UserService.create($scope.username, $scope.email, $scope.password)
       .then(function() {
-        $location.path('/dashboard');
+        $location.path('/home');
         $scope.$apply();
       })
       .catch(function(err) {

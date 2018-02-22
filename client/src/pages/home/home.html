@@ -36,12 +36,12 @@
       </div>
     </section>
 
-    <section ng-show="followedLists.length < 3" class="subtle text-right">
+    <section ng-show="followedLists.length && followedLists.length < 3" class="subtle text-right">
       <a href="/lists">Find some other lists to follow</a>.</i>
     </section>
 
-    <section ng-show="!followedLists.length" class="subtle">
-      <i>You haven't followed any lists yet. <a href="/lists">Browse some popular ones</a>.</i>
+    <section ng-show="!followedLists.length" class="subtle text-right">
+      You haven't followed any lists yet. <a href="/lists">Browse some popular ones</a>.
     </section>
 
   </div>

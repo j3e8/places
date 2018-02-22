@@ -5,8 +5,8 @@ app.config(["$routeProvider", "$locationProvider", function($routeProvider, $loc
 
   $routeProvider
   .when('/', {
-    templateUrl: '/pages/signin/signin.html',
-    controller: 'signinController'
+    templateUrl: '/pages/signup/signup.html',
+    controller: 'signupController'
   })
   .when('/created-lists', {
     templateUrl: '/pages/created-lists/created-lists.html',
@@ -51,6 +51,10 @@ app.config(["$routeProvider", "$locationProvider", function($routeProvider, $loc
   .when('/signup', {
     templateUrl: '/pages/signup/signup.html',
     controller: 'signupController'
+  })
+  .when('/user/:userId', {
+    templateUrl: '/pages/user/user.html',
+    controller: 'userController'
   })
 }])
 .run(function($rootScope, $route){

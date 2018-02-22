@@ -1,17 +1,26 @@
 .page__signup {
-  .floating {
-    max-width: 300px;
-    margin: 50px auto;
-  }
-  .box {
-    margin: 10px 0;
-  }
-  #photo-half {
-    background-image: url(/assets/images/signin/hawaii2.jpg);
+  .hero {
+    background-image: url(/assets/images/hero2.jpg);
     background-position: center top;
     background-size: cover;
-  }
-  input.ng-invalid.ng-dirty.ng-touched {
-    border: 1px solid red;
+    padding: 40px 0;
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      .floating {
+        max-width: 330px;
+        margin: 0 0 0 auto;
+        color: #fff;
+        text-shadow: 1px 1px rgba(0, 0, 0, 0.3);
+        background-color: rgba(77, 198, 253, 0.3);
+        padding: 20px;
+      }
+      .box {
+        margin: 10px 0;
+      }
+      input.ng-invalid.ng-dirty.ng-touched {
+        border: 1px solid red;
+      }
+    }
   }
 }

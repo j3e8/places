@@ -33,15 +33,7 @@ app.service("MapService", ["$rootScope", "Shape", function($rootScope, Shape) {
     var gmObject;
     switch(place.shapeType) {
       case 'point':
-        var icon = {
-          url: place.highlighted
-            ? '/assets/images/marker-highlighted.png'
-            : (place.isChecked ? '/assets/images/marker-been-there.png' : '/assets/images/marker.png'),
-          size: new google.maps.Size(44, 60),
-          origin: new google.maps.Point(0, 0),
-          anchor: new google.maps.Point(11, 29),
-          scaledSize: new google.maps.Size(22, 30)
-        }
+        var icon = buildIconForPlace(map, place);
         gmObject = new google.maps.Marker({
           shapeId: place.id,
           position: new google.maps.LatLng(place.shapeData.lat, place.shapeData.lng),
@@ -172,15 +164,7 @@ app.service("MapService", ["$rootScope", "Shape", function($rootScope, Shape) {
     }
     switch(place.shapeType) {
       case 'point':
-        var icon = {
-          url: place.highlighted
-            ? '/assets/images/marker-highlighted.png'
-            : (place.isChecked ? '/assets/images/marker-been-there.png' : '/assets/images/marker.png'),
-          size: new google.maps.Size(44, 60),
-          origin: new google.maps.Point(0, 0),
-          anchor: new google.maps.Point(11, 29),
-          scaledSize: new google.maps.Size(22, 30)
-        }
+        var icon = buildIconForPlace(map, place);
         place.gmObject.setIcon(icon);
         break;
       case 'polygon':
@@ -202,6 +186,21 @@ app.service("MapService", ["$rootScope", "Shape", function($rootScope, Shape) {
         break;
       default: break;
     }
+  }
+
+  function buildIconForPlace(map, place) {
+    var s = 32;
+    var s2 = Math.round(s/2);
+    var icon = {
+      url: place.highlighted
+        ? '/assets/images/marker2-highlighted.png'
+        : (place.isChecked ? '/assets/images/marker2-been-there.png' : '/assets/images/marker2.png'),
+      size: new google.maps.Size(50, 50),
+      origin: new google.maps.Point(0, 0),
+      anchor: new google.maps.Point(s2, s2),
+      scaledSize: new google.maps.Size(s, s)
+    }
+    return icon;
   }
 
   return MapService;

@@ -50,4 +50,10 @@ module.exports = function(app) {
     .then((result) => res.json(result))
     .catch((err) => ErrorHandler.respondWithError(res, err));
   });
+
+  app.get('/api/lists', jwt.optionaljwt, function(req, res) {
+    List.searchLists(req.user, req.query)
+    .then((result) => res.json(result))
+    .catch((err) => ErrorHandler.respondWithError(res, err));
+  });
 }

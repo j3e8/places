@@ -20,6 +20,8 @@ app.service("UserService", ["$http", "$rootScope", "$timeout", "PLACES_SERVICE_U
     return new Promise(function(resolve, reject) {
       $http.post(PLACES_SERVICE_URL + '/user', user)
       .then(function(response) {
+        var tok = response.data;
+        initToken(tok);
         resolve(response.data);
       }, function(err) {
         reject(err);
@@ -46,6 +48,20 @@ app.service("UserService", ["$http", "$rootScope", "$timeout", "PLACES_SERVICE_U
 
   UserService.getUser = function() {
     return user;
+  }
+
+  UserService.getUserById = function(userId) {
+    if (!userId || (user && user.id == userId)) {
+      return Promise.resolve(user);
+    }
+    return new Promise(function(resolve, reject) {
+      $http.get(PLACES_SERVICE_URL + '/user/' + userId)
+      .then(function(response) {
+        resolve(response.data);
+      }, function(err) {
+        reject(err);
+      });
+    });
   }
 
   UserService.isSignedIn = function() {
@@ -99,7 +115,6 @@ app.service("UserService", ["$http", "$rootScope", "$timeout", "PLACES_SERVICE_U
       var tok = response.data;
       initToken(tok);
     }, function (err) {
-      $rootScope.$broadcast("signedout", {});
       destroyToken();
       return console.error(err);
     });
@@ -109,6 +124,11 @@ app.service("UserService", ["$http", "$rootScope", "$timeout", "PLACES_SERVICE_U
     authToken = null;
     user = null;
     $http.defaults.headers.common.Authorization = undefined;
+    $rootScope.$broadcast("signedout", {});
+    try {
+      localStorage.removeItem('user')
+      localStorage.removeItem('authToken')
+    } catch(err) { }
   }
 
   return UserService;
