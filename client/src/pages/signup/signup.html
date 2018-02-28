@@ -19,8 +19,15 @@
               <label>Password</label>
               <input type="password" ng-model="password">
             </div>
-            <div class="gap text-right">
-              <button ng-click="signup()">Sign up</button>
+            <div class="gap">
+              <div class="flex-row vertical-center">
+                <div class="flex-cell">
+                  <a ng-href="/signin" class="inverted">Already have an account?</a>
+                </div>
+                <div class="flex-cell fixed">
+                  <button ng-click="signup()">Sign up</button>
+                </div>
+              </div>
             </div>
           </form>
         </div>

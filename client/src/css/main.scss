@@ -80,6 +80,12 @@ a {
   color: $brand_color;
   text-decoration: none;
 
+  &.inverted {
+    color: #fff;
+    text-decoration: underline;
+    text-shadow: none;
+  }
+
   img {
     border: none;
   }

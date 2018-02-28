@@ -1,5 +1,5 @@
 const UserModule = require('../../modules/user');
 
-module.exports = function(userId) {
-  return UserModule.getUser(userId);
+module.exports = function(userId, authenticatedUser) {
+  return UserModule.getUser(userId, authenticatedUser);
 }

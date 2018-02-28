@@ -6,8 +6,8 @@ module.exports = function(listId, userId) {
   let _listId = db.escape(listId);
   let _userId = db.escape(userId);
 
-  return db.query(`SELECT l.id, l.listName, l.description, l.dateCreated, l.dateModified, l.creatorUserId,
-    CASE WHEN u.userType = 'admin' THEN 'kulana' ELSE u.username END AS username, u.prominence,
+  return db.query(`SELECT l.id, l.listName, l.description, l.dateCreated, l.dateModified, l.creatorUserId, l.official,
+    CASE WHEN u.userType = 'admin' AND l.official THEN 'kulana' ELSE u.username END AS username, u.prominence,
     me.dateFollowed, CASE WHEN me.dateFollowed iS NOT NULL THEN 1 ELSE 0 END AS isFollowed,
     COUNT(distinct ul.userId) as numberOfFollowers
     FROM lists as l
@@ -19,6 +19,7 @@ module.exports = function(listId, userId) {
   .then((rows) => {
     if (rows && rows.length) {
       list = rows[0];
+      list.official = list.official ? true : false;
       list.isFollowed = list.isFollowed ? true : false;
       return PlaceModule.getPlacesOnList(listId, userId)
       .then((places) => {

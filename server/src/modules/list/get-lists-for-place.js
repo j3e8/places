@@ -5,8 +5,8 @@ module.exports = function(userId, placeId) {
   let _placeId = db.escape(placeId);
   let userClause = userId ? `LEFT JOIN userlists as me ON l.id=me.listId AND me.userId=${_userId}` : '';
 
-  return db.query(`SELECT l.id, l.listName, l.description, l.dateCreated, l.dateModified, l.creatorUserId,
-    CASE WHEN u.userType = 'admin' THEN 'kulana' ELSE u.username END AS username, u.prominence,
+  return db.query(`SELECT l.id, l.listName, l.description, l.dateCreated, l.dateModified, l.creatorUserId, l.official,
+    CASE WHEN u.userType = 'admin' AND l.official THEN 'kulana' ELSE u.username END AS username, u.prominence,
     me.dateFollowed,
     COUNT(lp.placeId) as numberOfPlaces,
     COUNT(distinct ul.userId) as numberOfFollowers
@@ -19,5 +19,11 @@ module.exports = function(userId, placeId) {
     GROUP BY l.id, u.username
     ORDER BY u.prominence DESC, numberOfFollowers DESC, l.listName
     LIMIT 25
-  `);
+  `)
+  .then((rows) => {
+    rows.forEach((row) => {
+      row.official = row.official ? true : false;
+    });
+    return Promise.resolve(rows);
+  });
 }

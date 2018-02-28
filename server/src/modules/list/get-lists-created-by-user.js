@@ -2,8 +2,8 @@ const db = require('../../connections/db');
 
 module.exports = function(userId) {
   let _userId = db.escape(userId);
-  return db.query(`SELECT l.id, l.listName, l.description, l.dateCreated, l.dateModified, l.creatorUserId,
-    CASE WHEN u.userType = 'admin' THEN 'kulana' ELSE u.username END AS username, u.prominence, tmp.numberOfPlaces
+  return db.query(`SELECT l.id, l.listName, l.description, l.dateCreated, l.dateModified, l.creatorUserId, l.official,
+    u.username, u.prominence, tmp.numberOfPlaces
     FROM lists as l
     INNER JOIN users as u ON l.creatorUserId=u.id
     INNER JOIN (
@@ -13,5 +13,12 @@ module.exports = function(userId) {
       GROUP BY l.id
     ) as tmp ON l.id=tmp.id
     WHERE u.id=${_userId}
-  `);
+    AND l.official = 0
+  `)
+  .then((rows) => {
+    rows.forEach((row) => {
+      row.official = row.official ? true : false;
+    });
+    return Promise.resolve(rows);
+  });
 }

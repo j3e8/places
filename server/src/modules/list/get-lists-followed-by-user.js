@@ -2,8 +2,8 @@ const db = require('../../connections/db');
 
 module.exports = function(userId) {
   let _userId = db.escape(userId);
-  return db.query(`SELECT l.id, l.listName, l.description, l.dateCreated, l.dateModified, l.creatorUserId,
-    CASE WHEN u.userType = 'admin' THEN 'kulana' ELSE u.username END AS username,
+  return db.query(`SELECT l.id, l.listName, l.description, l.dateCreated, l.dateModified, l.creatorUserId, l.official,
+    CASE WHEN u.userType = 'admin' AND l.official THEN 'kulana' ELSE u.username END AS username,
     ul.dateFollowed,
     tmp.numberOfPlaces, tmp.numberOfVisited
     FROM lists as l
@@ -16,5 +16,11 @@ module.exports = function(userId) {
       LEFT JOIN userplaces as up ON up.placeId=lp.placeId AND up.userId=${_userId}
       GROUP BY l.id
     ) as tmp ON l.id=tmp.id
-  `);
+  `)
+  .then((rows) => {
+    rows.forEach((row) => {
+      row.official = row.official ? true : false;
+    });
+    return Promise.resolve(rows);
+  });
 }

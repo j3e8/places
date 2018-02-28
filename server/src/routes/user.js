@@ -15,8 +15,20 @@ module.exports = function(app) {
     .catch((err) => ErrorHandler.respondWithError(res, err));
   });
 
-  app.get('/api/user/:userId', function(req, res) {
-    User.getUser(req.params.userId)
+  app.post('/api/user/:userId/follows/:followsUserId', jwt.requirejwt, function(req, res) {
+    User.follow(req.params.userId, req.params.followsUserId, req.user)
+    .then((token) => res.send(token))
+    .catch((err) => ErrorHandler.respondWithError(res, err));
+  });
+
+  app.delete('/api/user/:userId/follows/:followsUserId', jwt.requirejwt, function(req, res) {
+    User.unfollow(req.params.userId, req.params.followsUserId, req.user)
+    .then((token) => res.send(token))
+    .catch((err) => ErrorHandler.respondWithError(res, err));
+  });
+
+  app.get('/api/user/:userId', jwt.optionaljwt, function(req, res) {
+    User.getUser(req.params.userId, req.user)
     .then((result) => res.json(result))
     .catch((err) => ErrorHandler.respondWithError(res, err));
   });

@@ -46,7 +46,28 @@ function($scope, $routeParams, MapService, PlaceService, ListService, UserServic
   }
 
   $scope.handleFollowChange = function() {
-    
+    if ($scope.user.isFollowed) {
+      UserService.unfollow($scope.currentUser.id, $routeParams.userId)
+      .then(function() {
+        $scope.user.isFollowed = false;
+        $scope.user.numberOfFollowers--;
+        $scope.$apply();
+      })
+      .catch(function(err) {
+        $scope.$apply();
+      });
+    }
+    else {
+      UserService.follow($scope.currentUser.id, $routeParams.userId)
+      .then(function() {
+        $scope.user.isFollowed = true;
+        $scope.user.numberOfFollowers++;
+        $scope.$apply();
+      })
+      .catch(function(err) {
+        $scope.$apply();
+      });
+    }
   }
 
   function getRecentPlacesForUser() {

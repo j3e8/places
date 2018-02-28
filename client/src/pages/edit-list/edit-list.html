@@ -8,6 +8,9 @@
         <div class="content">
           <h1><input type="text" ng-model="list.listName" placeholder="New List"></h1>
           <div><textarea ng-model="list.description" placeholder="Write a description"></textarea></div>
+          <div class="gap" ng-if="user.userType == 'admin'">
+            <input type="checkbox" id="official_list_checkbox" ng-model="list.official"> <label for="official_list_checkbox">Admin list</label>
+          </div>
         </div>
       </div>
       <div class="flex-cell fixed">

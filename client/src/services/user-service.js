@@ -46,6 +46,17 @@ app.service("UserService", ["$http", "$rootScope", "$timeout", "PLACES_SERVICE_U
     });
   }
 
+  UserService.follow = function(userId, followsUserId) {
+    return new Promise(function(resolve, reject) {
+      $http.post(PLACES_SERVICE_URL + '/user/' + userId + '/follows/' + followsUserId)
+      .then(function(response) {
+        resolve(response.data);
+      }, function(err) {
+        reject(err);
+      });
+    });
+  }
+
   UserService.getUser = function() {
     return user;
   }
@@ -70,6 +81,17 @@ app.service("UserService", ["$http", "$rootScope", "$timeout", "PLACES_SERVICE_U
 
   UserService.signOut = function() {
     destroyToken();
+  }
+
+  UserService.unfollow = function(userId, followsUserId) {
+    return new Promise(function(resolve, reject) {
+      $http.delete(PLACES_SERVICE_URL + '/user/' + userId + '/follows/' + followsUserId)
+      .then(function(response) {
+        resolve(response.data);
+      }, function(err) {
+        reject(err);
+      });
+    });
   }
 
   function initToken(tok) {
