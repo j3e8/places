@@ -8,6 +8,7 @@ module.exports = {
   getListsForPlace: require('./get-lists-for-place'),
   getPopularLists: require('./get-popular-lists'),
   followList: require('./follow-list'),
+  searchLists: require('./search-lists'),
   unfollowList: require('./unfollow-list'),
   updateList: require('./update-list')
 }

@@ -39,6 +39,7 @@ app.service("UserService", ["$http", "$rootScope", "$timeout", "PLACES_SERVICE_U
       .then(function(response) {
         var tok = response.data;
         initToken(tok);
+        $rootScope.$broadcast("signedin", tok);
         resolve();
       }, function(err) {
         reject(err);
@@ -77,6 +78,17 @@ app.service("UserService", ["$http", "$rootScope", "$timeout", "PLACES_SERVICE_U
 
   UserService.isSignedIn = function() {
     return authToken && user && !isTokenExpired() ? true : false;
+  }
+
+  UserService.search = function(q) {
+    return new Promise(function(resolve, reject) {
+      $http.get(PLACES_SERVICE_URL + '/users?search=' + q)
+      .then(function(response) {
+        resolve(response.data);
+      }, function(err) {
+        reject(err);
+      });
+    });
   }
 
   UserService.signOut = function() {

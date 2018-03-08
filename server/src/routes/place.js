@@ -10,6 +10,12 @@ module.exports = function(app) {
     .catch((err) => ErrorHandler.respondWithError(res, err));
   });
 
+  app.get(['/api/places', '/api/place'], jwt.optionaljwt, function(req, res) {
+    Place.searchPlaces(req.user, req.query)
+    .then((result) => res.json(result))
+    .catch((err) => ErrorHandler.respondWithError(res, err));
+  });
+
   app.put('/api/place/:placeId', jwt.requirejwt, function(req, res) {
     Place.updatePlace(req.user, req.params.placeId, req.body)
     .then((result) => res.json(result))
@@ -28,12 +34,6 @@ module.exports = function(app) {
     .catch((err) => ErrorHandler.respondWithError(res, err));
   });
 
-  app.get('/api/place', function(req, res) {
-    Place.searchPlaces(req.query)
-    .then((result) => res.json(result))
-    .catch((err) => ErrorHandler.respondWithError(res, err));
-  });
-
   app.get('/api/places/popular', function(req, res) {
     Place.getPopularPlaces()
     .then((result) => res.json(result))
@@ -42,6 +42,12 @@ module.exports = function(app) {
 
   app.get('/api/user/:userId/places', function(req, res) {
     Place.getRecentPlacesForUser(req.params.userId)
+    .then((result) => res.json(result))
+    .catch((err) => ErrorHandler.respondWithError(res, err));
+  });
+
+  app.get('/api/user/:userId/follows/places', function(req, res) {
+    Place.getRecentPlacesForUsersNetwork(req.params.userId)
     .then((result) => res.json(result))
     .catch((err) => ErrorHandler.respondWithError(res, err));
   });

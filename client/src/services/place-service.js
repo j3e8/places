@@ -23,6 +23,28 @@ app.service("PlaceService", ["$http", "PLACES_SERVICE_URL", "Shape", function($h
     });
   }
 
+  PlaceService.getRecentPlacesForUsersNetwork = function(userId) {
+    return new Promise(function(resolve, reject) {
+      $http.get(PLACES_SERVICE_URL + '/user/' + userId + '/follows/places')
+      .then(function(response) {
+        resolve(response.data);
+      }, function(err) {
+        reject(err);
+      });
+    });
+  }
+
+  PlaceService.search = function(q) {
+    return new Promise(function(resolve, reject) {
+      $http.get(PLACES_SERVICE_URL + '/places?search=' + q)
+      .then(function(response) {
+        resolve(response.data);
+      }, function(err) {
+        reject(err);
+      });
+    });
+  }
+
   PlaceService.update = function(place) {
     return new Promise(function(resolve, reject) {
       $http.put(PLACES_SERVICE_URL + '/place/' + place.id, place)

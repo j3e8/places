@@ -16,4 +16,8 @@ function($rootScope, $http, $location, PLACES_SERVICE_URL, UserService) {
   $rootScope.$on('signedout', function() {
     $rootScope.user = null;
   });
+
+  $rootScope.$on('signedin', function() {
+    $rootScope.user = UserService.getUser();
+  });
 }]);

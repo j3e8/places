@@ -1,0 +1,17 @@
+user-place-tile {
+  div.user-place {
+    margin: 0;
+    padding: 10px 5px;
+    border-top: 1px solid #bcbec0;
+    .username {
+      font-size: 16px;
+      font-weight: 500;
+      color: #45c5ff;
+    }
+  }
+  &:last-child {
+    div.user-place {
+      border-bottom: 1px solid #bcbec0;
+    }
+  }
+}

@@ -4,13 +4,16 @@
       <a class="place-name" ng-href="/place/{{ place.id }}">{{ place.placeName }}</a>
       <div class="subtle">{{ place.region }}</div>
       <div>
-        Appears on <span class="highlight">{{ place.numberOfLists }}
-          <span ng-show="place.numberOfLists == 1">list</span>
-          <span ng-show="place.numberOfLists != 1">lists</span></span>.
-
-        Visted by <span class="highlight">{{ place.numberOfVisitors }}
-          <span ng-show="place.numberOfVisitors == 1">member</span>
-          <span ng-show="place.numberOfVisitors != 1">members</span></span>.
+        <span ng-if="place.numberOfLists">
+          Appears on <span class="highlight">{{ place.numberOfLists }}
+            <span ng-show="place.numberOfLists == 1">list</span>
+            <span ng-show="place.numberOfLists != 1">lists</span></span>.
+        </span>
+        <span ng-if="place.numberOfVisitors">
+          Visted by <span class="highlight">{{ place.numberOfVisitors }}
+            <span ng-show="place.numberOfVisitors == 1">member</span>
+            <span ng-show="place.numberOfVisitors != 1">members</span></span>.
+        </span>
       </div>
     </div>
     <div class="flex-cell fixed subtle" ng-show="place.distance !== undefined">

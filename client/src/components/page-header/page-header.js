@@ -5,6 +5,7 @@ app.directive("pageHeader", ["UserService", "$location", function(UserService, $
     templateUrl: '/components/page-header/page-header.html',
     link: function($scope, $elem, $attr) {
       $scope.isMenuDisplayed = undefined;
+      $scope.search = null;
 
       $scope.toggleMenu = function() {
         $scope.isMenuDisplayed = $scope.isMenuDisplayed ? false : true;
@@ -19,6 +20,14 @@ app.directive("pageHeader", ["UserService", "$location", function(UserService, $
       $scope.signout = function() {
         UserService.signOut();
         $location.path('/signin');
+      }
+
+      $scope.doSearch = function() {
+        if (!$scope.search) {
+          return;
+        }
+        $location.path('/search').search('q', $scope.search);
+        $scope.search = null;
       }
 
     }

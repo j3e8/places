@@ -18,6 +18,7 @@ module.exports = function(userId) {
   ).then((results) => {
     results.forEach((result) => {
       result.shapeData = JSON.parse(result.shapeData);
+      result.isChecked = true;
     });
     return Promise.resolve(results);
   });

@@ -1,0 +1,12 @@
+<div class="user">
+  <div class="flex-row spaced">
+    <div class="flex-cell">
+      <a class="username" ng-href="/user/{{ user.id }}">{{ user.username }}</a>
+      <div>
+        Followed by <span class="highlight">{{ user.numberOfFollowers }}
+          <span ng-show="user.numberOfFollowers == 1">member</span>
+          <span ng-show="user.numberOfFollowers != 1">members</span></span>.
+      </div>
+    </div>
+  </div>
+</div>

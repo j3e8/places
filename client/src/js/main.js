@@ -12,6 +12,10 @@ app.config(["$routeProvider", "$locationProvider", function($routeProvider, $loc
     templateUrl: '/pages/created-lists/created-lists.html',
     controller: 'createdListsController'
   })
+  .when('/followed-lists', {
+    templateUrl: '/pages/followed-lists/followed-lists.html',
+    controller: 'followedListsController'
+  })
   .when('/home', {
     templateUrl: '/pages/home/home.html',
     controller: 'homeController'
@@ -43,6 +47,10 @@ app.config(["$routeProvider", "$locationProvider", function($routeProvider, $loc
   .when('/place/:placeId', {
     templateUrl: '/pages/place/place.html',
     controller: 'placeController'
+  })
+  .when('/search', {
+    templateUrl: '/pages/search/search.html',
+    controller: 'searchController'
   })
   .when('/signin', {
     templateUrl: '/pages/signin/signin.html',

@@ -1,0 +1,56 @@
+<div class="search-page">
+  <div class="content">
+    <h1>Search</h1>
+    <section>
+      <div class="flex-row spaced vertical-center">
+        <div class="flex-cell">
+          <input type="text" ng-model="search" catch-enter="doSearch">
+        </div>
+        <div class="flex-cell fixed">
+          <button ng-click="doSearch()">Go</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="breathe" ng-hide="isLoading">
+      <div class="tabs">
+        <div class="tab" ng-class="{ 'active': activeTab == 'lists' }" ng-click="selectTab('lists')">Lists</div>
+        <div class="tab" ng-class="{ 'active': activeTab == 'places' }" ng-click="selectTab('places')">Places</div>
+        <div class="tab" ng-class="{ 'active': activeTab == 'users' }" ng-click="selectTab('users')">Users</div>
+      </div>
+
+      <div class="results">
+        <div ng-show="activeTab == 'lists'">
+          <div ng-show="lists.length">
+            <list-tile list="list" ng-repeat="list in lists"></list-tile>
+          </div>
+          <div ng-show="!lists.length">
+            No lists match your search criteria
+          </div>
+        </div>
+
+        <div ng-show="activeTab == 'places'">
+          <div ng-show="places.length">
+            <place-tile place="place" ng-repeat="place in places"></place-tile>
+          </div>
+          <div ng-show="!places.length">
+            No places match your search criteria
+          </div>
+        </div>
+
+        <div ng-show="activeTab == 'users'">
+          <div ng-show="users.length">
+            <user-tile user="user" ng-repeat="user in users"></user-tile>
+          </div>
+          <div ng-show="!users.length" class="subtle">
+            No users match your search criteria
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="text-center" ng-show="isLoading">
+      <wait-indicator></wait-indicator>
+    </div>
+  </div>
+</div>

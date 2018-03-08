@@ -3,7 +3,13 @@
     <div class="flex-cell">
       <a ng-href="/home"><img src="/assets/logo-white.svg" title="Kulana"></a>
     </div>
-    <div class="flex-cell text-right">
+    <div class="flex-cell fixed">
+      <input class="search" type="text" ng-model="search" placeholder="search" catch-enter="doSearch">
+    </div>
+    <div class="flex-cell fixed">
+      <i class="material-icons search-icon clickable" ng-click="doSearch()">search</i>
+    </div>
+    <div class="flex-cell fixed">
       <i class="material-icons menu-icon clickable" ng-click="toggleMenu()">menu</i>
     </div>
   </div>

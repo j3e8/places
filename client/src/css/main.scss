@@ -45,6 +45,9 @@ main {
 
 .content {
   padding: 50px 20px 70px 20px;
+  & + .content {
+    padding-top: 10px;
+  }
 }
 
 .content-fill-height {

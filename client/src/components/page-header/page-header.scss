@@ -10,16 +10,33 @@ page-header {
     right: 0;
     padding: 7px 15px;
 
+    input.search {
+      background-color: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      border-radius: 20px;
+      width: 200px;
+      color: #fff;
+      display: block;
+      &::placeholder {
+        color: rgba(255, 255, 255, 0.6);
+      }
+    }
+
     & > div.flex-row {
       height: 100%;
       img {
         height: 100%;
       }
-      i.material-icons.menu-icon {
-        color: #fff;
+      i.material-icons {
         font-size: 36px;
         position: relative;
         z-index: 11;
+        &.menu-icon {
+          color: #fff;
+        }
+        &.search-icon {
+          color: rgba(255, 255, 255, 0.8);
+        }
       }
     }
 

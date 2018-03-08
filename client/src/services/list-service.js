@@ -87,6 +87,17 @@ app.service("ListService", ["$http", "PLACES_SERVICE_URL", "PlaceService", funct
     });
   }
 
+  ListService.search = function(q) {
+    return new Promise(function(resolve, reject) {
+      $http.get(PLACES_SERVICE_URL + '/lists?search=' + q)
+      .then(function(response) {
+        resolve(response.data);
+      }, function(err) {
+        reject(err);
+      });
+    });
+  }
+
   ListService.sortList = function(list, sort) {
     if (!list || !list.places) {
       return;

@@ -15,6 +15,12 @@ module.exports = function(app) {
     .catch((err) => ErrorHandler.respondWithError(res, err));
   });
 
+  app.get('/api/users', jwt.optionaljwt, function(req, res) {
+    User.searchUsers(req.user, req.query)
+    .then((result) => res.json(result))
+    .catch((err) => ErrorHandler.respondWithError(res, err));
+  });
+
   app.post('/api/user/:userId/follows/:followsUserId', jwt.requirejwt, function(req, res) {
     User.follow(req.params.userId, req.params.followsUserId, req.user)
     .then((token) => res.send(token))
