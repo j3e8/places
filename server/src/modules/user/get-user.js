@@ -4,6 +4,7 @@ module.exports = function(userId, authenticatedUser) {
   let _id = db.escape(userId);
   let _authUserId = db.escape(authenticatedUser ? authenticatedUser.id : null);
   return db.query(`SELECT u.id, u.username, u.email, u.dateCreated, u.userType, COUNT(uf.userId) AS numberOfFollowers,
+    u.imgUrl, u.bio,
     CASE WHEN me.userId IS NOT NULL THEN 1 ELSE 0 END AS isFollowed
     FROM users AS u
     LEFT JOIN userFollowers AS uf ON u.id=uf.followsUserId
@@ -13,7 +14,9 @@ module.exports = function(userId, authenticatedUser) {
   `)
   .then((rows) => {
     if (rows.length) {
-      return Promise.resolve(rows[0]);
+      let user = rows[0];
+      user.imgUrl = user.imgUrl ? user.imgUrl : `/assets/images/no-image.png`;
+      return Promise.resolve(user);
     }
     return null;
   });

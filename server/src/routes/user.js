@@ -15,6 +15,12 @@ module.exports = function(app) {
     .catch((err) => ErrorHandler.respondWithError(res, err));
   });
 
+  app.put('/api/user/:userId', function(req, res) {
+    User.updateUser(req.params.userId, req.body)
+    .then((token) => res.send(token))
+    .catch((err) => ErrorHandler.respondWithError(res, err));
+  });
+
   app.get('/api/users', jwt.optionaljwt, function(req, res) {
     User.searchUsers(req.user, req.query)
     .then((result) => res.json(result))

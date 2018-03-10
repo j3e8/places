@@ -16,7 +16,9 @@ require('./lib/jwt').init(jwtconf.publicKey, jwtconf.privateKey, jwtoptions);
 
 app.use(cors());
 app.use(compression());
-app.use(bodyParser.json());
+app.use(bodyParser.json({
+  limit: '5mb'
+}));
 
 require('./routes/list.js')(app);
 require('./routes/place.js')(app);
