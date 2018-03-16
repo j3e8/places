@@ -1,0 +1,27 @@
+.profile-page {
+  .floating {
+    display: inline-block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .img-container {
+    border-radius: 80px;
+    width: 160px;
+    height: 160px;
+    overflow: hidden;
+    img {
+      width: 100%;
+    }
+  }
+  #avatar {
+    display: none;
+  }
+  #edit-bio,
+  #edit-email {
+    font-size: 18px;
+    vertical-align: bottom;
+  }
+  #new-password {
+    width: 150px;
+  }
+}

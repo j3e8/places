@@ -167,9 +167,13 @@ app.service("Shape", function() {
   }
 
   Shape.calculateDistanceBetweenCoordinates = function(a, b) {
+    return Math.sqrt(Shape.calculateSquareDistanceBetweenCoordinates(a, b));
+  }
+
+  Shape.calculateSquareDistanceBetweenCoordinates = function(a, b) {
     var mLat = milesPerLatitude(a.lat);
     var mLng = milesPerLongitude(a.lat);
-    return Math.sqrt((a.lat - b.lat)*mLat*(a.lat - b.lat)*mLat + (a.lng - b.lng)*mLng*(a.lng - b.lng)*mLng);
+    return (a.lat - b.lat)*mLat*(a.lat - b.lat)*mLat + (a.lng - b.lng)*mLng*(a.lng - b.lng)*mLng;
   }
 
   function findMinProperty(arr, prop) {

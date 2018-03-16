@@ -74,6 +74,28 @@ app.service("MapService", ["$rootScope", "Shape", function($rootScope, Shape) {
     }
   }
 
+  MapService.addClusterToMap = function(map, cluster, clickHandler) {
+    if (!cluster || !cluster.places || !cluster.places.length) {
+      return;
+    }
+    if (cluster.places.length == 1) {
+      return MapService.addPlaceToMap(map, cluster.places[0], clickHandler);
+    }
+    var icon = buildIconForCluster(map, cluster);
+    cluster.gmObject = new google.maps.Marker({
+      position: new google.maps.LatLng(cluster.lat, cluster.lng),
+      icon: icon,
+      label: {
+        text: cluster.places.length.toString(),
+        color: "#fff",
+        fontFamily: "Open Sans",
+        fontSize: "16px",
+        fontWeight: "500"
+      },
+      map: map
+    });
+  }
+
   MapService.findContainingRegion = function(shapeData) {
     return new Promise(function(resolve, reject) {
       var geocoder = new google.maps.Geocoder();
@@ -129,7 +151,17 @@ app.service("MapService", ["$rootScope", "Shape", function($rootScope, Shape) {
     return parts.join(', ');
   }
 
-  MapService.removePlaceFromMap = function(map, place) {
+  MapService.removeClusterFromMap = function(cluster) {
+    if (cluster && cluster.places && cluster.places.length == 1) {
+      MapService.removePlaceFromMap(cluster.places[0]);
+    }
+    if (cluster && cluster.gmObject) {
+      cluster.gmObject.setMap(null);
+      cluster.gmObject = undefined;
+    }
+  }
+
+  MapService.removePlaceFromMap = function(place) {
     if (place && place.gmObject) {
       place.gmObject.setMap(null);
     }
@@ -186,6 +218,22 @@ app.service("MapService", ["$rootScope", "Shape", function($rootScope, Shape) {
         break;
       default: break;
     }
+  }
+
+  function buildIconForCluster(map, cluster) {
+    var s = 32;
+    var s2 = Math.round(s/2);
+    var icon = {
+      url: cluster.highlighted
+        ? '/assets/images/marker2-highlighted.png'
+        : (cluster.isChecked ? '/assets/images/marker2-been-there.png' : '/assets/images/marker2.png'),
+      size: new google.maps.Size(50, 50),
+      origin: new google.maps.Point(0, 0),
+      labelOrigin: new google.maps.Point(s2, s2),
+      anchor: new google.maps.Point(s2, s2),
+      scaledSize: new google.maps.Size(s, s)
+    }
+    return icon;
   }
 
   function buildIconForPlace(map, place) {

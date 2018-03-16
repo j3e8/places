@@ -47,6 +47,10 @@ input[type=submit].sm,
 a.button.sm {
   font-size: 12px;
   padding: 5px 12px;
+  i.material-icons {
+    font-size: 20px;
+    vertical-align: middle;
+  }
 }
 
 h1,h2 {

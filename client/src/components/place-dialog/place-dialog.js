@@ -64,9 +64,12 @@ app.directive("placeDialog", ["Shape", "MapService", "PlaceService", "$timeout",
           $timeout(function() {
             google.maps.event.trigger(map, "resize");
             if ($scope.center && !$scope.placeId) {
-              map.setCenter(new google.maps.LatLng($scope.center));
+              console.log('show', $scope.zoom, $scope.center);
+              map.setZoom($scope.zoom || DEFAULT_ZOOM)
+              map.setCenter(new google.maps.LatLng($scope.center || DEFAULT_COORDS));
             }
           }, 20);
+          $scope.reset();
         }
       });
 
@@ -81,9 +84,6 @@ app.directive("placeDialog", ["Shape", "MapService", "PlaceService", "$timeout",
           'placeTypeId': $scope.placeTypes ? $scope.placeTypes.find(function(pt) { return pt.placeType.toLowerCase() == 'point of interest'; }).id : null
         }
         document.getElementById('gm-input').value = '';
-        if (map) {
-          map.setZoom(DEFAULT_ZOOM);
-        }
       }
 
       PlaceService.loadPlaceTypes()
@@ -183,7 +183,8 @@ app.directive("placeDialog", ["Shape", "MapService", "PlaceService", "$timeout",
       }
 
       function initMap() {
-        var zoom = DEFAULT_ZOOM;
+        var zoom = $scope.zoom || DEFAULT_ZOOM;
+        console.log($scope.zoom, $scope.center);
         map = new google.maps.Map(document.getElementById('place-dialog-map'), {
           zoom: zoom,
           center: new google.maps.LatLng($scope.center || DEFAULT_COORDS),

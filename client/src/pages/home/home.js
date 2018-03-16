@@ -36,7 +36,7 @@ app.controller("homeController", ["$scope", "PlaceService", "UserService", "$loc
     $scope.$apply();
   });
 
-  var userFields = [ 'username', 'userId' ];
+  var userFields = [ 'username', 'userId', 'imgUrl' ];
 
   function getPlaceFromObject(userPlace) {
     var place = {};

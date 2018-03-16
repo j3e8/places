@@ -1,0 +1,99 @@
+<div class="profile-page text-center">
+  <div class="content floating">
+    <form name="userForm" class="text-left">
+      <div class="flex-row vertical-top spaced">
+        <div class="flex-cell fixed image-cell">
+
+          <div class="img-container">
+            <img ng-src="{{ user.imgUrl }}" ng-click="editImage()" ng-if="!newuser.img_file">
+            <img ng-src="{{ newuser.img_file }}" ng-click="editImage()" ng-if="newuser.img_file">
+          </div>
+          <div class="text-center" ng-hide="isEditingImage">
+            <span class="clickable" ng-click="editImage()">edit</span>
+          </div>
+          <div class="text-center gap" ng-show="isEditingImage && !isSavingImage">
+            <button class="sm" ng-click="saveImage()"><i class="material-icons">check</i></button>
+            <button class="sm" ng-click="cancelImage()"><i class="material-icons">close</i></button>
+          </div>
+          <div class="text-center gap" ng-show="isSavingImage">
+            <wait-indicator></wait-indicator>
+          </div>
+          <input type="file" id="avatar" accept="image/*" onchange="angular.element(document.getElementById('avatar')).scope().onImageChosen(event)">
+
+        </div>
+        <div class="flex-cell">
+          <h1 ng-hide="isEditingUsername">
+            {{ user.username }}
+            <i class="material-icons clickable" ng-click="editUsername()">edit</i>
+          </h1>
+          <div ng-show="isEditingUsername">
+            <div class="flex-row spaced vertical-center">
+              <div class="flex-cell">
+                <input type="text" ng-model="newuser.username">
+              </div>
+              <div class="flex-cell fixed">
+                <button class="sm" ng-click="saveUsername()"><i class="material-icons">check</i></button>
+                <button class="sm" ng-click="cancelUsername()"><i class="material-icons">close</i></button>
+              </div>
+            </div>
+          </div>
+
+          <div class="gap">
+            <div ng-hide="isEditingEmail">
+              <span ng-show="user.email">{{ user.email }}</span>
+              <span ng-show="!user.email"><i>Write a email for your followers to see</i></span>
+              <i class="material-icons clickable" id="edit-email" ng-click="editEmail()">edit</i>
+            </div>
+            <div ng-show="isEditingEmail">
+              <div class="flex-row spaced vertical-center">
+                <div class="flex-cell">
+                  <input type="text" ng-model="newuser.email" placeholder="me@kulana.social">
+                </div>
+                <div class="flex-cell fixed">
+                  <button class="sm" ng-click="saveEmail()"><i class="material-icons">check</i></button>
+                  <button class="sm" ng-click="cancelEmail()"><i class="material-icons">close</i></button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="gap">
+            <div class="subtle" ng-hide="isEditingBio">
+              <span ng-show="user.bio">{{ user.bio }}</span>
+              <span ng-show="!user.bio"><i>Write a bio for your followers to see</i></span>
+              <i class="material-icons clickable" id="edit-bio" ng-click="editBio()">edit</i>
+            </div>
+            <div ng-show="isEditingBio">
+              <div class="flex-row spaced vertical-bottom">
+                <div class="flex-cell">
+                  <textarea ng-model="newuser.bio" placeholder="Write a friendly bio for your followers to see."></textarea>
+                </div>
+                <div class="flex-cell fixed">
+                  <div><button class="sm" ng-click="cancelBio()"><i class="material-icons">close</i></button></div>
+                  <div class="gap"><button class="sm" ng-click="saveBio()"><i class="material-icons">check</i></button></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="breathe">
+            <h3>Change password</h3>
+            <div class="gap">
+              <div class="flex-row spaced vertical-center">
+                <div class="flex-cell fixed">
+                  <input id="new-password" type="password" ng-model="newuser.password" catch-enter="savePassword()" placeholder="new password">
+                </div>
+                <div class="flex-cell fixed">
+                  <button class="sm" ng-click="savePassword()">Save</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </form>
+  </div>
+
+
+</div>

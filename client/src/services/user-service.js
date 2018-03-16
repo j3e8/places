@@ -63,7 +63,7 @@ app.service("UserService", ["$http", "$rootScope", "$timeout", "PLACES_SERVICE_U
   }
 
   UserService.getUserById = function(userId) {
-    if (!userId || (user && user.id == userId)) {
+    if (!userId) {
       return Promise.resolve(user);
     }
     return new Promise(function(resolve, reject) {
@@ -105,6 +105,18 @@ app.service("UserService", ["$http", "$rootScope", "$timeout", "PLACES_SERVICE_U
       });
     });
   }
+
+  UserService.updateUser = function(userId, user) {
+    return new Promise(function(resolve, reject) {
+      $http.put(PLACES_SERVICE_URL + '/user/' + userId, user)
+      .then(function(response) {
+        resolve(response.data);
+      }, function(err) {
+        reject(err);
+      });
+    });
+  }
+
 
   function initToken(tok) {
     authToken = tok;

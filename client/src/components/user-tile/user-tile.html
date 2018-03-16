@@ -1,5 +1,10 @@
 <div class="user">
   <div class="flex-row spaced">
+    <div class="flex-cell img-cell">
+      <div class="img-container">
+        <a ng-href="/user/{{ user.id }}"><img ng-src="{{ user.imgUrl }}"></a>
+      </div>
+    </div>
     <div class="flex-cell">
       <a class="username" ng-href="/user/{{ user.id }}">{{ user.username }}</a>
       <div>

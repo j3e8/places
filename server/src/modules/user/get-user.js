@@ -1,4 +1,5 @@
 const db = require('../../connections/db');
+const ImageUtil = require('../../lib/image');
 
 module.exports = function(userId, authenticatedUser) {
   let _id = db.escape(userId);
@@ -15,7 +16,7 @@ module.exports = function(userId, authenticatedUser) {
   .then((rows) => {
     if (rows.length) {
       let user = rows[0];
-      user.imgUrl = user.imgUrl ? user.imgUrl : `/assets/images/no-image.png`;
+      user.imgUrl = user.imgUrl ? user.imgUrl : ImageUtil.NO_IMAGE_URL;
       return Promise.resolve(user);
     }
     return null;

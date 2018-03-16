@@ -1,11 +1,11 @@
-app.controller("editListController", ["$scope", "$routeParams", "MapService", "PlaceService", "ListService", "alert", "$timeout", "$location",
-function($scope, $routeParams, MapService, PlaceService, ListService, alert, $timeout, $location) {
+app.controller("editListController", ["$scope", "$routeParams", "MapService", "ClusterService", "PlaceService", "ListService", "alert", "$timeout", "$location",
+function($scope, $routeParams, MapService, ClusterService, PlaceService, ListService, alert, $timeout, $location) {
   $scope.newPlaceDialogIsDisplayed = undefined;
   $scope.list = {
     places: []
   };
 
-  var map;
+  var map, clusterer;
 
   var DEFAULT_COORDS = { lat: 39.5464, lng: -97.3296 };
   var DEFAULT_ZOOM = 4;
@@ -17,6 +17,7 @@ function($scope, $routeParams, MapService, PlaceService, ListService, alert, $ti
   MapService.load()
   .then(function() {
     initMap();
+    clusterer = ClusterService.createClusterer(map, $scope.placeClicked);
     if ($routeParams.listId) {
       loadList($routeParams.listId);
     }
@@ -29,11 +30,14 @@ function($scope, $routeParams, MapService, PlaceService, ListService, alert, $ti
     ListService.get(listId)
     .then(function(list) {
       $scope.list = list;
-      $scope.list.places.forEach(function(place) {
-        MapService.addPlaceToMap(map, place, $scope.placeClicked);
-      });
       var listBounds = ListService.calculateBounds($scope.list);
       MapService.setMapToContainList(map, listBounds);
+      $scope.list.places.forEach(function(place) {
+        ClusterService.addPlaceToClusterer(clusterer, place);
+      });
+      $timeout(function() {
+        ClusterService.update(clusterer);
+      });
       $scope.$apply();
     })
     .catch(function(err) {
@@ -112,22 +116,26 @@ function($scope, $routeParams, MapService, PlaceService, ListService, alert, $ti
   $scope.addPlaceToList = function(place) {
     var existing = $scope.list.places.find(function(p) { return p.id == place.id; });
     if (existing) {
-      existing.gmObject.setMap(null);
+      // existing.gmObject.setMap(null);
       $scope.list.places.splice($scope.list.places.indexOf(existing), 1, place);
     }
     else {
       $scope.list.places.push(place);
     }
-    MapService.addPlaceToMap(map, place, $scope.placeClicked);
-    var listBounds = ListService.calculateBounds($scope.list);
-    MapService.setMapToContainList(map, listBounds);
+    ClusterService.addPlaceToClusterer(clusterer, place);
+    // MapService.addPlaceToMap(map, place, $scope.placeClicked);
+    // var listBounds = ListService.calculateBounds($scope.list);
+    // MapService.setMapToContainList(map, listBounds);
+    ClusterService.update(clusterer);
   }
 
   $scope.removePlace = function(place) {
     $scope.list.places.splice($scope.list.places.indexOf(place), 1);
-    MapService.removePlaceFromMap(map, place);
-    var listBounds = ListService.calculateBounds($scope.list);
-    MapService.setMapToContainList(map, listBounds);
+    ClusterService.removePlaceFromClusterer(clusterer, place);
+    // MapService.removePlaceFromMap(place);
+    // var listBounds = ListService.calculateBounds($scope.list);
+    // MapService.setMapToContainList(map, listBounds);
+    ClusterService.update(clusterer);
   }
 
   $scope.closeNewPlaceDialog = function() {

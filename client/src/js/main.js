@@ -8,6 +8,10 @@ app.config(["$routeProvider", "$locationProvider", function($routeProvider, $loc
     templateUrl: '/pages/signup/signup.html',
     controller: 'signupController'
   })
+  .when('/admin', {
+    templateUrl: '/pages/admin/dashboard/dashboard.html',
+    controller: 'adminDashboardController'
+  })
   .when('/created-lists', {
     templateUrl: '/pages/created-lists/created-lists.html',
     controller: 'createdListsController'
@@ -23,10 +27,6 @@ app.config(["$routeProvider", "$locationProvider", function($routeProvider, $loc
   .when('/lists', {
     templateUrl: '/pages/lists/lists.html',
     controller: 'listsController'
-  })
-  .when('/admin', {
-    templateUrl: '/pages/admin/dashboard/dashboard.html',
-    controller: 'adminDashboardController'
   })
   .when('/list/new', {
     templateUrl: '/pages/edit-list/edit-list.html',
@@ -47,6 +47,10 @@ app.config(["$routeProvider", "$locationProvider", function($routeProvider, $loc
   .when('/place/:placeId', {
     templateUrl: '/pages/place/place.html',
     controller: 'placeController'
+  })
+  .when('/profile', {
+    templateUrl: '/pages/profile/profile.html',
+    controller: 'profileController'
   })
   .when('/search', {
     templateUrl: '/pages/search/search.html',

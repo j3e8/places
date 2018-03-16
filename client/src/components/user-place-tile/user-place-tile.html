@@ -1,5 +1,10 @@
 <div class="user-place">
   <div class="flex-row spaced">
+    <div class="flex-cell img-cell">
+      <div class="img-container">
+        <a ng-href="/user/{{ userPlace.userId }}"><img ng-src="{{ userPlace.imgUrl }}"></a>
+      </div>
+    </div>
     <div class="flex-cell">
       <a class="username" ng-href="/user/{{ userPlace.userId }}">{{ userPlace.username }}</a>
       visited
