@@ -9,6 +9,7 @@ app.service("UserService", ["$http", "$rootScope", "$timeout", "PLACES_SERVICE_U
       initToken(authToken);
     }
     user = JSON.parse(localStorage.getItem('user'));
+    initUser(user);
   } catch(err) { }
 
   UserService.create = function(username, email, password) {
@@ -124,6 +125,7 @@ app.service("UserService", ["$http", "$rootScope", "$timeout", "PLACES_SERVICE_U
     var parts = authToken.split('.');
     var parsed = JSON.parse(atob(parts[1]));
     user = parsed.user;
+    initUser(user);
 
     try {
       localStorage.setItem('authToken', authToken);
@@ -144,6 +146,10 @@ app.service("UserService", ["$http", "$rootScope", "$timeout", "PLACES_SERVICE_U
       $rootScope.$broadcast("signedout", {});
       destroyToken();
     }
+  }
+
+  function initUser(user) {
+    $http.defaults.headers.common['kulana-user-id'] = user.id;
   }
 
   function isTokenExpired() {
@@ -168,11 +174,9 @@ app.service("UserService", ["$http", "$rootScope", "$timeout", "PLACES_SERVICE_U
 
   function destroyToken() {
     authToken = null;
-    user = null;
     $http.defaults.headers.common.Authorization = undefined;
     $rootScope.$broadcast("signedout", {});
     try {
-      localStorage.removeItem('user')
       localStorage.removeItem('authToken')
     } catch(err) { }
   }

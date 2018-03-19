@@ -1,5 +1,5 @@
-app.controller("editListController", ["$scope", "$routeParams", "MapService", "ClusterService", "PlaceService", "ListService", "alert", "$timeout", "$location",
-function($scope, $routeParams, MapService, ClusterService, PlaceService, ListService, alert, $timeout, $location) {
+app.controller("editListController", ["$scope", "$routeParams", "MapService", "ClusterService", "PlaceService", "ListService", "alert", "$timeout", "$location", "requirePassword",
+function($scope, $routeParams, MapService, ClusterService, PlaceService, ListService, alert, $timeout, $location, requirePassword) {
   $scope.newPlaceDialogIsDisplayed = undefined;
   $scope.list = {
     places: []
@@ -91,11 +91,17 @@ function($scope, $routeParams, MapService, ClusterService, PlaceService, ListSer
   }
 
   $scope.showNewPlaceDialog = function() {
-    var latlng = map.getCenter();
-    $scope.centerCoords = { lat: latlng.lat(), lng: latlng.lng() };
-    $scope.zoom = map.getZoom();
-    $scope.placeToEditId = null;
-    $scope.newPlaceDialogIsDisplayed = true;
+    console.log('showNewPlaceDialog');
+    requirePassword({
+      afterAuthenticate: function() {
+        console.log('afterAuthenticate');
+        var latlng = map.getCenter();
+        $scope.centerCoords = { lat: latlng.lat(), lng: latlng.lng() };
+        $scope.zoom = map.getZoom();
+        $scope.placeToEditId = null;
+        $scope.newPlaceDialogIsDisplayed = true;
+      }
+    });
   }
 
   $scope.editPlace = function(place) {
@@ -123,18 +129,12 @@ function($scope, $routeParams, MapService, ClusterService, PlaceService, ListSer
       $scope.list.places.push(place);
     }
     ClusterService.addPlaceToClusterer(clusterer, place);
-    // MapService.addPlaceToMap(map, place, $scope.placeClicked);
-    // var listBounds = ListService.calculateBounds($scope.list);
-    // MapService.setMapToContainList(map, listBounds);
     ClusterService.update(clusterer);
   }
 
   $scope.removePlace = function(place) {
     $scope.list.places.splice($scope.list.places.indexOf(place), 1);
     ClusterService.removePlaceFromClusterer(clusterer, place);
-    // MapService.removePlaceFromMap(place);
-    // var listBounds = ListService.calculateBounds($scope.list);
-    // MapService.setMapToContainList(map, listBounds);
     ClusterService.update(clusterer);
   }
 
@@ -144,32 +144,36 @@ function($scope, $routeParams, MapService, ClusterService, PlaceService, ListSer
   }
 
   $scope.saveList = function() {
-    $scope.saveError = null;
-    if (!$scope.list.listName) {
-      $scope.saveError = "You must provide a list name";
-      return;
-    }
-    if (!$scope.list.places.length) {
-      $scope.saveError = "You must add at least one place before saving";
-      return;
-    }
-    $scope.isSaving = true;
-    createOrUpdate()
-    .then(function(list) {
-      $scope.isSaving = false;
-      if (list.id && !$scope.list.id) {
-        $location.path('/list/' + list.id + '/edit');
+    requirePassword({
+      afterAuthenticate: function() {
+        $scope.saveError = null;
+        if (!$scope.list.listName) {
+          $scope.saveError = "You must provide a list name";
+          return;
+        }
+        if (!$scope.list.places.length) {
+          $scope.saveError = "You must add at least one place before saving";
+          return;
+        }
+        $scope.isSaving = true;
+        createOrUpdate()
+        .then(function(list) {
+          $scope.isSaving = false;
+          if (list.id && !$scope.list.id) {
+            $location.path('/list/' + list.id + '/edit');
+          }
+          else {
+            $scope.list = list;
+          }
+          $scope.$apply();
+        })
+        .catch(function(error) {
+          $scope.isSaving = false;
+          alert("There was a problem saving your list. Try again later.", true);
+          console.error(error);
+          $scope.$apply();
+        });
       }
-      else {
-        $scope.list = list;
-      }
-      $scope.$apply();
-    })
-    .catch(function(error) {
-      $scope.isSaving = false;
-      alert("There was a problem saving your list. Try again later.", true);
-      console.error(error);
-      $scope.$apply();
     });
   }
 

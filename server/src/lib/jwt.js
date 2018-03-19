@@ -1,3 +1,4 @@
+const db = require('../connections/db');
 let jwt = require('jsonwebtoken');
 
 let publicKey, privateKey;
@@ -45,6 +46,14 @@ function init(pubkey, privkey, opt) {
       next();
     })
     .catch((err) => {
+      if (req.headers['kulana-user-id']) {
+        return getUserFromHeader(req.headers['kulana-user-id'])
+        .then((user) => {
+          req.user = user;
+          next();
+        })
+        .catch((err) => next());
+      }
       next();
     });
   }
@@ -75,6 +84,20 @@ function parseTokenFromHeader(header) {
     return header.substring(7);
   }
   return header;
+}
+
+function getUserFromHeader(userId) {
+  let _id = db.escape(userId);
+  return db.query(`SELECT u.id, u.username, u.email, u.dateCreated, u.userType, u.imgUrl
+    FROM users AS u
+    WHERE id=${_id}
+  `)
+  .then((rows) => {
+    if (rows.length) {
+      let user = rows[0];
+      return Promise.resolve(user);
+    }
+  });
 }
 
 module.exports = {

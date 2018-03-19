@@ -1,4 +1,4 @@
-app.service("ClusterService", ["MapService", "Shape", function(MapService, Shape) {
+app.service("ClusterService", ["MapService", "Shape", "$timeout", function(MapService, Shape, $timeout) {
   var ClusterService = {};
   var PX_TOLERANCE = 30;
 
@@ -10,6 +10,10 @@ app.service("ClusterService", ["MapService", "Shape", function(MapService, Shape
       map: map,
       places: []
     };
+
+    google.maps.event.addListenerOnce(map, "projection_changed", function() {
+      clusterer.mapReady = true;
+    });
 
     google.maps.event.addListener(map, 'zoom_changed', function() {
       ClusterService.update(clusterer);
@@ -35,7 +39,7 @@ app.service("ClusterService", ["MapService", "Shape", function(MapService, Shape
       return p.id == place.id;
     });
     if (place) {
-      clusterer.places.splice(clusterer.indexOf(place), 1);
+      clusterer.places.splice(clusterer.places.indexOf(place), 1);
     }
   }
 
@@ -44,6 +48,9 @@ app.service("ClusterService", ["MapService", "Shape", function(MapService, Shape
   }
 
   function calculate(clusterer) {
+    if (!clusterer.mapReady) {
+      return $timeout(calculate.bind(this, clusterer), 50);
+    }
     removeClustersFromMap(clusterer);
 
     var visited = [];

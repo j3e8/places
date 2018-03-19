@@ -1,7 +1,10 @@
 const db = require('../../connections/db');
 const ImageUtil = require('../../lib/image');
+const getRecentPlacesForUser = require('./get-recent-places-for-user');
 
 module.exports = function(userId) {
+  let places;
+
   let _userId = db.escape(userId);
   return db.query(`SELECT friendplaces.placeId,
     p.placeTypeId, pt.placeType, p.placeName, p.shapeType, p.shapeData, p.creatorUserId, p.region,
@@ -19,6 +22,11 @@ module.exports = function(userId) {
       result.shapeData = JSON.parse(result.shapeData);
       result.imgUrl = result.imgUrl ? result.imgUrl :ImageUtil.NO_IMAGE_URL;
     });
-    return Promise.resolve(results);
+    places = results;
+    return getRecentPlacesForUser(userId);
+  })
+  .then((results) => {
+    places = places.concat(results);
+    return Promise.resolve(places);
   });
 }

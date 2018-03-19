@@ -1,0 +1,19 @@
+<div class="dialog-shadow" ng-show="show" ng-class="{ 'open': show, 'closed': show === false }"></div>
+<div class="dialog-box" ng-show="show" ng-class="{ 'open': show, 'closed': show === false }">
+
+  <h2>Sign in</h2>
+  Your session timed out. Type your password to continue.
+
+  <div class="breathe">
+    <div class="flex-row spaced">
+      <div class="flex-cell">
+        <input type="password" placeholder="password" ng-model="password" catch-enter="signin()">
+      </div>
+      <div class="flex-cell fixed">
+        <button ng-click="signin()" ng-hide="isSigningIn">Continue</button>
+        <wait-indicator ng-show="isSigningIn"></wait-indicator>
+      </div>
+    </div>
+  </div>
+
+</div>
