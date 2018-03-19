@@ -1,10 +1,11 @@
 const db = require('../../connections/db');
+const ImageUtil = require('../../lib/image');
 
 module.exports = function(userId) {
   let _userId = db.escape(userId);
   return db.query(`SELECT p.id, p.placeTypeId, pt.placeType, p.placeName, p.shapeType, p.shapeData, p.creatorUserId, p.region,
     p.minLatitude, p.maxLatitude, p.minLongitude, p.maxLongitude,
-    me.dateChecked, u.imgUrl,
+    me.dateChecked, u.username, u.imgUrl,
     COUNT(up.userId) as numberOfVisitors,
     COUNT(lp.listId) as numberOfLists
     FROM places AS p
@@ -19,6 +20,7 @@ module.exports = function(userId) {
   ).then((results) => {
     results.forEach((result) => {
       result.shapeData = JSON.parse(result.shapeData);
+      result.imgUrl = result.imgUrl ? result.imgUrl : ImageUtil.NO_IMAGE_URL;
       result.isChecked = true;
     });
     return Promise.resolve(results);

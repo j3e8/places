@@ -7,4 +7,10 @@ module.exports = function(app) {
     .then((result) => res.json(result))
     .catch((err) => ErrorHandler.respondWithError(res, err));
   });
+
+  app.get('/api/icon/default', function(req, res) {
+    Icon.getDefaultIcon()
+    .then((result) => res.json(result))
+    .catch((err) => ErrorHandler.respondWithError(res, err));
+  });
 }

@@ -20,7 +20,7 @@ module.exports = function(userId) {
   ).then((results) => {
     results.forEach((result) => {
       result.shapeData = JSON.parse(result.shapeData);
-      result.imgUrl = result.imgUrl ? result.imgUrl :ImageUtil.NO_IMAGE_URL;
+      result.imgUrl = result.imgUrl ? result.imgUrl : ImageUtil.NO_IMAGE_URL;
     });
     places = results;
     return getRecentPlacesForUser(userId);

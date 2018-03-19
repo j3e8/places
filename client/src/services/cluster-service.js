@@ -1,4 +1,4 @@
-app.service("ClusterService", ["MapService", "Shape", "$timeout", function(MapService, Shape, $timeout) {
+app.service("ClusterService", ["MapService", "PlaceService", "Shape", "$timeout", function(MapService, PlaceService, Shape, $timeout) {
   var ClusterService = {};
   var PX_TOLERANCE = 30;
 
@@ -93,12 +93,14 @@ app.service("ClusterService", ["MapService", "Shape", "$timeout", function(MapSe
     }
 
     clusterer.visitedClusters.forEach(function(cluster) {
-      if (cluster.lat >= mapBounds.minLat && cluster.lat <= mapBounds.maxLat && cluster.lng >= mapBounds.minLng && cluster.lng <= mapBounds.maxLng) {
+      // if (cluster.lat >= mapBounds.minLat && cluster.lat <= mapBounds.maxLat && cluster.lng >= mapBounds.minLng && cluster.lng <= mapBounds.maxLng) {
+      if (cluster.maxLat >= mapBounds.minLat && cluster.minLat <= mapBounds.maxLat && cluster.maxLng >= mapBounds.minLng && cluster.minLng <= mapBounds.maxLng) {
         MapService.addClusterToMap(clusterer.map, cluster, clusterer.clickHandler);
       }
     });
     clusterer.notVisitedClusters.forEach(function(cluster) {
-      if (cluster.lat >= mapBounds.minLat && cluster.lat <= mapBounds.maxLat && cluster.lng >= mapBounds.minLng && cluster.lng <= mapBounds.maxLng) {
+      // if (cluster.lat >= mapBounds.minLat && cluster.lat <= mapBounds.maxLat && cluster.lng >= mapBounds.minLng && cluster.lng <= mapBounds.maxLng) {
+      if (cluster.maxLat >= mapBounds.minLat && cluster.minLat <= mapBounds.maxLat && cluster.maxLng >= mapBounds.minLng && cluster.minLng <= mapBounds.maxLng) {
         MapService.addClusterToMap(clusterer.map, cluster, clusterer.clickHandler);
       }
     });
@@ -111,11 +113,16 @@ app.service("ClusterService", ["MapService", "Shape", "$timeout", function(MapSe
       // find all places within tolerance
       var nearby = getClusterablePlaces(clusterer, place, places, pigeon);
       if (nearby && nearby.length) {
-        var averageLatLng = calculateAverageLatLng(nearby);
+        // var averageLatLng = calculateAverageLatLng(nearby);
+        var bounds = calculateBounds(nearby);
         var cluster = {
           highlighted: false,
-          lat: averageLatLng.lat,
-          lng: averageLatLng.lng,
+          // lat: averageLatLng.lat,
+          // lng: averageLatLng.lng,
+          minLat: bounds.minLat,
+          maxLat: bounds.maxLat,
+          minLng: bounds.minLng,
+          maxLng: bounds.maxLng,
           isChecked: nearby[0].isChecked,
           places: nearby
         }
@@ -125,6 +132,7 @@ app.service("ClusterService", ["MapService", "Shape", "$timeout", function(MapSe
     return clusters;
   }
 
+  /*
   function calculateAverageLatLng(places) {
     var totalLat = 0;
     var totalLng = 0;
@@ -137,6 +145,18 @@ app.service("ClusterService", ["MapService", "Shape", "$timeout", function(MapSe
       lat: totalLat / places.length,
       lng: totalLng / places.length
     }
+  }*/
+
+  function calculateBounds(places) {
+    var bounds = {};
+    places.forEach(function(place) {
+      var b = PlaceService.calculateBounds(place);
+      if (bounds.minLat === undefined || b.minLat < bounds.minLat) bounds.minLat = b.minLat;
+      if (bounds.maxLat === undefined || b.maxLat > bounds.maxLat) bounds.maxLat = b.maxLat;
+      if (bounds.minLng === undefined || b.minLng < bounds.minLng) bounds.minLng = b.minLng;
+      if (bounds.maxLng === undefined || b.maxLng > bounds.maxLng) bounds.maxLng = b.maxLng;
+    });
+    return bounds;
   }
 
   function getClusterablePlaces(clusterer, place, places, pigeon) {

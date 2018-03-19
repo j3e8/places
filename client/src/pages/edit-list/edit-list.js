@@ -26,6 +26,19 @@ function($scope, $routeParams, MapService, ClusterService, PlaceService, ListSer
     console.error(err);
   });
 
+  if (!$routeParams.listId) {
+    ListService.getDefaultIcon()
+    .then(function(icon) {
+      $scope.list.iconId = icon.id;
+      $scope.list.iconUrl = icon.iconUrl;
+      $scope.$apply();
+    })
+    .catch(function(err) {
+      alert("There was a problem loading the icon for the list", true);
+      $scope.$apply();
+    });
+  }
+
   function loadList(listId) {
     ListService.get(listId)
     .then(function(list) {
@@ -158,17 +171,21 @@ function($scope, $routeParams, MapService, ClusterService, PlaceService, ListSer
   }
 
   $scope.saveList = function() {
+    $scope.saveError = null;
+    if (!$scope.list.listName) {
+      $scope.saveError = "You must provide a list name";
+      return;
+    }
+    if (!$scope.list.places.length) {
+      $scope.saveError = "You must add at least one place before saving";
+      return;
+    }
+    if (!$scope.list.iconId) {
+      $scope.saveError = "You must choose an icon for your list";
+      return;
+    }
     requirePassword({
       afterAuthenticate: function() {
-        $scope.saveError = null;
-        if (!$scope.list.listName) {
-          $scope.saveError = "You must provide a list name";
-          return;
-        }
-        if (!$scope.list.places.length) {
-          $scope.saveError = "You must add at least one place before saving";
-          return;
-        }
         $scope.isSaving = true;
         createOrUpdate()
         .then(function(list) {
