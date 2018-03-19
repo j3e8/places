@@ -20,6 +20,7 @@ app.use(bodyParser.json({
   limit: '5mb'
 }));
 
+require('./routes/icons.js')(app);
 require('./routes/list.js')(app);
 require('./routes/place.js')(app);
 require('./routes/user.js')(app);

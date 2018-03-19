@@ -5,12 +5,14 @@ module.exports = function(userId, placeId) {
   let _placeId = db.escape(placeId);
   let userClause = userId ? `LEFT JOIN userlists as me ON l.id=me.listId AND me.userId=${_userId}` : '';
 
-  return db.query(`SELECT l.id, l.listName, l.description, l.dateCreated, l.dateModified, l.creatorUserId, l.official,
+  return db.query(`SELECT l.id, l.listName, l.description, l.dateCreated, l.dateModified, l.creatorUserId, l.official, l.icondId,
+    i.iconUrl,
     CASE WHEN u.userType = 'admin' AND l.official THEN 'kulana' ELSE u.username END AS username, u.prominence,
     me.dateFollowed,
     COUNT(lp.placeId) as numberOfPlaces,
     COUNT(distinct ul.userId) as numberOfFollowers
     FROM lists as l
+    INNER JOIN icons as i ON l.iconId=i.id
     INNER JOIN users as u ON l.creatorUserId=u.id
     INNER JOIN listplaces as lp ON l.id=lp.listId
     ${userClause}

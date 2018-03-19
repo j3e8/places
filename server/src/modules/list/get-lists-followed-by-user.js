@@ -2,11 +2,13 @@ const db = require('../../connections/db');
 
 module.exports = function(userId) {
   let _userId = db.escape(userId);
-  return db.query(`SELECT l.id, l.listName, l.description, l.dateCreated, l.dateModified, l.creatorUserId, l.official,
+  return db.query(`SELECT l.id, l.listName, l.description, l.dateCreated, l.dateModified, l.creatorUserId, l.official, l.iconId,
+    i.iconUrl,
     CASE WHEN u.userType = 'admin' AND l.official THEN 'kulana' ELSE u.username END AS username,
     ul.dateFollowed,
     tmp.numberOfPlaces, tmp.numberOfVisited
     FROM lists as l
+    INNER JOIN icons as i ON l.iconId=i.id
     INNER JOIN users AS u ON l.creatorUserId=u.id
     INNER JOIN userlists as ul ON l.id=ul.listId and ul.userId=${_userId}
     INNER JOIN (

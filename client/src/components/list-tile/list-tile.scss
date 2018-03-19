@@ -3,6 +3,10 @@ list-tile {
     margin: 0;
     padding: 10px 5px;
     border-top: 1px solid #bcbec0;
+    img.list-icon {
+      height: 80px;
+      width: auto;
+    }
     .list-name {
       font-size: 16px;
       font-weight: 500;

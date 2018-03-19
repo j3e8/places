@@ -104,6 +104,20 @@ function($scope, $routeParams, MapService, ClusterService, PlaceService, ListSer
     });
   }
 
+  $scope.chooseIcon = function() {
+    $scope.iconDialogIsDisplayed = true;
+  }
+
+  $scope.updateIcon = function(icon) {
+    $scope.list.iconId = icon.id;
+    $scope.list.iconUrl = icon.iconUrl;
+    $scope.iconDialogIsDisplayed = false;
+  }
+
+  $scope.closeIconDialog = function() {
+    $scope.iconDialogIsDisplayed = false;
+  }
+
   $scope.editPlace = function(place) {
     $scope.placeToEditId = place.id;
     $scope.newPlaceDialogIsDisplayed = true;
@@ -165,6 +179,7 @@ function($scope, $routeParams, MapService, ClusterService, PlaceService, ListSer
           else {
             $scope.list = list;
           }
+          alert("List saved");
           $scope.$apply();
         })
         .catch(function(error) {

@@ -5,7 +5,8 @@ module.exports = function(listId, userId, data) {
   let obj = {
     listName: data.listName || undefined,
     description: data.description || undefined,
-    official: data.official ? 1 : 0
+    official: data.official ? 1 : 0,
+    iconId: data.iconId || 0
   }
   if (listId) {
     obj.id = listId;

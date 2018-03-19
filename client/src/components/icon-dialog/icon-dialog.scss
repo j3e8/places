@@ -1,0 +1,18 @@
+icon-dialog {
+
+  div.floating {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  img.icon {
+    height: 80px;
+    width: auto;
+    padding: 2px;
+    margin: 3px;
+    &.selected {
+      border: 2px solid $purple;
+    }
+  }
+
+}

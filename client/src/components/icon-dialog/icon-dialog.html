@@ -1,0 +1,19 @@
+<div class="dialog-shadow" ng-show="show" ng-class="{ 'open': show, 'closed': show === false }"></div>
+<div class="dialog-box" ng-show="show" ng-class="{ 'open': show, 'closed': show === false }">
+  <h2>Choose an icon</h2>
+  Pick an icon to represent your list.
+
+  <div class="floating breathe">
+    <div ng-repeat="r in rows track by $index">
+      <span ng-repeat="icon in r track by $index">
+        <img ng-src="{{ icon.iconUrl }}" class="icon clickable" ng-class="{ 'selected': selectedIcon.id == icon.id }" ng-click="chooseIcon(icon)">
+      </span>
+    </div>
+  </div>
+
+  <div class="breathe text-center">
+    <button ng-click="okay()">Okay</button>
+    <button class="cancel" ng-click="cancel()">Cancel</button>
+  </div>
+
+</div>

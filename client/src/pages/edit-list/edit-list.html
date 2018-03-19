@@ -8,8 +8,16 @@
         <div class="content">
           <h1><input type="text" ng-model="list.listName" placeholder="New List"></h1>
           <div><textarea ng-model="list.description" placeholder="Write a description"></textarea></div>
-          <div class="gap" ng-if="user.userType == 'admin'">
-            <input type="checkbox" id="official_list_checkbox" ng-model="list.official"> <label for="official_list_checkbox">Admin list</label>
+          <div class="gap">
+            <div class="flex-row">
+              <div class="flex-cell">
+                <img class="list-icon clickable" ng-src="{{ list.iconUrl }}" ng-click="chooseIcon()">
+                <i class="material-icons clickable" ng-click="chooseIcon()">edit</i>
+              </div>
+              <div class="flex-cell text-right" ng-if="user.userType == 'admin'">
+                <input type="checkbox" id="official_list_checkbox" ng-model="list.official"> <label for="official_list_checkbox">Admin list</label>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -68,3 +76,4 @@
 </div>
 
 <place-dialog ng-show="newPlaceDialogIsDisplayed" show="newPlaceDialogIsDisplayed" center="centerCoords" zoom="zoom" place-id="placeToEditId" on-save="afterPlaceSave" on-cancel="closeNewPlaceDialog"></place-dialog>
+<icon-dialog ng-show="iconDialogIsDisplayed" selected-icon-id="list.iconId" show="iconDialogIsDisplayed" on-save="updateIcon" on-cancel="closeIconDialog"></icon-dialog>
