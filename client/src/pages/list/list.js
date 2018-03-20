@@ -1,5 +1,5 @@
-app.controller("listController", ["$scope", "$routeParams", "MapService", "PlaceService", "ListService", "UserService", "alert", "$timeout", "$location", function($scope, $routeParams, MapService, PlaceService, ListService, UserService, alert, $timeout, $location) {
-  var map;
+app.controller("listController", ["$scope", "$routeParams", "MapService", "ClusterService", "PlaceService", "ListService", "UserService", "alert", "$timeout", "$location", function($scope, $routeParams, MapService, ClusterService, PlaceService, ListService, UserService, alert, $timeout, $location) {
+  var map, clusterer;
   var DEFAULT_COORDS = { lat: 39.5464, lng: -97.3296 };
 
   $scope.user = UserService.getUser();
@@ -9,18 +9,26 @@ app.controller("listController", ["$scope", "$routeParams", "MapService", "Place
   MapService.load()
   .then(function() {
     initMap();
+    clusterer = ClusterService.createClusterer(map, $scope.placeClicked);
     ListService.get($routeParams.listId)
     .then(function(list) {
       $scope.list = list;
       ListService.sortList($scope.list, ListService.ALPHABETICALLY)
+      /*
       $scope.list.places.forEach(function(place) {
         MapService.addPlaceToMap(map, place, $scope.placeClicked);
-      });
+      });*/
       if (ListService.listHasPolylines($scope.list)) {
         MapService.toggleRoads(map, false);
       }
       var listBounds = ListService.calculateBounds($scope.list);
       MapService.setMapToContainList(map, listBounds);
+      $scope.list.places.forEach(function(place) {
+        ClusterService.addPlaceToClusterer(clusterer, place);
+      });
+      $timeout(function() {
+        ClusterService.update(clusterer);
+      });
       $scope.$apply();
     })
     .catch(function(err) {

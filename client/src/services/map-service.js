@@ -83,7 +83,7 @@ app.service("MapService", ["$rootScope", "Shape", function($rootScope, Shape) {
     }
     var icon = buildIconForCluster(map, cluster);
     cluster.gmObject = new google.maps.Marker({
-      position: new google.maps.LatLng(cluster.lat, cluster.lng),
+      position: new google.maps.LatLng((cluster.minLat + cluster.maxLat)/2, (cluster.minLng + cluster.maxLng)/2),
       icon: icon,
       label: {
         text: cluster.places.length.toString(),

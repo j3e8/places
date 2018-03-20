@@ -4,7 +4,8 @@ module.exports = function(userId) {
   let _userId = db.escape(userId);
   return db.query(`SELECT l.id, l.listName, l.description, l.dateCreated, l.dateModified, l.creatorUserId, l.official, l.iconId,
     i.iconUrl,
-    u.username, u.prominence, tmp.numberOfPlaces
+    CASE WHEN u.userType = 'admin' AND l.official THEN 'kulana' ELSE u.username END AS username,
+    u.prominence, tmp.numberOfPlaces
     FROM lists as l
     INNER JOIN icons as i ON l.iconId=i.id
     INNER JOIN users as u ON l.creatorUserId=u.id
@@ -15,7 +16,6 @@ module.exports = function(userId) {
       GROUP BY l.id
     ) as tmp ON l.id=tmp.id
     WHERE u.id=${_userId}
-    AND l.official = 0
   `)
   .then((rows) => {
     rows.forEach((row) => {
