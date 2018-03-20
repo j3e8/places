@@ -3,12 +3,13 @@ const db = require('../../connections/db');
 module.exports = function(userId, placeId) {
   let _userId = db.escape(userId);
   let _placeId = db.escape(placeId);
+  let selectClause = userId ? `me.dateFollowed,` : '';
   let userClause = userId ? `LEFT JOIN userlists as me ON l.id=me.listId AND me.userId=${_userId}` : '';
 
-  return db.query(`SELECT l.id, l.listName, l.description, l.dateCreated, l.dateModified, l.creatorUserId, l.official, l.icondId,
+  return db.query(`SELECT l.id, l.listName, l.description, l.dateCreated, l.dateModified, l.creatorUserId, l.official, l.iconId,
     i.iconUrl,
     CASE WHEN u.userType = 'admin' AND l.official THEN 'kulana' ELSE u.username END AS username, u.prominence,
-    me.dateFollowed,
+    ${selectClause}
     COUNT(lp.placeId) as numberOfPlaces,
     COUNT(distinct ul.userId) as numberOfFollowers
     FROM lists as l

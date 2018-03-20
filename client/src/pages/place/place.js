@@ -1,6 +1,7 @@
 app.controller("placeController", ["$scope", "$routeParams", "MapService", "PlaceService", "ListService", "UserService", "Shape", "alert", "$timeout", "$location",
 function($scope, $routeParams, MapService, PlaceService, ListService, UserService, Shape, alert, $timeout, $location) {
   var map;
+  var DEFAULT_ZOOM = 15;
 
   $scope.user = UserService.getUser();
   $scope.placeDialogIsDisplayed = undefined;
@@ -37,7 +38,9 @@ function($scope, $routeParams, MapService, PlaceService, ListService, UserServic
         MapService.toggleRoads(map, false);
       }
       var bounds = PlaceService.calculateBounds($scope.place);
-      MapService.setMapToContainList(map, bounds);
+      // MapService.setMapToContainList(map, bounds);
+      map.setZoom(DEFAULT_ZOOM);
+      map.setCenter(new google.maps.LatLng($scope.placeCenter));
       $scope.$apply();
     })
     .catch(function(err) {
@@ -59,8 +62,6 @@ function($scope, $routeParams, MapService, PlaceService, ListService, UserServic
 
   function initMap() {
     map = new google.maps.Map(document.getElementById('list-map'), {
-      zoom: $scope.zoom,
-      center: new google.maps.LatLng($scope.centerCoords),
       mapTypeId: 'roadmap',
       gestureHandling: 'greedy'
     });

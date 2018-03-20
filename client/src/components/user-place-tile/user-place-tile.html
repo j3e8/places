@@ -8,7 +8,7 @@
     <div class="flex-cell">
       <a class="username" ng-href="/user/{{ userPlace.userId }}">{{ userPlace.username }}</a>
       visited
-      <span ng-repeat="place in userPlace.places track by $index"><span ng-if="$index > 0">, </span><a class="place-name" ng-href="/place/{{ place.placeId }}">{{ place.placeName }}</a></span>
+      <span ng-repeat="place in userPlace.places track by $index"><span ng-if="$index > 0">, </span><a class="place-name" ng-href="/place/{{ place.id }}">{{ place.placeName }}</a></span>
 
       <div class="subtle">Marked on {{ userPlace.dateChecked | date:'MMMM d' }}</div>
     </div>
