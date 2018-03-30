@@ -1,7 +1,7 @@
-<div class="page__signup">
+<div class="page__signup content-fill-height">
 
-  <div class="hero">
-    <div class="container">
+  <div class="flex-row">
+    <div class="flex-cell">
       <div class="floating">
         <h1>Sign up</h1>
         It's free and it only takes 3.2 seconds
@@ -22,7 +22,7 @@
             <div class="gap">
               <div class="flex-row vertical-center">
                 <div class="flex-cell">
-                  <a ng-href="/signin" class="inverted">Already have an account?</a>
+                  <a ng-href="/signin">Already have an account?</a>
                 </div>
                 <div class="flex-cell fixed">
                   <button ng-click="signup()">Sign up</button>
@@ -33,6 +33,39 @@
         </div>
       </div>
     </div>
-  </div>
+    <div class="flex-cell" id="photo-half">
 
+      <div class="flex-column">
+        <div class="flex-cell">
+          <div class="floating">
+            <div class="title">
+              <span class="kulana">kulana</span> means <span class="adventure">adventure</span>
+            </div>
+
+            <div class="subtitle">
+              Wherever you go, whatever adventures you have, keep them with kulana
+            </div>
+
+            <div class="breathe bullets">
+              <div class="bullet">
+                <i class="material-icons">explore</i>
+                <span>Discover new places</span>
+              </div>
+              <div class="bullet">
+                <i class="material-icons">face</i>
+                <span>Follow your friends</span>
+              </div>
+              <div class="bullet">
+                <i class="material-icons">map</i>
+                <span>Map your adventures</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="flex-cell fixed logo-cell">
+          <img src="/assets/logo-white.svg" title="Kulana">
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

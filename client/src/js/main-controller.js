@@ -2,15 +2,13 @@ app.controller("mainController", ["$rootScope", "$http", "$location", "PLACES_SE
 function($rootScope, $http, $location, PLACES_SERVICE_URL, UserService) {
   $rootScope.user = UserService.getUser();
 
-  var authenticatedRoutes = [
-    '/admin',
-    '/created-lists',
-    '/list/new',
-    '/list/:listId/edit'
+  var unauthenticatedRoutes = [
+    '/signin',
+    '/signup'
   ];
 
-  if (!UserService.isSignedIn() && authenticatedRoutes.indexOf($location.path()) != -1) {
-    $location.path('/signin');
+  if ($rootScope.user && unauthenticatedRoutes.indexOf($location.path()) != -1) {
+    $location.path('/home');
   }
 
   $rootScope.$on('signedout', function() {

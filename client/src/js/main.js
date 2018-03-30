@@ -69,8 +69,16 @@ app.config(["$routeProvider", "$locationProvider", function($routeProvider, $loc
     controller: 'userController'
   })
 }])
-.run(function($rootScope, $route){
+.run(function($rootScope, $route, $location){
   $rootScope.$on('$routeChangeSuccess', function(e,to){
     window.scrollTo(0, 0);
+  });
+
+  $rootScope.$on('$locationChangeStart', function(event, next, current) {
+    try {
+      if (current == '/' && localStorage.getItem('hasEverSignedIn')) {
+        $location.path('/signin');
+      }
+    } catch(ex) { }
   });
 });

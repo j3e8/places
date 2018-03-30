@@ -12,16 +12,15 @@
     <div class="breathe">
       <div class="tools">
         <div class="flex-row spaced vertical-center">
-          <div class="flex-cell fixed">
-            <img src="/assets/images/pan.svg" ng-click="setDrawingMode('pan')">
-            <img src="/assets/images/marker.svg" ng-click="setDrawingMode('marker')">
-            <img src="/assets/images/polygon.svg" ng-click="setDrawingMode('polygon')">
-            <img src="/assets/images/polyline.svg" ng-click="setDrawingMode('polyline')">
+          <div class="flex-cell fixed" ng-if="user.userType == 'admin'">
+            <img src="/assets/images/marker.svg" ng-class="{ 'selected': drawingMode == 'marker' }" ng-click="setDrawingMode('marker')">
+            <img src="/assets/images/polygon.svg" ng-class="{ 'selected': drawingMode == 'polygon' }" ng-click="setDrawingMode('polygon')">
+            <img src="/assets/images/polyline.svg" ng-class="{ 'selected': drawingMode == 'polyline' }" ng-click="setDrawingMode('polyline')">
           </div>
           <div class="flex-cell">
             <input type="text" id="gm-input" placeholder="Search">
           </div>
-          <div class="flex-cell fixed">
+          <div class="flex-cell fixed" ng-if="user.userType == 'admin'">
             <span ng-click="toggleGeoJSON()" class="clickable">GeoJSON</span>
           </div>
         </div>

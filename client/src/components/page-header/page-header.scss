@@ -93,10 +93,10 @@ page-header {
 
   @keyframes slide-in {
     from { width: 0; opacity: 0; }
-    to { width: 70%; opacity: 1; }
+    to { width: 310px; opacity: 1; }
   }
   @keyframes slide-out {
-    from { width: 70%; opacity: 1; }
+    from { width: 310px; opacity: 1; }
     to { width: 0; opacity: 0; }
   }
 

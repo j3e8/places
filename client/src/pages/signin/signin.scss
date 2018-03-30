@@ -1,4 +1,4 @@
-.page__signup {
+.page__signin {
   .floating {
     max-width: 300px;
     margin: 50px auto;
@@ -12,6 +12,6 @@
     background-size: cover;
   }
   input.ng-invalid.ng-dirty.ng-touched {
-    border: 1px solid red;
+    border: 1px solid $red;
   }
 }

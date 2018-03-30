@@ -130,6 +130,7 @@ app.service("UserService", ["$http", "$rootScope", "$timeout", "PLACES_SERVICE_U
     try {
       localStorage.setItem('authToken', authToken);
       localStorage.setItem('user', JSON.stringify(user));
+      localStorage.setItem('hasEverSignedIn', true);
     } catch(err) {
       console.warn("Couldn't set user to localStorage");
     }

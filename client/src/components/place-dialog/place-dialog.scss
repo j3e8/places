@@ -25,15 +25,18 @@ place-dialog {
   .tools {
     padding: 2px 0 8px 0;
     img {
-      width: 25px;
+      width: 30px;
       height: auto;
       cursor: pointer;
       padding: 3px;
       margin: 0 2px;
-      border: 1px solid #e6e6e6;
+      border: 2px solid #e6e6e6;
       border-radius: 2px;
       &:hover {
         background-color: rgba(68, 186, 201, 0.2);
+      }
+      &.selected {
+        border-color: $purple;
       }
     }
     #gm-input {

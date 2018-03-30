@@ -1,4 +1,4 @@
-app.directive("placeDialog", ["Shape", "MapService", "PlaceService", "$timeout", "alert", function(Shape, MapService, PlaceService, $timeout, alert) {
+app.directive("placeDialog", ["Shape", "MapService", "PlaceService", "UserService", "$timeout", "alert", function(Shape, MapService, PlaceService, UserService, $timeout, alert) {
   return {
     restrict: 'E',
     scope: {
@@ -11,6 +11,8 @@ app.directive("placeDialog", ["Shape", "MapService", "PlaceService", "$timeout",
     },
     templateUrl: '/components/place-dialog/place-dialog.html',
     link: function($scope, $elem, $attrs) {
+      $scope.user = UserService.getUser();
+
       $scope.shapeTypes = [
         'Point',
         'Polygon',
@@ -74,7 +76,6 @@ app.directive("placeDialog", ["Shape", "MapService", "PlaceService", "$timeout",
       });
 
       $scope.reset = function() {
-        console.log('reset');
         if ($scope.place && $scope.place.gmObject) {
           removeShapesFromMap($scope.place.gmObject);
         }
@@ -142,6 +143,7 @@ app.directive("placeDialog", ["Shape", "MapService", "PlaceService", "$timeout",
         if (tool == 'pan') {
           tool = null;
         }
+        $scope.drawingMode = tool;
         drawingManager.setDrawingMode(tool);
       }
 
@@ -184,7 +186,6 @@ app.directive("placeDialog", ["Shape", "MapService", "PlaceService", "$timeout",
 
       function initMap() {
         var zoom = $scope.zoom || DEFAULT_ZOOM;
-        console.log($scope.zoom, $scope.center);
         map = new google.maps.Map(document.getElementById('place-dialog-map'), {
           zoom: zoom,
           center: new google.maps.LatLng($scope.center || DEFAULT_COORDS),
@@ -209,7 +210,8 @@ app.directive("placeDialog", ["Shape", "MapService", "PlaceService", "$timeout",
           }
         });
         drawingManager.setMap(map);
-        drawingManager.setDrawingMode(null);
+        $scope.drawingMode = 'marker';
+        drawingManager.setDrawingMode($scope.drawingMode);
         google.maps.event.addListener(drawingManager, 'markercomplete', markerComplete);
         google.maps.event.addListener(drawingManager, 'polygoncomplete', polygonComplete);
         google.maps.event.addListener(drawingManager, 'polylinecomplete', polylineComplete);
@@ -263,12 +265,12 @@ app.directive("placeDialog", ["Shape", "MapService", "PlaceService", "$timeout",
         }
         $scope.place.shapeType = Shape.POINT;
         $scope.place.gmObject = gmMarker;
-        drawingManager.setDrawingMode(null);
         gmMarker.setDraggable(true);
       }
 
       function polygonComplete(gmPolygon) {
-        if ($scope.place.shapeType != Shape.POLYGON || !$scope.place.gmObject) {
+        if (!$scope.place.gmObject || ($scope.place.gmObject && $scope.place.shapeType != Shape.POLYGON)) {
+          $scope.place.gmObject.setMap(null);
           $scope.place.gmObject = gmPolygon;
         }
         else {
@@ -282,7 +284,6 @@ app.directive("placeDialog", ["Shape", "MapService", "PlaceService", "$timeout",
           gmPolygon.setMap(null); // remove this new polygon from the map
         }
         $scope.place.shapeType = Shape.POLYGON;
-        drawingManager.setDrawingMode(null);
         gmPolygon.setEditable(true);
       }
 
