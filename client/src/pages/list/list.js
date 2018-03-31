@@ -14,10 +14,6 @@ app.controller("listController", ["$scope", "$routeParams", "MapService", "Clust
     .then(function(list) {
       $scope.list = list;
       ListService.sortList($scope.list, ListService.ALPHABETICALLY)
-      /*
-      $scope.list.places.forEach(function(place) {
-        MapService.addPlaceToMap(map, place, $scope.placeClicked);
-      });*/
       if (ListService.listHasPolylines($scope.list)) {
         MapService.toggleRoads(map, false);
       }
@@ -74,6 +70,13 @@ app.controller("listController", ["$scope", "$routeParams", "MapService", "Clust
       }
     }
     $scope.$apply();
+  }
+
+  $scope.highlightPlace = function(place) {
+    $scope.unhighlightAllPlaces();
+    place.highlighted = true;
+    MapService.updatePlaceOnMap(map, place);
+    MapService.zoomToPlace(map, place);
   }
 
   $scope.unhighlightAllPlaces = function() {

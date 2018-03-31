@@ -1,14 +1,39 @@
 <div class="home-page">
-  <div class="content floating">
 
-    <h1>Recent activity</h1>
-    <section ng-show="userPlaces.length">
-      <user-place-tile ng-repeat="userPlace in userPlaces" user-place="userPlace"></user-place-tile>
-    </section>
+  <div class="flex-row wrap">
+    <div class="flex-cell main-cell">
 
-    <section ng-show="!userPlaces.length" class="subtle text-right">
-      No recent activity. <a href="/lists">Discover some popular lists</a> or <a href="/members">follow some popular members</a>.
-    </section>
+      <div class="floating">
+        <h1>Recent activity</h1>
+        <section ng-if="userPlaces.length">
+          <user-place-tile ng-repeat="userPlace in userPlaces" user-place="userPlace"></user-place-tile>
+        </section>
 
+        <section ng-if="!userPlaces.length" class="subtle text-right">
+          No recent activity. <a href="/lists">Discover some popular lists</a> or <a href="/members">follow some popular members</a>.
+        </section>
+      </div>
+
+    </div>
+    <div class="flex-cell sidebar-cell" ng-if="followedLists.length">
+
+      <section ng-if="followedLists.length">
+        <div class="flex-row vertical-bottom">
+          <div class="flex-cell">
+            <h1>Followed lists</h1>
+          </div>
+          <div class="flex-cell fixed subtle">
+            {{ followedLists.length }}
+            <span ng-if="followedLists.length == 1">list</span>
+            <span ng-if="followedLists.length != 1">lists</span>
+          </div>
+        </div>
+
+        <div>
+          <list-tile ng-repeat="list in followedLists" list="list"></list-tile>
+        </div>
+      </section>
+
+    </div>
   </div>
 </div>

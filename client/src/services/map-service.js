@@ -128,6 +128,17 @@ app.service("MapService", ["$rootScope", "Shape", function($rootScope, Shape) {
     });
   }
 
+  MapService.zoomToPlace = function(map, place) {
+    var shapeBounds = Shape.calculateBounds(place.shapeData);
+    var center = Shape.getCenterOfShape(place.shapeData);
+    var zoom = 6;
+    if (shapeBounds.minLat == shapeBounds.maxLat || shapeBounds.minLng == shapeBounds.maxLng) {
+      zoom = 11;
+    }
+    map.setZoom(zoom);
+    map.setCenter(new google.maps.LatLng(center));
+  }
+
   function formatRegion(regions) {
     if (!regions || !regions.length) {
       return '';

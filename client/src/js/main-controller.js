@@ -3,13 +3,10 @@ function($rootScope, $http, $location, PLACES_SERVICE_URL, UserService) {
   $rootScope.user = UserService.getUser();
 
   var unauthenticatedRoutes = [
+    '/',
     '/signin',
     '/signup'
   ];
-
-  if ($rootScope.user && unauthenticatedRoutes.indexOf($location.path()) != -1) {
-    $location.path('/home');
-  }
 
   $rootScope.$on('signedout', function() {
     $rootScope.user = null;
@@ -18,4 +15,9 @@ function($rootScope, $http, $location, PLACES_SERVICE_URL, UserService) {
   $rootScope.$on('signedin', function() {
     $rootScope.user = UserService.getUser();
   });
+
+
+  if ($rootScope.user && unauthenticatedRoutes.indexOf($location.path()) != -1) {
+    $location.path('/home');
+  }
 }]);

@@ -6,7 +6,11 @@
           {{ list.listName }}
           <a ng-show="user.id == list.creatorUserId" ng-href="/list/{{ list.id }}/edit"><i class="material-icons">edit</i></a>
         </h1>
-        <span class="subtle">Created by <a ng-href="/user/{{ list.creatorUserId }}">{{ list.username }}</a></span>
+        <span class="subtle">
+          Created by
+          <a ng-href="/user/{{ list.creatorUserId }}" ng-hide="list.official">{{ list.username }}</a>
+          <span ng-show="list.official" class="purple">kulana</span>
+        </span>
       </div>
       <div class="flex-cell fixed subtle text-right">
         <span class="highlight">{{ list.numberOfFollowers }}</span>
@@ -30,17 +34,29 @@
         <div class="flex-column">
           <div class="flex-cell fixed">
             <div class="content">
-              <h2>Places</h2>
+              <div class="flex-row">
+                <div class="flex-cell">
+                  <h2>Places</h2>
+                </div>
+                <div class="flex-cell fixed subtle">
+                  {{ list.places.length }}
+                  <span ng-show="list.places.length == 1">place</span>
+                  <span ng-show="list.places.length != 1">places</span>
+                </div>
+              </div>
+              <div id="place-search">
+                <input id="search-box" type="text" ng-model="placeFilter" placeholder="Filter places">
+              </div>
             </div>
           </div>
           <div class="flex-cell" id="place-list">
             <div class="content">
               <ul ng-show="list.places.length">
-                <li ng-repeat="place in list.places" ng-class="{ 'highlighted': place.highlighted }" id="place_{{ place.id }}">
+                <li ng-repeat="place in list.places | filter:{placeName: placeFilter}" ng-class="{ 'highlighted': place.highlighted }" id="place_{{ place.id }}">
                   <div class="flex-row sm-spaced">
                     <div class="flex-cell">
                       <input id="place_{{ place.id }}_checkbox" type="checkbox" ng-model="place.isChecked" ng-change="handleCheckboxClick(place)"> <label for="place_{{ place.id }}_checkbox"></label>
-                      {{ place.placeName }}
+                      <span class="place-name" ng-click="highlightPlace(place)">{{ place.placeName }}</span>
                     </div>
                     <div class="flex-cell fixed" ng-show="place.creatorUserId == user.id">
                       <i class="material-icons clickable" ng-click="displayPlaceDialog(place)">edit</i>

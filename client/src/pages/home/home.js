@@ -1,10 +1,18 @@
-app.controller("homeController", ["$scope", "PlaceService", "UserService", "$location", function($scope, PlaceService, UserService, $location) {
+app.controller("homeController", ["$scope", "PlaceService", "UserService", "ListService", "$location", function($scope, PlaceService, UserService, ListService, $location) {
   $scope.user = UserService.getUser();
-  if (!$scope.user || !$scope.user.id) {
-    $location.path('/signin');
-    return;
-  }
   $scope.userPlaces = [];
+  $scope.followedLists = [];
+
+  ListService.getListsFollowedByUser($scope.user.id)
+  .then(function(lists) {
+    $scope.completedLists = lists.filter(function(l) { return l.numberOfPlaces == l.numberOfVisited; });
+    $scope.followedLists = lists.filter(function(l) { return l.numberOfPlaces != l.numberOfVisited; });
+    $scope.$apply();
+  })
+  .catch(function(err) {
+    console.error("Couldn't load followed lists", err);
+    $scope.$apply();
+  });
 
   PlaceService.getRecentPlacesForUsersNetwork($scope.user.id)
   .then(function(userPlaces) {

@@ -1,7 +1,27 @@
 .home-page {
-  .floating {
-    max-width: 800px;
-    margin-left: auto;
-    margin-right: auto;
+  .main-cell {
+    padding: 50px 20px 70px 20px;
+    .floating {
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+      @media (max-width: 960px) {
+        max-width: none;
+      }
+    }
+  }
+  .sidebar-cell {
+    flex: 0 0 35%;
+    -webkit-flex: 0 0 35%;
+    padding: 50px 20px 70px 20px;
+    @media (max-width: 1350px) {
+      flex: 0 0 380px;
+      -webkit-flex: 0 0 380px;
+    }
+    @media (max-width: 960px) {
+      flex: 0 0 100%;
+      -webkit-flex: 0 0 100%;
+      order: 2;
+    }
   }
 }

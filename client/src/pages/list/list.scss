@@ -42,6 +42,14 @@
       }
     }
 
+    #search-box {
+      background-image: url(/assets/images/filter.svg);
+      background-repeat: no-repeat;
+      background-position: 4px center;
+      background-size: auto 19px;
+      padding-left: 30px;
+    }
+
     #place-list {
       position: relative;
       overflow-y: scroll;
@@ -68,6 +76,9 @@
           }
           &.highlighted {
             background-color: #fffcd3;
+          }
+          .place-name {
+            cursor: pointer;
           }
           .place-type {
             color: #888;

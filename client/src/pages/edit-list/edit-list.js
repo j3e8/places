@@ -88,21 +88,6 @@ function($scope, $routeParams, MapService, ClusterService, PlaceService, ListSer
     });
   }
 
-  var searchTimeout = null;
-  $scope.searchPlaces = function(str) {
-    $timeout.cancel(searchTimeout);
-    searchTimeout = $timeout(function() {
-      PlaceService.search(str)
-      .then(function(places) {
-        $scope.placeSearchResults = places;
-        $scope.$apply();
-      })
-      .catch(function(err) {
-        $scope.$apply();
-      });
-    }, 300);
-  }
-
   $scope.showNewPlaceDialog = function() {
     console.log('showNewPlaceDialog');
     requirePassword({
@@ -143,7 +128,7 @@ function($scope, $routeParams, MapService, ClusterService, PlaceService, ListSer
 
   $scope.handlePlaceResultClick = function(place) {
     $scope.addPlaceToList(place);
-    $scope.placeSearch = '';
+    $scope.placeFilter = null;
   }
 
   $scope.addPlaceToList = function(place) {

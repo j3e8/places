@@ -9,15 +9,14 @@ app.directive("signinDialog", ["UserService", "alert", "$rootScope", function(Us
 
       $rootScope.$on('requirePassword', function(event, data) {
         $scope.afterAuthenticate = data.afterAuthenticate;
-        console.log('$on requirePassword');
         if (UserService.isSignedIn()) {
-          console.log('isSignedIn');
           if ($scope.afterAuthenticate) {
-            console.log('call afterAuthenticate');
             $scope.afterAuthenticate();
           }
           return;
         }
+        $scope.isSigningIn = false;
+        $scope.password = null;
         $scope.show = true;
       });
 
@@ -29,7 +28,9 @@ app.directive("signinDialog", ["UserService", "alert", "$rootScope", function(Us
           if ($scope.afterAuthenticate) {
             $scope.afterAuthenticate();
           }
+          $scope.isSigningIn = false;
           $scope.show = false;
+          $scope.password = null;
           $scope.$apply();
         })
         .catch(function(err) {

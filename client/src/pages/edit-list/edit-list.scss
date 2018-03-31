@@ -66,6 +66,9 @@
           &.highlighted {
             background-color: #fffcd3;
           }
+          .place-name {
+            cursor: pointer;
+          }
           .place-type {
             color: #888;
             font-size: 13px;
@@ -85,35 +88,12 @@
 
   }
 
-  #place-search {
-    position: relative;
-    #search-box {
-      background-image: url(/assets/images/search.svg);
-      background-repeat: no-repeat;
-      background-position: 4px center;
-      background-size: auto 19px;
-      padding-left: 30px;
-    }
-
-    #place-search-results {
-      position: absolute;
-      top: 100%;
-      left: 0;
-      min-width: 100%;
-      background-color: #fff;
-      box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.3);
-      .place-search-result {
-        padding: 6px 10px;
-        border-bottom: 1px solid #f0f0f0;
-        cursor: pointer;
-        &:last-child {
-          border-bottom: none;
-        }
-        &:hover {
-          background-color: #f0f0f0;
-        }
-      }
-    }
+  #search-box {
+    background-image: url(/assets/images/filter.svg);
+    background-repeat: no-repeat;
+    background-position: 4px center;
+    background-size: auto 19px;
+    padding-left: 30px;
   }
 
   #save-buttons {

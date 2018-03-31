@@ -34,21 +34,15 @@
             </div>
           </div>
           <div id="place-search">
-            <input id="search-box" type="text" ng-model="placeSearch" ng-change="searchPlaces(placeSearch)">
-            <div id="place-search-results" ng-show="placeSearch && placeSearchResults.length">
-              <div class="place-search-result" ng-repeat="result in placeSearchResults" ng-click="handlePlaceResultClick(result)">
-                {{ result.placeName }}
-                <div class="subtle">{{ result.region }}</div>
-              </div>
-            </div>
+            <input id="search-box" type="text" ng-model="placeFilter" placeholder="Filter places">
           </div>
         </div>
       </div>
       <div class="flex-cell" id="place-list">
         <div class="content">
           <ul ng-show="list.places.length">
-            <li ng-repeat="place in list.places" ng-class="{ 'highlighted': place.highlighted }" id="place_{{ place.id }}">
-              <div class="flex-row spaced vertical-center">
+            <li ng-repeat="place in list.places | filter:{placeName: placeFilter}" ng-class="{ 'highlighted': place.highlighted }" id="place_{{ place.id }}">
+              <div class="flex-row mini-spaced vertical-center">
                 <div class="flex-cell">
                   {{ place.placeName }}
                   <div class="subtle">{{ place.region }}</div>
