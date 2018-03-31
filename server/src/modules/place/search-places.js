@@ -10,7 +10,7 @@ module.exports = function(userId, search) {
     p.minLatitude, p.maxLatitude, p.minLongitude, p.maxLongitude
     ${userSelect}
     FROM places AS p
-    INNER JOIN placeTypes AS pt ON p.placeTypeId=pt.id
+    INNER JOIN placetypes AS pt ON p.placeTypeId=pt.id
     ${userJoin}
     WHERE p.placeName LIKE ${_search}
     LIMIT 25`

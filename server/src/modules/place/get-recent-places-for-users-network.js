@@ -14,7 +14,7 @@ module.exports = function(userId) {
     INNER JOIN userplaces AS friendplaces ON p.id=friendplaces.placeId
     INNER JOIN users AS friends on friendplaces.userId=friends.id
     INNER JOIN userFollowers AS uf ON friendplaces.userId=uf.followsUserId AND uf.userId=${_userId}
-    INNER JOIN placeTypes AS pt ON p.placeTypeId=pt.id
+    INNER JOIN placetypes AS pt ON p.placeTypeId=pt.id
     ORDER BY friendplaces.dateChecked DESC
     LIMIT 50`
   ).then((results) => {

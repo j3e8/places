@@ -6,7 +6,7 @@ module.exports = function() {
     COUNT(up.userId) as numberOfVisitors,
     COUNT(lp.listId) as numberOfLists
     FROM places AS p
-    INNER JOIN placeTypes AS pt ON p.placeTypeId=pt.id
+    INNER JOIN placetypes AS pt ON p.placeTypeId=pt.id
     INNER JOIN listplaces AS lp ON p.id=lp.placeId
     INNER JOIN userplaces AS up ON p.id=up.placeId
     GROUP BY p.id

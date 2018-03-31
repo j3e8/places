@@ -11,7 +11,7 @@ module.exports = function(userId) {
     FROM places AS p
     INNER JOIN userplaces AS me ON p.id=me.placeId AND me.userId=${_userId}
     INNER JOIN users AS u ON me.userId=u.id
-    INNER JOIN placeTypes AS pt ON p.placeTypeId=pt.id
+    INNER JOIN placetypes AS pt ON p.placeTypeId=pt.id
     INNER JOIN listplaces AS lp ON p.id=lp.placeId
     INNER JOIN userplaces AS up ON p.id=up.placeId
     GROUP BY p.id

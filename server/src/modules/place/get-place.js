@@ -7,7 +7,7 @@ module.exports = function(placeId) {
     p.minLatitude, p.maxLatitude, p.minLongitude, p.maxLongitude,
     COUNT(up.userId) as numberOfVisitors
     FROM places AS p
-    INNER JOIN placeTypes AS pt ON p.placeTypeId=pt.id
+    INNER JOIN placetypes AS pt ON p.placeTypeId=pt.id
     LEFT JOIN userplaces AS up ON p.id=up.placeId
     WHERE p.id=${_placeId}
     GROUP BY p.id`

@@ -14,7 +14,7 @@ function getPlacesForUserList(listId, userId) {
     up.dateChecked, case when up.dateChecked is null then 0 else 1 end as isChecked
     FROM listplaces as lp
     INNER JOIN places as p ON lp.placeId=p.id
-    INNER JOIN placeTypes AS pt ON p.placeTypeId=pt.id
+    INNER JOIN placetypes AS pt ON p.placeTypeId=pt.id
     LEFT JOIN userplaces AS up ON up.placeId=p.id AND up.userId=${userId}
     WHERE lp.listId=${listId}
     ORDER BY lp.rank, p.placeName`
@@ -34,7 +34,7 @@ function getPlacesForList(listId) {
     p.minLatitude, p.maxLatitude, p.minLongitude, p.maxLongitude
     FROM listplaces as lp
     INNER JOIN places as p ON lp.placeId=p.id
-    INNER JOIN placeTypes AS pt ON p.placeTypeId=pt.id
+    INNER JOIN placetypes AS pt ON p.placeTypeId=pt.id
     WHERE lp.listId=${listId}
     ORDER BY lp.rank, p.placeName`
   )
