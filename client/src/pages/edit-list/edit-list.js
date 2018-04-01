@@ -62,6 +62,7 @@ function($scope, $routeParams, MapService, ClusterService, PlaceService, ListSer
   $scope.placeClicked = function(gmEvent) {
     var gmObject = this;
     $scope.unhighlightAllPlaces();
+    $scope.placeFilter = null;
 
     var clickedPlace = $scope.list.places.find(function(place) {
       return place.id == gmObject.shapeId;
@@ -79,6 +80,13 @@ function($scope, $routeParams, MapService, ClusterService, PlaceService, ListSer
       }
     }
     $scope.$apply();
+  }
+
+  $scope.highlightPlace = function(place) {
+    $scope.unhighlightAllPlaces();
+    place.highlighted = true;
+    MapService.updatePlaceOnMap(map, place);
+    MapService.zoomToPlace(map, place);
   }
 
   $scope.unhighlightAllPlaces = function() {

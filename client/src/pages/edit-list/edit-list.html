@@ -15,6 +15,7 @@
                 <i class="material-icons clickable" ng-click="chooseIcon()">edit</i>
               </div>
               <div class="flex-cell text-right" ng-if="user.userType == 'admin'">
+                <div><a ng-href="/list/{{ list.id }}">View list <i class="material-icons">chevron_right</i></a></div>
                 <input type="checkbox" id="official_list_checkbox" ng-model="list.official"> <label for="official_list_checkbox">Admin list</label>
               </div>
             </div>
@@ -44,7 +45,7 @@
             <li ng-repeat="place in list.places | filter:{placeName: placeFilter}" ng-class="{ 'highlighted': place.highlighted }" id="place_{{ place.id }}">
               <div class="flex-row mini-spaced vertical-center">
                 <div class="flex-cell">
-                  {{ place.placeName }}
+                   <span class="place-name" ng-click="highlightPlace(place)">{{ place.placeName }}</span>
                   <div class="subtle"><span class="purple">{{ place.placeType }}</span> near {{ place.region }}</div>
                 </div>
                 <div class="flex-cell fixed" ng-show="place.creatorUserId == user.id"><i class="material-icons tools clickable" ng-click="editPlace(place)">edit</i></div>
