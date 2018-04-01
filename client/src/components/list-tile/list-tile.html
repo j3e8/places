@@ -13,7 +13,9 @@
           <a class="list-name" ng-href="/list/{{ list.id }}">{{ list.listName }}</a>
         </div>
         <div class="flex-cell fixed">
-          <span class="subtle">Created by</span> <a ng-href="/user/{{ list.creatorUserId }}">{{ list.username }}</a>
+          <span class="subtle">Created by</span>
+          <a ng-href="/user/{{ list.creatorUserId }}" ng-if="!list.official">{{ list.username }}</a>
+          <span class="purple" ng-if="list.official">kulana</span>
         </div>
       </div>
 

@@ -14,35 +14,81 @@ app.controller("homeController", ["$scope", "PlaceService", "UserService", "List
     $scope.$apply();
   });
 
-  PlaceService.getRecentPlacesForUsersNetwork($scope.user.id)
-  .then(function(userPlaces) {
-    $scope.userPlaces = [];
-    userPlaces.forEach(function(up) {
-      var p = getPlaceFromObject(up);
-      var u = getUserFromObject(up);
-      u.dateChecked = p.dateChecked;
+  Promise.all([
+    PlaceService.getRecentPlacesForUsersNetwork($scope.user.id),
+    ListService.getRecentListsForUsersNetwork($scope.user.id)
+  ])
+  .then(function(results) {
+    var userPlaces = results[0];
+    var userLists = results[1];
 
-      if (!$scope.userPlaces.length) {
-        $scope.userPlaces.push(u);
-        u.places.push(p);
-      }
-      else {
-        var lastUser = $scope.userPlaces[$scope.userPlaces.length-1];
-        if (areDatesEqual(lastUser.dateChecked, p.dateChecked)) {
-          lastUser.places.push(p);
-        }
-        else {
-          $scope.userPlaces.push(u);
-          u.places.push(p);
-        }
-      }
+    $scope.userPlaces = formatUserPlaces(userPlaces);
+    $scope.userLists = formatUserLists(userLists);
+
+    $scope.activities = [].concat($scope.userPlaces, $scope.userLists);
+    $scope.activities.sort(function(a, b) {
+      var dateA = a.activityType == 'userPlace' ? a.dateChecked : a.dateFollowed;
+      var dateB = b.activityType == 'userPlace' ? b.dateChecked : b.dateFollowed;
+      return Date.parse(dateA) - Date.parse(dateB);
     });
     $scope.$apply();
   })
   .catch(function(err) {
-    console.error("Couldn't load places", err);
+    console.error("Couldn't load recent activity", err);
     $scope.$apply();
   });
+
+  function formatUserPlaces(userPlaces) {
+    var results = [];
+    userPlaces.forEach(function(up) {
+      var p = getPlaceFromObject(up);
+      var u = getUserFromObject(up);
+      u.dateChecked = p.dateChecked;
+      u.activityType = 'userPlace';
+
+      if (!results.length) {
+        results.push(u);
+        u.places.push(p);
+      }
+      else {
+        var lastUser = results[results.length-1];
+        if (areDatesEqual(lastUser.dateChecked, p.dateChecked)) {
+          lastUser.places.push(p);
+        }
+        else {
+          results.push(u);
+          u.places.push(p);
+        }
+      }
+    });
+    return results;
+  }
+
+  function formatUserLists(userLists) {
+    var results = [];
+    userLists.forEach(function(ul) {
+      var l = getListFromObject(ul);
+      var u = getUserFromObject(ul);
+      u.dateFollowed = l.dateFollowed;
+      u.activityType = 'userList';
+
+      if (!results.length) {
+        results.push(u);
+        u.lists.push(l);
+      }
+      else {
+        var lastUser = results[results.length-1];
+        if (areDatesEqual(lastUser.dateFollowed, l.dateFollowed)) {
+          lastUser.lists.push(l);
+        }
+        else {
+          results.push(u);
+          u.lists.push(l);
+        }
+      }
+    });
+    return results;
+  }
 
   var userFields = [ 'username', 'userId', 'imgUrl' ];
 
@@ -56,9 +102,20 @@ app.controller("homeController", ["$scope", "PlaceService", "UserService", "List
     return place;
   }
 
+  function getListFromObject(userList) {
+    var list = {};
+    for (var prop in userList) {
+      if (userFields.indexOf(prop) == -1) {
+        list[prop] = userList[prop];
+      }
+    }
+    return list;
+  }
+
   function getUserFromObject(userPlace) {
     var user = {
-      places: []
+      places: [],
+      lists: []
     };
     for (var prop in userPlace) {
       if (userFields.indexOf(prop) != -1) {

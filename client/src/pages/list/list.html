@@ -57,6 +57,7 @@
                     <div class="flex-cell">
                       <input id="place_{{ place.id }}_checkbox" type="checkbox" ng-model="place.isChecked" ng-change="handleCheckboxClick(place)"> <label for="place_{{ place.id }}_checkbox"></label>
                       <span class="place-name" ng-click="highlightPlace(place)">{{ place.placeName }}</span>
+                      <div class="subtle"><span class="purple">{{ place.placeType }}</span> near {{ place.region }}</div>
                     </div>
                     <div class="flex-cell fixed" ng-show="place.creatorUserId == user.id">
                       <i class="material-icons clickable" ng-click="displayPlaceDialog(place)">edit</i>

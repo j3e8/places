@@ -20,4 +20,7 @@ function($rootScope, $http, $location, PLACES_SERVICE_URL, UserService) {
   if ($rootScope.user && unauthenticatedRoutes.indexOf($location.path()) != -1) {
     $location.path('/home');
   }
+  else if (!$rootScope.user && unauthenticatedRoutes.indexOf($location.path()) == -1) {
+    $location.path('/');
+  }
 }]);

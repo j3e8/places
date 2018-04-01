@@ -1,0 +1,16 @@
+<div class="user-list">
+  <div class="flex-row spaced">
+    <div class="flex-cell img-cell">
+      <div class="img-container">
+        <a ng-href="/user/{{ userList.userId }}"><img ng-src="{{ userList.imgUrl }}"></a>
+      </div>
+    </div>
+    <div class="flex-cell">
+      <a class="username" ng-href="/user/{{ userList.userId }}">{{ userList.username }}</a>
+      followed
+      <span ng-repeat="list in userList.lists track by $index"><span ng-if="$index > 0">, </span><a class="list-name" ng-href="/list/{{ list.id }}">{{ list.listName }}</a></span>
+
+      <div class="subtle">Followed on {{ userList.dateFollowed | date:'MMMM d' }}</div>
+    </div>
+  </div>
+</div>

@@ -51,6 +51,12 @@ module.exports = function(app) {
     .catch((err) => ErrorHandler.respondWithError(res, err));
   });
 
+  app.get('/api/user/:userId/follows/lists', function(req, res) {
+    List.getRecentListsForUsersNetwork(req.params.userId)
+    .then((result) => res.json(result))
+    .catch((err) => ErrorHandler.respondWithError(res, err));
+  });
+
   app.get('/api/lists/popular', jwt.optionaljwt, function(req, res) {
     List.getPopularLists(req.user)
     .then((result) => res.json(result))

@@ -133,7 +133,7 @@ app.service("MapService", ["$rootScope", "Shape", function($rootScope, Shape) {
     var center = Shape.getCenterOfShape(place.shapeData);
     var zoom = 6;
     if (shapeBounds.minLat == shapeBounds.maxLat || shapeBounds.minLng == shapeBounds.maxLng) {
-      zoom = 11;
+      zoom = 12;
     }
     map.setZoom(zoom);
     map.setCenter(new google.maps.LatLng(center));

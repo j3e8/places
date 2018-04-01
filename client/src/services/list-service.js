@@ -69,6 +69,17 @@ app.service("ListService", ["$http", "PLACES_SERVICE_URL", "PlaceService", funct
     });
   }
 
+  ListService.getRecentListsForUsersNetwork = function(userId) {
+    return new Promise(function(resolve, reject) {
+      $http.get(PLACES_SERVICE_URL + '/user/' + userId + '/follows/lists')
+      .then(function(response) {
+        resolve(response.data);
+      }, function(err) {
+        reject(err);
+      });
+    });
+  }
+
   ListService.getListsForPlace = function(placeId) {
     return new Promise(function(resolve, reject) {
       $http.get(PLACES_SERVICE_URL + '/lists/?placeId=' + placeId)

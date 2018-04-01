@@ -5,11 +5,14 @@
 
       <div class="floating">
         <h1>Recent activity</h1>
-        <section ng-if="userPlaces.length">
-          <user-place-tile ng-repeat="userPlace in userPlaces" user-place="userPlace"></user-place-tile>
+        <section ng-if="activities.length">
+          <div ng-repeat="activity in activities">
+            <user-place-tile ng-if="activity.activityType == 'userPlace'" user-place="activity"></user-place-tile>
+            <user-list-tile ng-if="activity.activityType == 'userList'" user-list="activity"></user-list-tile>
+          </div>
         </section>
 
-        <section ng-if="!userPlaces.length" class="subtle">
+        <section ng-if="!activities.length" class="subtle">
           No recent activity. <a href="/lists">Discover some popular lists</a> or <a href="/members">follow some popular members</a>.
         </section>
       </div>
