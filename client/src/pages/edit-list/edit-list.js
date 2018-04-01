@@ -62,7 +62,7 @@ function($scope, $routeParams, MapService, ClusterService, PlaceService, ListSer
   $scope.placeClicked = function(gmEvent) {
     var gmObject = this;
     $scope.unhighlightAllPlaces();
-    $scope.placeFilter = null;
+    $scope.placeFilter = undefined;
 
     var clickedPlace = $scope.list.places.find(function(place) {
       return place.id == gmObject.shapeId;
@@ -136,7 +136,7 @@ function($scope, $routeParams, MapService, ClusterService, PlaceService, ListSer
 
   $scope.handlePlaceResultClick = function(place) {
     $scope.addPlaceToList(place);
-    $scope.placeFilter = null;
+    $scope.placeFilter = undefined;
   }
 
   $scope.addPlaceToList = function(place) {

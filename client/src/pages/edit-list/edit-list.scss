@@ -49,6 +49,9 @@
 
     #place-list {
       overflow-y: scroll;
+      i.material-icons {
+        vertical-align: middle;
+      }
       & > .content {
         padding-top: 0;
       }

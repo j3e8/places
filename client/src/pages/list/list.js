@@ -53,7 +53,7 @@ app.controller("listController", ["$scope", "$routeParams", "MapService", "Clust
   $scope.placeClicked = function(gmEvent) {
     var gmObject = this;
     $scope.unhighlightAllPlaces();
-    $scope.placeFilter = null;
+    $scope.placeFilter = undefined;
 
     var clickedPlace = $scope.list.places.find(function(place) {
       return place.id == gmObject.shapeId;
