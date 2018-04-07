@@ -12,7 +12,22 @@ place-dialog {
       tab-size: 2;
     }
   }
-
+  input[type=file] {
+    display: none;
+  }
+  .image-cell {
+    text-align: center;
+    font-size: 12px;
+    .place-image {
+      vertical-align: top;
+      height: 112px;
+      width: auto;
+      cursor: pointer;
+    }
+    i.material-icons {
+      vertical-align: top;
+    }
+  }
   h2 {
     input[type=text] {
       border: 1px solid #e0e0e0;

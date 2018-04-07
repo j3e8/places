@@ -48,6 +48,10 @@ app.config(["$routeProvider", "$locationProvider", function($routeProvider, $loc
     templateUrl: '/pages/place/place.html',
     controller: 'placeController'
   })
+  .when('/privacy', {
+    templateUrl: '/pages/privacy/privacy.html',
+    controller: 'privacyController'
+  })
   .when('/profile', {
     templateUrl: '/pages/profile/profile.html',
     controller: 'profileController'
@@ -63,6 +67,10 @@ app.config(["$routeProvider", "$locationProvider", function($routeProvider, $loc
   .when('/signup', {
     templateUrl: '/pages/signup/signup.html',
     controller: 'signupController'
+  })
+  .when('/terms', {
+    templateUrl: '/pages/terms/terms.html',
+    controller: 'termsController'
   })
   .when('/user/:userId', {
     templateUrl: '/pages/user/user.html',

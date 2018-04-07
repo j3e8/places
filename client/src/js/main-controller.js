@@ -8,6 +8,11 @@ function($rootScope, $http, $location, PLACES_SERVICE_URL, UserService) {
     '/signup'
   ];
 
+  var accessibleRoutes = [
+    '/privacy',
+    '/terms'
+  ];
+
   $rootScope.$on('signedout', function() {
     $rootScope.user = null;
   });
@@ -16,11 +21,12 @@ function($rootScope, $http, $location, PLACES_SERVICE_URL, UserService) {
     $rootScope.user = UserService.getUser();
   });
 
-
-  if ($rootScope.user && unauthenticatedRoutes.indexOf($location.path()) != -1) {
-    $location.path('/home');
-  }
-  else if (!$rootScope.user && unauthenticatedRoutes.indexOf($location.path()) == -1) {
-    $location.path('/');
+  if (accessibleRoutes.indexOf($location.path()) == -1) {
+    if ($rootScope.user && unauthenticatedRoutes.indexOf($location.path()) != -1) {
+      $location.path('/home');
+    }
+    else if (!$rootScope.user && unauthenticatedRoutes.indexOf($location.path()) == -1) {
+      $location.path('/');
+    }
   }
 }]);

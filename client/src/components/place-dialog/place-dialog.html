@@ -2,11 +2,22 @@
 <div class="dialog-box" ng-show="show" ng-class="{ 'open': show, 'closed': show === false }">
 
   <div ng-hide="geoJSONIsDisplayed">
-    <h2><input type="text" ng-model="place.placeName"></h2>
+    <div class="flex-row spaced">
+      <div class="flex-cell fixed image-cell">
+        <img ng-src="{{place.imageUrl}}" class="place-image" ng-click="chooseImage()">
+        <i class="material-icons clickable" ng-click="chooseImage()">edit</i>
+        <form name="placeImageForm">
+          <input type="file" id="placeImage" accept="image/*" onchange="angular.element(document.getElementById('placeImage')).scope().onImageChosen(event)">
+        </form>
+      </div>
+      <div class="flex-cell">
+        <h2><input type="text" ng-model="place.placeName"></h2>
 
-    <div class="breathe">
-      <label>Place category</label>
-      <select ng-model="place.placeTypeId" ng-options="pt.id as pt.placeType for pt in placeTypes"></select>
+        <div class="breathe">
+          <label>Place type</label>
+          <select ng-model="place.placeTypeId" ng-options="pt.id as pt.placeType for pt in placeTypes"></select>
+        </div>
+      </div>
     </div>
 
     <div class="breathe">
@@ -25,8 +36,9 @@
           </div>
         </div>
       </div>
-      <div id="place-dialog-map" ng-hide="geoJSONIsDisplayed"></div>
     </div>
+
+    <div id="place-dialog-map" ng-hide="geoJSONIsDisplayed"></div>
 
     <div class="breathe text-center" ng-hide="isSaving">
       <button ng-click="save()">Save</button>

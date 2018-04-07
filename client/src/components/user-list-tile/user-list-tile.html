@@ -8,7 +8,7 @@
     <div class="flex-cell">
       <a class="username" ng-href="/user/{{ userList.userId }}">{{ userList.username }}</a>
       followed
-      <span ng-repeat="list in userList.lists track by $index"><span ng-if="$index > 0">, </span><a class="list-name" ng-href="/list/{{ list.id }}">{{ list.listName }}</a></span>
+      <span ng-repeat="list in userList.lists track by $index"><span ng-if="$index > 0">, </span><a class="list-name" ng-href="/list/{{ list.listId }}">{{ list.listName }}</a></span>
 
       <div class="subtle">Followed on {{ userList.dateFollowed | date:'MMMM d' }}</div>
     </div>
