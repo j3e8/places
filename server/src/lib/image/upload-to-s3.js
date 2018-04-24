@@ -14,7 +14,7 @@ module.exports = function(filename, body) {
     let params = {
       Bucket: s3config.bucket,
       ContentType: contentType,
-      Key: `profiles/${filename}`,
+      Key: filename,
       ACL: 'public-read',
       StorageClass: 'STANDARD',
       Body: body

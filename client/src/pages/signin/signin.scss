@@ -1,17 +1,88 @@
 .page__signin {
   .floating {
     max-width: 300px;
-    margin: 50px auto;
+    margin: 60px auto;
   }
   .box {
     margin: 10px 0;
+    font-size: 15px;
+    label {
+      font-size: 14px;
+    }
+    input {
+      font-size: 14px;
+      padding: 8px 10px;
+    }
   }
   #photo-half {
-    background-image: url(/assets/images/signin/hawaii1.jpg);
-    background-position: center top;
-    background-size: cover;
+    flex: 0 0 50%;
+    -webkit-flex: 0 0 50%;
+    background-color: $blue;
+    color: #fff;
+    text-align: center;
+    padding: 60px 20px 20px 20px;
+
+    .floating {
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    .title {
+      font-size: 40px;
+      .kulana {
+        font-weight: 400;
+      }
+      .adventure {
+        font-weight: 500;
+        color: $yellow;
+      }
+    }
+
+    .subtitle {
+      margin-top: 5px;
+      font-size: 18px;
+      font-weight: 300;
+      line-height: 1.4;
+    }
+
+    .bullets {
+      display: inline-block;
+      text-align: left;
+      .bullet {
+        font-size: 34px;
+        color: #0b9fd3;
+        padding: 15px 0;
+        i.material-icons {
+          vertical-align: middle;
+          font-size: 54px;
+        }
+      }
+    }
+
+    .logo-cell {
+      text-align: center;
+      img {
+        height: 60px;
+      }
+    }
   }
   input.ng-invalid.ng-dirty.ng-touched {
     border: 1px solid $red;
   }
+
+  @media (max-width: 960px) {
+    #sign-up-half {
+      flex: 0 0 100%;
+      -webkit-flex: 0 0 100%;
+      order: 1;
+    }
+    #photo-half {
+      flex: 0 0 100%;
+      -webkit-flex: 0 0 100%;
+      order: 2;
+      & > div.flex-column {
+        display: block;
+      }
+    }
+  }
+
 }

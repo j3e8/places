@@ -69,4 +69,20 @@
     border: 1px solid $red;
   }
 
+  @media (max-width: 960px) {
+    #sign-up-half {
+      flex: 0 0 100%;
+      -webkit-flex: 0 0 100%;
+      order: 1;
+    }
+    #photo-half {
+      flex: 0 0 100%;
+      -webkit-flex: 0 0 100%;
+      order: 2;
+      & > div.flex-column {
+        display: block;
+      }
+    }
+  }
+
 }

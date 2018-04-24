@@ -24,14 +24,13 @@ function updateUserImage(userId, img_file) {
   if (!img_file) {
     return Promise.resolve();
   }
-
   // upload to s3
   const extension = ImageUtil.getExtensionOfBase64(img_file);
   const filename = `${userId}.${extension}`;
   const base64prefix = img_file.substring(0, img_file.indexOf('base64,') + 7);
   const base64 = img_file.substring(base64prefix.length);
   const buf = new Buffer(base64, 'base64');
-  return ImageUtil.uploadToS3(filename, buf)
+  return ImageUtil.uploadToS3(`profiles/${filename}`, buf)
   .then(() => ImageUtil.PATH_TO_PROFILES + `/${filename}`);
 }
 
