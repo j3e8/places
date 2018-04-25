@@ -4,7 +4,8 @@
   <div ng-hide="geoJSONIsDisplayed">
     <div class="flex-row spaced">
       <div class="flex-cell fixed image-cell">
-        <img ng-src="{{place.imageUrl}}" class="place-image" ng-click="chooseImage()">
+        <img ng-src="{{place.placeImgUrl}}" class="place-image" ng-click="chooseImage()" ng-hide="place.img_file">
+        <img ng-src="{{place.img_file}}" class="place-image" ng-click="chooseImage()" ng-show="place.img_file">
         <i class="material-icons clickable" ng-click="chooseImage()">edit</i>
         <form name="placeImageForm">
           <input type="file" id="placeImage" accept="image/*" onchange="angular.element(document.getElementById('placeImage')).scope().onImageChosen(event)">

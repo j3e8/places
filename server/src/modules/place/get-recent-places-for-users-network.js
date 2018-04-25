@@ -8,7 +8,7 @@ module.exports = function(userId) {
   let _userId = db.escape(userId);
   return db.query(`SELECT friendplaces.placeId,
     p.placeTypeId, pt.placeType, p.placeName, p.shapeType, p.shapeData, p.creatorUserId, p.region,
-    p.minLatitude, p.maxLatitude, p.minLongitude, p.maxLongitude,
+    p.minLatitude, p.maxLatitude, p.minLongitude, p.maxLongitude, p.placeImgUrl,
     friendplaces.dateChecked, friendplaces.userId, friends.username, friends.imgUrl
     FROM places AS p
     INNER JOIN userplaces AS friendplaces ON p.id=friendplaces.placeId

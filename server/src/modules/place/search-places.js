@@ -7,7 +7,7 @@ module.exports = function(userId, search) {
   let _search = db.escape(`%${search}%`);
 
   return db.query(`SELECT p.id, p.placeTypeId, pt.placeType, p.placeName, p.shapeType, p.shapeData, p.creatorUserId, p.region,
-    p.minLatitude, p.maxLatitude, p.minLongitude, p.maxLongitude
+    p.minLatitude, p.maxLatitude, p.minLongitude, p.maxLongitude, p.placeImgUrl,
     ${userSelect}
     FROM places AS p
     INNER JOIN placetypes AS pt ON p.placeTypeId=pt.id

@@ -144,6 +144,20 @@ app.directive("placeDialog", ["Shape", "MapService", "PlaceService", "UserServic
         document.getElementById('placeImage').click();
       }
 
+      $scope.onImageChosen = function(event) {
+        if (event.target.files && event.target.files.length) {
+          var file = event.target.files[0];
+          var reader = new FileReader();
+          reader.onload = function(event) {
+            if ($scope.place) {
+              $scope.place.img_file = event.target.result;
+              $scope.$apply();
+            }
+          };
+          reader.readAsDataURL(file);
+        }
+      }
+
       $scope.setDrawingMode = function(tool) {
         if (tool == 'pan') {
           tool = null;

@@ -2,7 +2,7 @@ const db = require('../../connections/db');
 
 module.exports = function(minLat, maxLat, minLng, maxLng) {
   let sql = `SELECT p.id, p.placeTypeId, pt.placeType, p.placeName, p.shapeType, p.shapeData, p.creatorUserId, p.region,
-    p.minLatitude, p.maxLatitude, p.minLongitude, p.maxLongitude,
+    p.minLatitude, p.maxLatitude, p.minLongitude, p.maxLongitude, p.placeImgUrl,
     COUNT(up.userId) as numberOfVisitors,
     COUNT(lp.listId) as numberOfLists
     FROM places AS p

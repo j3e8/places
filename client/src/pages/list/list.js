@@ -1,4 +1,4 @@
-app.controller("listController", ["$scope", "$routeParams", "MapService", "ClusterService", "PlaceService", "ListService", "UserService", "alert", "$timeout", "$location", function($scope, $routeParams, MapService, ClusterService, PlaceService, ListService, UserService, alert, $timeout, $location) {
+app.controller("listController", ["$scope", "$routeParams", "MapService", "ClusterService", "PlaceService", "ListService", "UserService", "alert", "$timeout", "$location", "requirePassword", function($scope, $routeParams, MapService, ClusterService, PlaceService, ListService, UserService, alert, $timeout, $location, requirePassword) {
   var map, clusterer;
   var DEFAULT_COORDS = { lat: 39.5464, lng: -97.3296 };
 
@@ -91,45 +91,53 @@ app.controller("listController", ["$scope", "$routeParams", "MapService", "Clust
     if (!$scope.user || !$scope.user.id) {
       return;
     }
-    $scope.list.isFollowed = !$scope.list.isFollowed;
-    if ($scope.list.isFollowed) {
-      ListService.follow($scope.user.id, $scope.list.id)
-      .then(function() {
-        $scope.list.numberOfFollowers++;
-        $scope.$apply();
-      })
-      .catch(function(err) {
-        console.error(err);
-        $scope.$apply();
-      });
-    }
-    else {
-      ListService.unfollow($scope.user.id, $scope.list.id)
-      .then(function() {
-        $scope.list.numberOfFollowers--;
-        $scope.$apply();
-      })
-      .catch(function(err) {
-        console.error(err);
-        $scope.$apply();
-      });
-    }
+    requirePassword({
+      afterAuthenticate: function() {
+        $scope.list.isFollowed = !$scope.list.isFollowed;
+        if ($scope.list.isFollowed) {
+          ListService.follow($scope.user.id, $scope.list.id)
+          .then(function() {
+            $scope.list.numberOfFollowers++;
+            $scope.$apply();
+          })
+          .catch(function(err) {
+            console.error(err);
+            $scope.$apply();
+          });
+        }
+        else {
+          ListService.unfollow($scope.user.id, $scope.list.id)
+          .then(function() {
+            $scope.list.numberOfFollowers--;
+            $scope.$apply();
+          })
+          .catch(function(err) {
+            console.error(err);
+            $scope.$apply();
+          });
+        }
+      }
+    });
   }
 
   $scope.handleCheckboxClick = function(place) {
-    var p = Object.assign({}, place);
-    p.gmObject = undefined;
-    if (!p.isChecked) {
-      p.dateChecked = undefined;
-    }
-    PlaceService.updateUserPlace($scope.user.id, p)
-    .then(function(p) {
-      place.dateChecked = p.dateChecked;
-      MapService.updatePlaceOnMap(map, place);
-      $scope.$apply();
-    })
-    .catch(function(err) {
-      $scope.$apply();
+    requirePassword({
+      afterAuthenticate: function() {
+        var p = Object.assign({}, place);
+        p.gmObject = undefined;
+        if (!p.isChecked) {
+          p.dateChecked = undefined;
+        }
+        PlaceService.updateUserPlace($scope.user.id, p)
+        .then(function(p) {
+          place.dateChecked = p.dateChecked;
+          MapService.updatePlaceOnMap(map, place);
+          $scope.$apply();
+        })
+        .catch(function(err) {
+          $scope.$apply();
+        });
+      }
     });
   }
 

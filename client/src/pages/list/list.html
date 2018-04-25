@@ -53,9 +53,14 @@
             <div class="content">
               <ul ng-show="list.places.length">
                 <li ng-repeat="place in list.places | filter:{placeName: placeFilter}" ng-class="{ 'highlighted': place.highlighted }" id="place_{{ place.id }}">
-                  <div class="flex-row sm-spaced">
-                    <div class="flex-cell">
+                  <div class="flex-row mini-spaced">
+                    <div class="flex-cell fixed">
                       <input id="place_{{ place.id }}_checkbox" type="checkbox" ng-model="place.isChecked" ng-change="handleCheckboxClick(place)"> <label for="place_{{ place.id }}_checkbox"></label>
+                    </div>
+                    <div class="flex-cell fixed" ng-if="place.placeImgUrl">
+                      <img ng-src="{{ place.placeImgUrl }}">
+                    </div>
+                    <div class="flex-cell">
                       <span class="place-name" ng-click="highlightPlace(place)">{{ place.placeName }}</span>
                       <div class="subtle"><span class="purple">{{ place.placeType }}</span> near {{ place.region }}</div>
                     </div>

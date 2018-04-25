@@ -21,7 +21,7 @@
     min-height: 400px;
   }
   .list-cell {
-    flex: 0 0 300px;
+    flex: 0 0 400px;
     background-color: #fff;
     padding: 0;
 
@@ -68,6 +68,14 @@
         margin: 0;
         padding: 0;
         li {
+          label {
+            &:before {
+              margin-right: 0;
+            }
+          }
+          img {
+            height: 60px;
+          }
           padding: 10px 6px;
           font-size: 15px;
           border-top: 1px solid $blue;

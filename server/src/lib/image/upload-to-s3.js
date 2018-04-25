@@ -19,7 +19,9 @@ module.exports = function(filename, body) {
       StorageClass: 'STANDARD',
       Body: body
     };
+    console.log('putObject');
     s3.putObject(params, function(err, data) {
+      console.log('callback', err, data);
       if (err) {
         logger.error(err.statusCode, err);
         resolve();

@@ -13,16 +13,18 @@
       <i class="material-icons menu-icon clickable" ng-click="toggleMenu()">menu</i>
     </div>
   </div>
-  <nav ng-if="$root.user" class="main-menu" ng-class="{ 'open': isMenuDisplayed, 'closed': isMenuDisplayed === false }">
-    <ul>
-      <li><a ng-href="/home">Home</a></li>
-      <li><a ng-href="/followed-lists">Followed lists</a></li>
-      <li><a ng-href="/lists">Popular lists</a></li>
-      <li><a ng-href="/places">Nearby places</a></li>
-      <li><a ng-href="/created-lists">My created lists</a></li>
-      <li><a ng-href="/list/new">Make a list</a></li>
-      <li><a ng-href="/profile">My Profile</a></li>
-      <li><a class="clickable" ng-click="signout()">Sign out</a></li>
-    </ul>
-  </nav>
 </header>
+
+<div class="shadow" ng-show="isMenuDisplayed" ng-click="toggleMenu()"></div>
+<nav ng-if="$root.user" class="main-menu" ng-class="{ 'open': isMenuDisplayed, 'closed': isMenuDisplayed === false }">
+  <ul>
+    <li><a ng-href="/home">Home</a></li>
+    <li><a ng-href="/followed-lists">Followed lists</a></li>
+    <li><a ng-href="/lists">Popular lists</a></li>
+    <li><a ng-href="/places">Nearby places</a></li>
+    <li><a ng-href="/created-lists">My created lists</a></li>
+    <li><a ng-href="/list/new">Make a list</a></li>
+    <li><a ng-href="/profile">My Profile</a></li>
+    <li><a class="clickable" ng-click="signout()">Sign out</a></li>
+  </ul>
+</nav>
