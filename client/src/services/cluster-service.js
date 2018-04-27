@@ -11,19 +11,22 @@ app.service("ClusterService", ["MapService", "PlaceService", "Shape", "$timeout"
       places: []
     };
 
-    google.maps.event.addListenerOnce(map, "projection_changed", function() {
-      clusterer.mapReady = true;
-    });
+    // google.maps.event.addListenerOnce(map, "bounds_changed", function() {
+    //   clusterer.mapReady = true;
+    // });
 
     google.maps.event.addListener(map, 'zoom_changed', function() {
-      ClusterService.update(clusterer);
+      clearTimeout(clusterer._zoom_changed_timeout);
+      clusterer._zoom_changed_timeout = setTimeout(function() {
+        ClusterService.update(clusterer);
+      }, 50);
     });
 
     google.maps.event.addListener(map, 'bounds_changed', function() {
+      clusterer.mapReady = true;
       clearTimeout(clusterer._bounds_changed_timeout);
       clusterer._bounds_changed_timeout = setTimeout(function() {
-        removeClustersFromMap(clusterer);
-        addClustersToMap(clusterer);
+        ClusterService.update(clusterer);
       }, 50);
     });
 
@@ -51,7 +54,6 @@ app.service("ClusterService", ["MapService", "PlaceService", "Shape", "$timeout"
     if (!clusterer.mapReady) {
       return $timeout(calculate.bind(this, clusterer), 50);
     }
-    removeClustersFromMap(clusterer);
 
     var visited = [];
     var notVisited = [];
@@ -63,26 +65,7 @@ app.service("ClusterService", ["MapService", "PlaceService", "Shape", "$timeout"
         notVisited.push(place);
       }
     });
-    clusterer.visitedClusters = createClusters(clusterer, visited);
-    clusterer.notVisitedClusters = createClusters(clusterer, notVisited);
 
-    addClustersToMap(clusterer);
-  }
-
-  function removeClustersFromMap(clusterer) {
-    if (clusterer.visitedClusters.length) {
-      clusterer.visitedClusters.forEach(function(cluster) {
-        MapService.removeClusterFromMap(cluster);
-      });
-    }
-    if (clusterer.notVisitedClusters.length) {
-      clusterer.notVisitedClusters.forEach(function(cluster) {
-        MapService.removeClusterFromMap(cluster);
-      });
-    }
-  }
-
-  function addClustersToMap(clusterer) {
     var ne = clusterer.map.getBounds().getNorthEast();
     var sw = clusterer.map.getBounds().getSouthWest();
     var mapBounds = {
@@ -92,16 +75,45 @@ app.service("ClusterService", ["MapService", "PlaceService", "Shape", "$timeout"
       maxLng: ne.lng()
     }
 
-    clusterer.visitedClusters.forEach(function(cluster) {
-      if (isClusterWithinMapBounds(cluster, mapBounds)) {
-        MapService.addClusterToMap(clusterer.map, cluster, clusterer.clickHandler);
+    var vc = createClusters(clusterer, visited).filter(function(c) { return isClusterWithinMapBounds(c, mapBounds); });
+    // remove clusters no longer in array
+    clusterer.visitedClusters.forEach(function(c) {
+      var found = vc.find(function(c2) { return c.hash == c2.hash; });
+      if (!found) {
+        MapService.removeClusterFromMap(c);
       }
     });
-    clusterer.notVisitedClusters.forEach(function(cluster) {
-      if (isClusterWithinMapBounds(cluster, mapBounds)) {
-        MapService.addClusterToMap(clusterer.map, cluster, clusterer.clickHandler);
+    // add clusters that are new
+    vc.forEach(function(c) {
+      var found = clusterer.visitedClusters.find(function(c2) { return c.hash == c2.hash; });
+      if (!found) {
+        MapService.addClusterToMap(clusterer.map, c, clusterer.clickHandler);
+      }
+      else {
+        c.gmObject = found.gmObject;
       }
     });
+    clusterer.visitedClusters = vc;
+
+    var nvc = createClusters(clusterer, notVisited).filter(function(c) { return isClusterWithinMapBounds(c, mapBounds); });
+    // remove clusters no longer in array
+    clusterer.notVisitedClusters.forEach(function(c) {
+      var found = nvc.find(function(c2) { return c.hash == c2.hash; });
+      if (!found) {
+        MapService.removeClusterFromMap(c);
+      }
+    });
+    // add clusters that are new
+    nvc.forEach(function(c) {
+      var found = clusterer.notVisitedClusters.find(function(c2) { return c.hash == c2.hash; });
+      if (!found) {
+        MapService.addClusterToMap(clusterer.map, c, clusterer.clickHandler);
+      }
+      else {
+        c.gmObject = found.gmObject;
+      }
+    });
+    clusterer.notVisitedClusters = nvc;
   }
 
   function isClusterWithinMapBounds(cluster, mapBounds) {
@@ -141,7 +153,8 @@ app.service("ClusterService", ["MapService", "PlaceService", "Shape", "$timeout"
           minLng: bounds.minLng,
           maxLng: bounds.maxLng,
           isChecked: nearby[0].isChecked,
-          places: nearby
+          places: nearby,
+          hash: nearby.map(function(n) { return n.id; }).join(',')
         }
         clusters.push(cluster);
       }
