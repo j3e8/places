@@ -20,6 +20,9 @@ page-header {
       &::placeholder {
         color: rgba(255, 255, 255, 0.6);
       }
+      @media (max-width: 460px) {
+        width: 142px;
+      }
     }
 
     & > div.flex-row {
