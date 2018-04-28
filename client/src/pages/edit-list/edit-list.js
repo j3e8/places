@@ -97,10 +97,8 @@ function($scope, $routeParams, MapService, ClusterService, PlaceService, ListSer
   }
 
   $scope.showNewPlaceDialog = function() {
-    console.log('showNewPlaceDialog');
     requirePassword({
       afterAuthenticate: function() {
-        console.log('afterAuthenticate');
         var latlng = map.getCenter();
         $scope.centerCoords = { lat: latlng.lat(), lng: latlng.lng() };
         $scope.zoom = map.getZoom();
@@ -125,8 +123,12 @@ function($scope, $routeParams, MapService, ClusterService, PlaceService, ListSer
   }
 
   $scope.editPlace = function(place) {
-    $scope.placeToEditId = place.id;
-    $scope.newPlaceDialogIsDisplayed = true;
+    requirePassword({
+      afterAuthenticate: function() {
+        $scope.placeToEditId = place.id;
+        $scope.newPlaceDialogIsDisplayed = true;
+      }
+    });
   }
 
   $scope.afterPlaceSave = function(place) {
