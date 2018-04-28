@@ -37,8 +37,12 @@ app.controller("listController", ["$scope", "$routeParams", "MapService", "Clust
   });
 
   $scope.displayPlaceDialog = function(place) {
-    $scope.placeToEditId = place.id;
-    $scope.placeDialogIsDisplayed = true;
+    requirePassword({
+      afterAuthenticate: function() {
+        $scope.placeToEditId = place.id;
+        $scope.placeDialogIsDisplayed = true;
+      }
+    });
   }
 
   $scope.closePlaceDialog = function() {
