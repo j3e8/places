@@ -51,7 +51,8 @@ app.controller("listController", ["$scope", "$routeParams", "MapService", "Clust
   }
 
   $scope.afterPlaceSave = function(place) {
-
+    $scope.placeToEditId = null;
+    $scope.placeDialogIsDisplayed = false;
   }
 
   $scope.placeClicked = function(gmEvent) {
