@@ -21,16 +21,17 @@ module.exports = function(user, place) {
     'creatorUserId': user.id
   }
 
-  return updatePlaceImage(placeId, place.img_file)
-  .then((imgUrl) => {
-    if (imgUrl) {
-      obj.placeImgUrl = imgUrl
-    }
-    console.log('insert into places set', obj);
-    return db.query(`INSERT INTO places SET ?`, obj);
-  })
+  console.log('insert into places set', obj);
+  return db.query(`INSERT INTO places SET ?`, obj)
   .then((result) => {
     obj.id = result.insertId;
-    return Promise.resolve(obj);
-  });
+    return updatePlaceImage(obj.id, place.img_file)
+    .then((imgUrl) => {
+      if (imgUrl) {
+        let _imgUrl = db.escape(imgUrl);
+        return db.query(`UPDATE places SET imgUrl=${_imgUrl} WHERE id=${obj.id}`);
+      }
+    });
+  })
+  .then(() => Promise.resolve(obj));
 }
