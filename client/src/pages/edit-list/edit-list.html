@@ -102,7 +102,10 @@
                     </div>
                     <div class="flex-cell">
                        <span class="place-name" ng-click="highlightPlace(place)">{{ place.placeName }}</span>
-                      <div class="subtle"><span class="purple">{{ place.placeType }}</span> near {{ place.region }}</div>
+                      <div class="subtle">
+                        <span class="purple">{{ place.placeType }}</span>
+                        <span ng-show="place.region">near {{ place.region }}</span>
+                      </div>
                     </div>
                     <div class="flex-cell fixed" ng-show="place.creatorUserId == user.id"><i class="material-icons tools clickable" ng-click="editPlace(place)">edit</i></div>
                     <div class="flex-cell fixed"><i class="material-icons tools" ng-click="removePlace(place)">close</i></div>
