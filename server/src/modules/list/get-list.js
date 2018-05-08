@@ -9,7 +9,7 @@ module.exports = function(listId, userId) {
   return db.query(`SELECT l.id, l.listName, l.description, l.dateCreated, l.dateModified, l.creatorUserId, l.official, l.iconId,
     i.iconUrl,
     CASE WHEN u.userType = 'admin' AND l.official THEN 'kulana' ELSE u.username END AS username, u.prominence,
-    me.dateFollowed, CASE WHEN me.dateFollowed iS NOT NULL THEN 1 ELSE 0 END AS isFollowed,
+    me.dateFollowed, CASE WHEN me.dateFollowed IS NOT NULL THEN 1 ELSE 0 END AS isFollowed,
     COUNT(distinct ul.userId) as numberOfFollowers
     FROM lists as l
     INNER JOIN icons as i ON l.iconId=i.id

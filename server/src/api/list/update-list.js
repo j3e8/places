@@ -8,5 +8,5 @@ module.exports = function(user, listId, requestBody) {
       .then(() => ListModule.addPlacesToList(listId, requestBody.places));
     }
   })
-  .then(() => ListModule.getList(listId));
+  .then(() => ListModule.getList(listId, user.id));
 }

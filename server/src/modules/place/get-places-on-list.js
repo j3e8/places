@@ -10,8 +10,8 @@ module.exports = function(listId, userId) {
 function getPlacesForUserList(listId, userId) {
   return db.query(`SELECT
     p.id, p.placeTypeId, pt.placeType, p.placeName, p.shapeType, p.shapeData, p.creatorUserId, p.region,
-    p.minLatitude, p.maxLatitude, p.minLongitude, p.maxLongitude, p.placeImgUrl,
-    up.dateChecked, case when up.dateChecked is null then 0 else 1 end as isChecked
+    p.minLatitude, p.maxLatitude, p.minLongitude, p.maxLongitude,
+    up.dateChecked, case when up.dateChecked is null then 0 else 1 end as isChecked, up.placeImgUrl, up.placeDescription
     FROM listplaces as lp
     INNER JOIN places as p ON lp.placeId=p.id
     INNER JOIN placetypes AS pt ON p.placeTypeId=pt.id
