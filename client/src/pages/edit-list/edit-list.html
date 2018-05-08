@@ -1,72 +1,120 @@
-<div class="flex-row new-list-page">
-  <div class="flex-cell map-cell" id="list-map">
-  </div>
-  <div class="flex-cell list-cell">
-
-    <div class="flex-column">
+<div class="flex-column new-list-page">
+  <div class="flex-cell fixed list-info">
+    <div class="flex-row spaced">
       <div class="flex-cell fixed">
-        <div class="content">
-          <h1><input type="text" ng-model="list.listName" placeholder="New List"></h1>
-          <div><textarea ng-model="list.description" placeholder="Write a description"></textarea></div>
-          <div class="gap">
-            <div class="flex-row">
-              <div class="flex-cell">
-                <img class="list-icon clickable" ng-src="{{ list.iconUrl }}" ng-click="chooseIcon()">
-                <i class="material-icons clickable" ng-click="chooseIcon()">edit</i>
-              </div>
-              <div class="flex-cell text-right" ng-if="user.userType == 'admin'">
-                <div><a ng-href="/list/{{ list.id }}">View list <i class="material-icons">chevron_right</i></a></div>
-                <input type="checkbox" id="official_list_checkbox" ng-model="list.official"> <label for="official_list_checkbox">Admin list</label>
-              </div>
-            </div>
-          </div>
+        <img class="list-icon clickable" ng-src="{{ list.iconUrl }}" ng-click="chooseIcon()">
+        <div class="edit-image text-center">
+          <span class="clickable" ng-click="chooseIcon()">Edit <i class="material-icons clickable">edit</i></span>
         </div>
       </div>
-      <div class="flex-cell fixed">
-        <div class="content">
-          <div class="flex-row">
+      <div class="flex-cell">
+        <h1>
+          <div ng-hide="editing.listName">
+            {{ list.listName }}
+            <span ng-show="user.id == list.creatorUserId" ng-click="toggleEditField('listName')" class="clickable"><i class="material-icons">edit</i></span>
+          </div>
+          <div ng-show="editing.listName" class="flex-row mini-spaced">
             <div class="flex-cell">
-              <h3>Places <i class="material-icons" ng-click="showNewPlaceDialog()">add_circle</i></h3>
+              <input type="text" ng-model="list.listName" placeholder="New List">
             </div>
-            <div class="flex-cell fixed subtle">
-              {{ list.places.length }}
-              <span ng-show="list.places.length == 1">place</span>
-              <span ng-show="list.places.length != 1">places</span>
+            <div class="flex-cell fixed">
+              <button class="sm" ng-click="saveList()"><i class="material-icons">check</i></button>
+              <button class="sm cancel" ng-click="toggleEditField('listName')"><i class="material-icons">close</i></button>
             </div>
           </div>
-          <div id="place-search">
-            <input id="search-box" type="text" ng-model="placeFilter" placeholder="Filter places">
+        </h1>
+        <span class="subtle">
+          Created by
+          <a ng-href="/user/{{ list.creatorUserId }}" ng-hide="list.official">{{ list.username }}</a>
+          <span ng-show="list.official" class="purple">kulana</span>
+        </span>
+        <div>
+          <div ng-hide="editing.description">
+            {{ list.description }} <i class="material-icons clickable" ng-click="toggleEditField('description')">edit</i>
+          </div>
+          <div class="flex-row mini-spaced" ng-show="editing.description">
+            <div class="flex-cell">
+              <textarea ng-model="list.description" placeholder="Write a description"></textarea>
+            </div>
+            <div class="flex-cell fixed">
+              <button class="sm" ng-click="saveList()"><i class="material-icons">check</i></button>
+              <button class="sm cancel" ng-click="toggleEditField('description')"><i class="material-icons">close</i></button>
+            </div>
           </div>
         </div>
       </div>
-      <div class="flex-cell" id="place-list">
-        <div class="content">
-          <ul ng-show="list.places.length">
-            <li ng-repeat="place in list.places | filter:{placeName: placeFilter}" ng-class="{ 'highlighted': place.highlighted }" id="place_{{ place.id }}">
-              <div class="flex-row mini-spaced vertical-center">
-                <div class="flex-cell">
-                   <span class="place-name" ng-click="highlightPlace(place)">{{ place.placeName }}</span>
-                  <div class="subtle"><span class="purple">{{ place.placeType }}</span> near {{ place.region }}</div>
-                </div>
-                <div class="flex-cell fixed" ng-show="place.creatorUserId == user.id"><i class="material-icons tools clickable" ng-click="editPlace(place)">edit</i></div>
-                <div class="flex-cell fixed"><i class="material-icons tools" ng-click="removePlace(place)">close</i></div>
-              </div>
-            </li>
-          </ul>
-        </div>
-      </div>
-      <div class="flex-cell fixed text-center" id="save-buttons">
-        <div class="content">
-          <div ng-hide="isSaving">
-            <button class="inverse" ng-click="saveList()">Save</button>
-            <button class="cancel inverse" ng-click="cancelList()">Cancel</button>
-            <div class="warning" ng-show="saveError">{{ saveError }}</div>
-          </div>
-          <wait-indicator color="white" ng-show="isSaving"></wait-indicator>
+      <div class="flex-cell fixed subtle text-right">
+        <span class="highlight">{{ list.numberOfFollowers }}</span>
+        <span ng-show="list.numberOfFollowers == 1">follower</span>
+        <span ng-show="list.numberOfFollowers != 1">followers</span>
+        <div class="gap">
+          <button ng-click="handleFollowChange()" ng-show="!list.isFollowed">Follow</button>
+          <button ng-click="handleFollowChange()" class="cancel" ng-show="list.isFollowed">Unfollow</button>
         </div>
       </div>
     </div>
+  </div>
 
+  <div class="flex-cell content-fill-height">
+
+    <div class="flex-row mobile-wrap" id="map-and-list">
+      <div class="flex-cell map-cell" id="list-map">
+      </div>
+      <div class="flex-cell list-cell">
+
+        <div class="flex-column">
+          <div class="flex-cell fixed">
+            <div class="content">
+              <div class="gap">
+                <div class="text-right" ng-if="user.userType == 'admin'">
+                  <input type="checkbox" id="official_list_checkbox" ng-model="list.official" ng-change="updateAdminFlag()"> <label for="official_list_checkbox">Admin list</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="flex-cell fixed">
+            <div class="content">
+              <div class="flex-row">
+                <div class="flex-cell">
+                  <h3>Places <i class="material-icons" ng-click="showNewPlaceDialog()">add_circle</i></h3>
+                </div>
+                <div class="flex-cell fixed subtle">
+                  {{ list.places.length }}
+                  <span ng-show="list.places.length == 1">place</span>
+                  <span ng-show="list.places.length != 1">places</span>
+                </div>
+              </div>
+              <div id="place-search">
+                <input id="search-box" type="text" ng-model="placeFilter" placeholder="Filter places">
+              </div>
+            </div>
+          </div>
+          <div class="flex-cell" id="place-list">
+            <div class="content">
+              <ul ng-show="list.places.length">
+                <li ng-repeat="place in list.places | filter:{placeName: placeFilter}" ng-class="{ 'highlighted': place.highlighted }" id="place_{{ place.id }}">
+                  <div class="flex-row mini-spaced vertical-center">
+                    <div class="flex-cell fixed">
+                      <input id="place_{{ place.id }}_checkbox" type="checkbox" ng-model="place.isChecked" ng-change="handleCheckboxClick(place)"> <label for="place_{{ place.id }}_checkbox"></label>
+                    </div>
+                    <div class="flex-cell fixed" ng-if="place.placeImgUrl">
+                      <img ng-src="{{ place.placeImgUrl }}">
+                    </div>
+                    <div class="flex-cell">
+                       <span class="place-name" ng-click="highlightPlace(place)">{{ place.placeName }}</span>
+                      <div class="subtle"><span class="purple">{{ place.placeType }}</span> near {{ place.region }}</div>
+                    </div>
+                    <div class="flex-cell fixed" ng-show="place.creatorUserId == user.id"><i class="material-icons tools clickable" ng-click="editPlace(place)">edit</i></div>
+                    <div class="flex-cell fixed"><i class="material-icons tools" ng-click="removePlace(place)">close</i></div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
   </div>
 </div>
 

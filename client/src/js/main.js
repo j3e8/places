@@ -37,8 +37,8 @@ app.config(["$routeProvider", "$locationProvider", function($routeProvider, $loc
     controller: 'editListController'
   })
   .when('/list/:listId', {
-    templateUrl: '/pages/list/list.html',
-    controller: 'listController'
+    templateUrl: '/pages/edit-list/edit-list.html',
+    controller: 'editListController'
   })
   .when('/places', {
     templateUrl: '/pages/places/places.html',

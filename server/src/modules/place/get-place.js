@@ -4,7 +4,7 @@ module.exports = function(placeId) {
   let _placeId = db.escape(placeId);
   return db.query(`SELECT p.id, p.placeTypeId, pt.placeType,
     p.placeName, p.shapeType, p.shapeData, p.creatorUserId, p.region,
-    p.minLatitude, p.maxLatitude, p.minLongitude, p.maxLongitude, p.placeImgUrl,
+    p.minLatitude, p.maxLatitude, p.minLongitude, p.maxLongitude,
     COUNT(up.userId) as numberOfVisitors
     FROM places AS p
     INNER JOIN placetypes AS pt ON p.placeTypeId=pt.id

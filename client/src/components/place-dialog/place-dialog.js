@@ -82,8 +82,7 @@ app.directive("placeDialog", ["Shape", "MapService", "PlaceService", "UserServic
         $scope.place = {
           'shapeType': 'Point',
           'placeName': 'New Place',
-          'placeTypeId': $scope.placeTypes ? $scope.placeTypes.find(function(pt) { return pt.placeType.toLowerCase() == 'point of interest'; }).id : null,
-          'imageUrl': '/assets/images/no-place-image.svg'
+          'placeTypeId': $scope.placeTypes ? $scope.placeTypes.find(function(pt) { return pt.placeType.toLowerCase() == 'point of interest'; }).id : null
         }
         document.getElementById('gm-input').value = '';
       }
@@ -137,24 +136,6 @@ app.directive("placeDialog", ["Shape", "MapService", "PlaceService", "UserServic
         $scope.place = null;
         if ($scope.onCancel) {
           $scope.onCancel();
-        }
-      }
-
-      $scope.chooseImage = function() {
-        document.getElementById('placeImage').click();
-      }
-
-      $scope.onImageChosen = function(event) {
-        if (event.target.files && event.target.files.length) {
-          var file = event.target.files[0];
-          var reader = new FileReader();
-          reader.onload = function(event) {
-            if ($scope.place) {
-              $scope.place.img_file = event.target.result;
-              $scope.$apply();
-            }
-          };
-          reader.readAsDataURL(file);
         }
       }
 

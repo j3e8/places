@@ -180,6 +180,7 @@ app.service("MapService", ["$rootScope", "Shape", function($rootScope, Shape) {
   }
 
   MapService.setMapToContainList = function(map, listBounds) {
+    console.log('setMapToContainList', listBounds);
     if (!listBounds || !listBounds.minLat || !listBounds.maxLat || !listBounds.minLng || !listBounds.maxLng) {
       return;
     }

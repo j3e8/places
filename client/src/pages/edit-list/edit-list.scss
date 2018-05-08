@@ -1,10 +1,34 @@
 .new-list-page {
+  i.material-icons {
+    font-size: 1.4em;
+  }
+  .list-info {
+    padding: 30px;
+    img.list-icon {
+      height: 80px;
+      width: auto;
+      vertical-align: top;
+    }
+    div.edit-image {
+      margin-top: 3px;
+      i.material-icons {
+        vertical-align: bottom;
+        font-size: 1.4em;
+      }
+    }
+  }
   h1 {
+    i.material-icons {
+      font-size: 0.8em;
+    }
     input[type=text] {
       border: 1px solid #e0e0e0;
       padding: 5px;
       margin: 0;
       font-size: 21px;
+    }
+    button {
+      margin: 0;
     }
   }
   textarea {
@@ -20,15 +44,6 @@
     flex: 0 0 350px;
     background-color: #fff;
     padding: 0;
-
-    img.list-icon {
-      height: 80px;
-      width: auto;
-      vertical-align: top;
-      & + i.material-icons {
-        vertical-align: top;
-      }
-    }
 
     .content {
       padding: 15px;

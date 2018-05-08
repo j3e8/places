@@ -11,10 +11,6 @@ app.service("ClusterService", ["MapService", "PlaceService", "Shape", "$timeout"
       places: []
     };
 
-    // google.maps.event.addListenerOnce(map, "bounds_changed", function() {
-    //   clusterer.mapReady = true;
-    // });
-
     google.maps.event.addListener(map, 'zoom_changed', function() {
       clearTimeout(clusterer._zoom_changed_timeout);
       clusterer._zoom_changed_timeout = setTimeout(function() {
@@ -51,7 +47,7 @@ app.service("ClusterService", ["MapService", "PlaceService", "Shape", "$timeout"
   }
 
   function calculate(clusterer) {
-    if (!clusterer.mapReady) {
+    if (!clusterer.mapReady || !clusterer.map || !clusterer.map.getBounds()) {
       return $timeout(calculate.bind(this, clusterer), 50);
     }
 

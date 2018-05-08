@@ -1,9 +1,11 @@
-app.controller("editListController", ["$scope", "$routeParams", "MapService", "ClusterService", "PlaceService", "ListService", "alert", "$timeout", "$location", "requirePassword",
-function($scope, $routeParams, MapService, ClusterService, PlaceService, ListService, alert, $timeout, $location, requirePassword) {
+app.controller("editListController", ["$scope", "$routeParams", "UserService", "MapService", "ClusterService", "PlaceService", "ListService", "alert", "$timeout", "$location", "requirePassword",
+function($scope, $routeParams, UserService, MapService, ClusterService, PlaceService, ListService, alert, $timeout, $location, requirePassword) {
+  $scope.user = UserService.getUser();
   $scope.newPlaceDialogIsDisplayed = undefined;
   $scope.list = {
     places: []
   };
+  $scope.editing = {};
 
   var map, clusterer;
 
@@ -59,6 +61,10 @@ function($scope, $routeParams, MapService, ClusterService, PlaceService, ListSer
     });
   }
 
+  $scope.toggleEditField = function(fieldName) {
+    $scope.editing[fieldName] = $scope.editing[fieldName] ? false : true;
+  }
+
   $scope.placeClicked = function(gmEvent) {
     var gmObject = this;
     $scope.unhighlightAllPlaces();
@@ -108,6 +114,60 @@ function($scope, $routeParams, MapService, ClusterService, PlaceService, ListSer
     });
   }
 
+  $scope.handleFollowChange = function() {
+    if (!$scope.user || !$scope.user.id) {
+      return;
+    }
+    requirePassword({
+      afterAuthenticate: function() {
+        $scope.list.isFollowed = !$scope.list.isFollowed;
+        if ($scope.list.isFollowed) {
+          ListService.follow($scope.user.id, $scope.list.id)
+          .then(function() {
+            $scope.list.numberOfFollowers++;
+            $scope.$apply();
+          })
+          .catch(function(err) {
+            console.error(err);
+            $scope.$apply();
+          });
+        }
+        else {
+          ListService.unfollow($scope.user.id, $scope.list.id)
+          .then(function() {
+            $scope.list.numberOfFollowers--;
+            $scope.$apply();
+          })
+          .catch(function(err) {
+            console.error(err);
+            $scope.$apply();
+          });
+        }
+      }
+    });
+  }
+
+  $scope.handleCheckboxClick = function(place) {
+    requirePassword({
+      afterAuthenticate: function() {
+        var p = Object.assign({}, place);
+        p.gmObject = undefined;
+        if (!p.isChecked) {
+          p.dateChecked = undefined;
+        }
+        PlaceService.updateUserPlace($scope.user.id, p)
+        .then(function(p) {
+          place.dateChecked = p.dateChecked;
+          MapService.updatePlaceOnMap(map, place);
+          $scope.$apply();
+        })
+        .catch(function(err) {
+          $scope.$apply();
+        });
+      }
+    });
+  }
+
   $scope.chooseIcon = function() {
     $scope.iconDialogIsDisplayed = true;
   }
@@ -116,10 +176,17 @@ function($scope, $routeParams, MapService, ClusterService, PlaceService, ListSer
     $scope.list.iconId = icon.id;
     $scope.list.iconUrl = icon.iconUrl;
     $scope.iconDialogIsDisplayed = false;
+    $scope.saveList();
   }
 
   $scope.closeIconDialog = function() {
     $scope.iconDialogIsDisplayed = false;
+  }
+
+  $scope.updateAdminFlag = function() {
+    requirePassword({
+      afterAuthenticate: $scope.saveList
+    });
   }
 
   $scope.editPlace = function(place) {
@@ -134,6 +201,7 @@ function($scope, $routeParams, MapService, ClusterService, PlaceService, ListSer
   $scope.afterPlaceSave = function(place) {
     $scope.closeNewPlaceDialog();
     $scope.addPlaceToList(place);
+    $scope.saveList();
   }
 
   $scope.handlePlaceResultClick = function(place) {
@@ -191,6 +259,7 @@ function($scope, $routeParams, MapService, ClusterService, PlaceService, ListSer
           else {
             $scope.list = list;
           }
+          $scope.editing = {};
           alert("List saved");
           $scope.$apply();
         })
