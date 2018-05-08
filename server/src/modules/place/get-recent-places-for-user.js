@@ -4,7 +4,7 @@ const ImageUtil = require('../../lib/image');
 module.exports = function(userId) {
   let _userId = db.escape(userId);
   return db.query(`SELECT p.id, p.placeTypeId, pt.placeType, p.placeName, p.shapeType, p.shapeData, p.creatorUserId, p.region,
-    p.minLatitude, p.maxLatitude, p.minLongitude, p.maxLongitude, p.placeImgUrl,
+    p.minLatitude, p.maxLatitude, p.minLongitude, p.maxLongitude,
     me.dateChecked, u.username, u.imgUrl, u.id as userId,
     COUNT(up.userId) as numberOfVisitors,
     COUNT(lp.listId) as numberOfLists
