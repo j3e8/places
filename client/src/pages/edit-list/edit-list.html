@@ -3,7 +3,7 @@
     <div class="flex-row spaced">
       <div class="flex-cell fixed">
         <img class="list-icon clickable" ng-src="{{ list.iconUrl }}" ng-click="chooseIcon()">
-        <div class="edit-image text-center">
+        <div class="edit-image text-center" ng-if="user.id == list.creatorUserId">
           <span class="clickable" ng-click="chooseIcon()">Edit <i class="material-icons clickable">edit</i></span>
         </div>
       </div>
@@ -11,7 +11,7 @@
         <h1>
           <div ng-hide="editing.listName">
             {{ list.listName }}
-            <span ng-show="user.id == list.creatorUserId" ng-click="toggleEditField('listName')" class="clickable"><i class="material-icons">edit</i></span>
+            <span ng-if="user.id == list.creatorUserId" ng-click="toggleEditField('listName')" class="clickable"><i class="material-icons">edit</i></span>
           </div>
           <div ng-show="editing.listName" class="flex-row mini-spaced">
             <div class="flex-cell">
@@ -30,7 +30,7 @@
         </span>
         <div>
           <div ng-hide="editing.description">
-            {{ list.description }} <i class="material-icons clickable" ng-click="toggleEditField('description')">edit</i>
+            {{ list.description }} <i class="material-icons clickable" ng-click="toggleEditField('description')" ng-if="user.id == list.creatorUserId">edit</i>
           </div>
           <div class="flex-row mini-spaced" ng-show="editing.description">
             <div class="flex-cell">
