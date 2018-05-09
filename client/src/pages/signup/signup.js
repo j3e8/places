@@ -5,8 +5,8 @@ app.controller("signupController", ["$scope", "$location", "UserService", functi
 
   $scope.errorMessage = null;
 
-  $scope.emailPattern = /^[a-z0-9\.\-_]+@[a-z0-9\.\-_]+\.[a-z]+$/;
-  $scope.usernamePattern = /^[a-z0-9\.\-_]+$/;
+  $scope.emailPattern = /^[a-z0-9\.\-_]+@[a-z0-9\.\-_]+\.[a-z]+$/i;
+  $scope.usernamePattern = /^[a-z0-9\.\-_]+$/i;
 
   $scope.signup = function() {
     $scope.errorMessage = null;
