@@ -168,6 +168,9 @@ function($scope, $routeParams, UserService, MapService, ClusterService, PlaceSer
         .then(function(p) {
           place.dateChecked = p.dateChecked;
           MapService.updatePlaceOnMap(map, place);
+          var action = p.dateChecked ? 'Saved' : 'Removed';
+          var reminder = $scope.list.isFollowed ? '' : 'Be sure to follow this list if you want to track your progress.';
+          alert(action + " your visit to " + place.placeName + ". " + reminder);
           $scope.$apply();
         })
         .catch(function(err) {
