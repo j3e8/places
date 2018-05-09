@@ -1,6 +1,7 @@
 module.exports = {
   createList: require('./create-list'),
   getList: require('./get-list'),
+  getListForUser: require('./get-list-for-user'),
   getListsCreatedByUser: require('./get-lists-created-by-user'),
   getListsFollowedByUser: require('./get-lists-followed-by-user'),
   getPopularLists: require('./get-popular-lists'),

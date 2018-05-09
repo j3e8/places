@@ -44,14 +44,14 @@
   <section class="content" ng-hide="!createdLists.length">
     <h2>Lists created by {{ user.username }}</h2>
     <div>
-      <list-tile ng-repeat="list in createdLists" list="list" editable></list-tile>
+      <list-tile ng-repeat="list in createdLists" list="list" user-id="user.id" editable></list-tile>
     </div>
   </section>
 
   <section class="content" ng-hide="!followedLists.length">
     <h2>Lists followed by {{ user.username }}</h2>
     <div>
-      <list-tile ng-repeat="list in followedLists" list="list" editable></list-tile>
+      <list-tile ng-repeat="list in followedLists" list="list" user-id="user.id" editable></list-tile>
     </div>
   </section>
 

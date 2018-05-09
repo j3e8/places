@@ -25,6 +25,17 @@ app.service("ListService", ["$http", "PLACES_SERVICE_URL", "PlaceService", funct
     });
   }
 
+  ListService.getListForUser = function(listId, userId) {
+    return new Promise(function(resolve, reject) {
+      $http.get(PLACES_SERVICE_URL + '/list/' + listId + '/user/' + userId)
+      .then(function(response) {
+        resolve(response.data);
+      }, function(err) {
+        reject(err);
+      });
+    });
+  }
+
   ListService.getIcons = function() {
     return new Promise(function(resolve, reject) {
       $http.get(PLACES_SERVICE_URL + '/icons')

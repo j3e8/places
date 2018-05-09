@@ -1,6 +1,11 @@
 .list-page {
   .list-info {
     padding: 30px;
+    img.list-icon {
+      height: 80px;
+      width: auto;
+      vertical-align: top;
+    }
   }
   h1 {
     input[type=text] {

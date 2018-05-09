@@ -1,16 +1,22 @@
-app.controller("listController", ["$scope", "$routeParams", "MapService", "ClusterService", "PlaceService", "ListService", "UserService", "alert", "$timeout", "$location", "requirePassword", function($scope, $routeParams, MapService, ClusterService, PlaceService, ListService, UserService, alert, $timeout, $location, requirePassword) {
+app.controller("userListController", ["$scope", "$routeParams", "MapService", "ClusterService", "PlaceService", "ListService", "UserService", "alert", "$timeout", "$location", "requirePassword", function($scope, $routeParams, MapService, ClusterService, PlaceService, ListService, UserService, alert, $timeout, $location, requirePassword) {
   var map, clusterer;
   var DEFAULT_COORDS = { lat: 39.5464, lng: -97.3296 };
 
-  $scope.user = UserService.getUser();
   $scope.placeDialogIsDisplayed = undefined;
   $scope.centerCoords = DEFAULT_COORDS;
+
+  UserService.getUserById($routeParams.userId)
+  .then(function(u) {
+    $scope.user = u;
+    $scope.$apply();
+  })
+  .catch(function(e) { });
 
   MapService.load()
   .then(function() {
     initMap();
     clusterer = ClusterService.createClusterer(map, $scope.placeClicked);
-    ListService.get($routeParams.listId)
+    ListService.getListForUser($routeParams.listId, $routeParams.userId)
     .then(function(list) {
       $scope.list = list;
       ListService.sortList($scope.list, ListService.ALPHABETICALLY)
@@ -35,25 +41,6 @@ app.controller("listController", ["$scope", "$routeParams", "MapService", "Clust
   .catch(function(err) {
     console.error(err);
   });
-
-  $scope.displayPlaceDialog = function(place) {
-    requirePassword({
-      afterAuthenticate: function() {
-        $scope.placeToEditId = place.id;
-        $scope.placeDialogIsDisplayed = true;
-      }
-    });
-  }
-
-  $scope.closePlaceDialog = function() {
-    $scope.placeToEditId = null;
-    $scope.placeDialogIsDisplayed = false;
-  }
-
-  $scope.afterPlaceSave = function(place) {
-    $scope.placeToEditId = null;
-    $scope.placeDialogIsDisplayed = false;
-  }
 
   $scope.placeClicked = function(gmEvent) {
     var gmObject = this;
@@ -89,60 +76,6 @@ app.controller("listController", ["$scope", "$routeParams", "MapService", "Clust
     $scope.list.places.forEach(function(place) {
       place.highlighted = false;
       MapService.updatePlaceOnMap(map, place);
-    });
-  }
-
-  $scope.handleFollowChange = function() {
-    if (!$scope.user || !$scope.user.id) {
-      return;
-    }
-    requirePassword({
-      afterAuthenticate: function() {
-        $scope.list.isFollowed = !$scope.list.isFollowed;
-        if ($scope.list.isFollowed) {
-          ListService.follow($scope.user.id, $scope.list.id)
-          .then(function() {
-            $scope.list.numberOfFollowers++;
-            $scope.$apply();
-          })
-          .catch(function(err) {
-            console.error(err);
-            $scope.$apply();
-          });
-        }
-        else {
-          ListService.unfollow($scope.user.id, $scope.list.id)
-          .then(function() {
-            $scope.list.numberOfFollowers--;
-            $scope.$apply();
-          })
-          .catch(function(err) {
-            console.error(err);
-            $scope.$apply();
-          });
-        }
-      }
-    });
-  }
-
-  $scope.handleCheckboxClick = function(place) {
-    requirePassword({
-      afterAuthenticate: function() {
-        var p = Object.assign({}, place);
-        p.gmObject = undefined;
-        if (!p.isChecked) {
-          p.dateChecked = undefined;
-        }
-        PlaceService.updateUserPlace($scope.user.id, p)
-        .then(function(p) {
-          place.dateChecked = p.dateChecked;
-          MapService.updatePlaceOnMap(map, place);
-          $scope.$apply();
-        })
-        .catch(function(err) {
-          $scope.$apply();
-        });
-      }
     });
   }
 

@@ -2,7 +2,7 @@
   <div class="flex-row spaced vertical-center">
 
     <div class="flex-cell fixed">
-      <a href="/list/{{ list.id }}">
+      <a href="{{ getListUrl() }}">
         <img class="list-icon" ng-src="{{ list.iconUrl }}">
       </a>
     </div>
@@ -10,7 +10,7 @@
     <div class="flex-cell">
       <div class="flex-row spaced">
         <div class="flex-cell">
-          <a class="list-name" ng-href="/list/{{ list.id }}">{{ list.listName }}</a>
+          <a class="list-name" ng-href="{{ getListUrl() }}">{{ list.listName }}</a>
         </div>
         <div class="flex-cell fixed">
           <span class="subtle">Created by</span>

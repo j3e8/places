@@ -1,28 +1,24 @@
 <div class="flex-column list-page">
   <div class="flex-cell fixed list-info">
-    <div class="flex-row">
+    <div class="flex-row spaced">
+      <div class="flex-cell fixed">
+        <img class="list-icon clickable" ng-src="{{ list.iconUrl }}">
+      </div>
       <div class="flex-cell">
-        <h1>
-          {{ list.listName }}
-          <a ng-show="user.id == list.creatorUserId" ng-href="/list/{{ list.id }}/edit"><i class="material-icons">edit</i></a>
-        </h1>
+        <h1>{{ list.listName }} for {{ user.username }}</h1>
         <span class="subtle">
           Created by
           <a ng-href="/user/{{ list.creatorUserId }}" ng-hide="list.official">{{ list.username }}</a>
           <span ng-show="list.official" class="purple">kulana</span>
         </span>
+        <div>{{ list.description }}</div>
       </div>
       <div class="flex-cell fixed subtle text-right">
         <span class="highlight">{{ list.numberOfFollowers }}</span>
         <span ng-show="list.numberOfFollowers == 1">follower</span>
         <span ng-show="list.numberOfFollowers != 1">followers</span>
-        <div class="gap">
-          <button ng-click="handleFollowChange()" ng-show="!list.isFollowed">Follow</button>
-          <button ng-click="handleFollowChange()" class="cancel" ng-show="list.isFollowed">Unfollow</button>
-        </div>
       </div>
     </div>
-    <div>{{ list.description }}</div>
   </div>
 
   <div class="flex-cell content-fill-height">
@@ -55,7 +51,7 @@
                 <li ng-repeat="place in list.places | filter:{placeName: placeFilter}" ng-class="{ 'highlighted': place.highlighted }" id="place_{{ place.id }}">
                   <div class="flex-row mini-spaced">
                     <div class="flex-cell fixed">
-                      <input id="place_{{ place.id }}_checkbox" type="checkbox" ng-model="place.isChecked" ng-change="handleCheckboxClick(place)"> <label for="place_{{ place.id }}_checkbox"></label>
+                      <input id="place_{{ place.id }}_checkbox" type="checkbox" ng-model="place.isChecked" ng-change="handleCheckboxClick(place)" disabled> <label for="place_{{ place.id }}_checkbox"></label>
                     </div>
                     <div class="flex-cell fixed" ng-if="place.placeImgUrl">
                       <img ng-src="{{ place.placeImgUrl }}">
@@ -63,9 +59,6 @@
                     <div class="flex-cell">
                       <span class="place-name" ng-click="highlightPlace(place)">{{ place.placeName }}</span>
                       <div class="subtle"><span class="purple">{{ place.placeType }}</span> near {{ place.region }}</div>
-                    </div>
-                    <div class="flex-cell fixed" ng-show="place.creatorUserId == user.id">
-                      <i class="material-icons clickable" ng-click="displayPlaceDialog(place)">edit</i>
                     </div>
                   </div>
                 </li>
@@ -78,5 +71,3 @@
     </div>
   </div>
 </div>
-
-<place-dialog ng-show="placeDialogIsDisplayed" show="placeDialogIsDisplayed" center="centerCoords" place-id="placeToEditId" on-save="afterPlaceSave" on-cancel="closePlaceDialog"></place-dialog>

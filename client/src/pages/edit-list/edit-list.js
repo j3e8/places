@@ -178,7 +178,9 @@ function($scope, $routeParams, UserService, MapService, ClusterService, PlaceSer
   }
 
   $scope.chooseIcon = function() {
-    $scope.iconDialogIsDisplayed = true;
+    if ($scope.editMode) {
+      $scope.iconDialogIsDisplayed = true;
+    }
   }
 
   $scope.updateIcon = function(icon) {

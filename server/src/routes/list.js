@@ -27,6 +27,12 @@ module.exports = function(app) {
     .catch((err) => ErrorHandler.respondWithError(res, err));
   });
 
+  app.get('/api/list/:listId/user/:userId', jwt.optionaljwt, function(req, res) {
+    List.getListForUser(req.params.listId, req.params.userId)
+    .then((result) => res.json(result))
+    .catch((err) => ErrorHandler.respondWithError(res, err));
+  });
+
   app.post('/api/user/:userId/list/:listId', jwt.requirejwt, function(req, res) {
     List.followList(req.user, req.params.userId, req.params.listId)
     .then((result) => res.json(result))

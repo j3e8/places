@@ -40,6 +40,10 @@ app.config(["$routeProvider", "$locationProvider", function($routeProvider, $loc
     templateUrl: '/pages/edit-list/edit-list.html',
     controller: 'editListController'
   })
+  .when('/list/:listId/user/:userId', {
+    templateUrl: '/pages/user-list/user-list.html',
+    controller: 'userListController'
+  })
   .when('/places', {
     templateUrl: '/pages/places/places.html',
     controller: 'placesController'
