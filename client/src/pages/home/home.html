@@ -3,19 +3,25 @@
   <div class="flex-row wrap">
     <div class="flex-cell main-cell">
 
-      <div class="floating">
+      <section class="floating" ng-if="activities.length">
         <h1>Recent activity</h1>
-        <section ng-if="activities.length">
+        <div>
           <div ng-repeat="activity in activities">
             <user-place-tile ng-if="activity.activityType == 'userPlace'" user-place="activity"></user-place-tile>
             <user-list-tile ng-if="activity.activityType == 'userList'" user-list="activity"></user-list-tile>
           </div>
-        </section>
+        </div>
+      </section>
 
-        <section ng-if="!activities.length" class="subtle">
-          No recent activity. <a href="/lists">Discover some popular lists</a> or <a href="/members">follow some popular members</a>.
-        </section>
-      </div>
+      <section ng-if="!activities.length" class="floating">
+        <h1>Welcome to kulana</h1>
+        Here are a few things to get you started mapping your adventures:
+        <ul>
+          <li><a href="/lists">Discover some popular lists</a></li>
+          <li><a href="/list/new">Create a list of your own</a></li>
+          <li><a href="/search">Search for members, lists or places</a></li>
+        </ul>
+      </section>
 
     </div>
     <div class="flex-cell sidebar-cell" ng-if="followedLists.length">

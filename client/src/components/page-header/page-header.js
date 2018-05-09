@@ -1,4 +1,4 @@
-app.directive("pageHeader", ["UserService", "$location", function(UserService, $location) {
+app.directive("pageHeader", ["UserService", "$location", "$rootScope", function(UserService, $location, $rootScope) {
   return {
     restrict: 'E',
     scope: {},
@@ -20,6 +20,13 @@ app.directive("pageHeader", ["UserService", "$location", function(UserService, $
       $scope.signout = function() {
         UserService.signOut();
         $location.path('/signin');
+      }
+
+      $scope.getHomeUrl = function() {
+        if ($rootScope.user) {
+          return '/home';
+        }
+        return '/signin';
       }
 
       $scope.doSearch = function() {

@@ -1,12 +1,12 @@
 <header>
   <div class="flex-row">
     <div class="flex-cell">
-      <a ng-href="/home"><img src="/assets/logo-white.svg" title="Kulana"></a>
+      <a ng-href="{{ getHomeUrl() }}"><img src="/assets/logo-white.svg" title="Kulana"></a>
     </div>
-    <div class="flex-cell fixed">
+    <div class="flex-cell fixed" ng-show="$root.user">
       <input class="search" type="text" ng-model="search" placeholder="search" catch-enter="doSearch">
     </div>
-    <div class="flex-cell fixed" ng-if="$root.user">
+    <div class="flex-cell fixed" ng-show="$root.user">
       <i class="material-icons search-icon clickable" ng-click="doSearch()">search</i>
     </div>
     <div class="flex-cell fixed" ng-if="$root.user">
