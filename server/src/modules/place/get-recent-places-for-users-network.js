@@ -11,7 +11,7 @@ module.exports = function(userId) {
     p.minLatitude, p.maxLatitude, p.minLongitude, p.maxLongitude,
     friendplaces.dateChecked, friendplaces.userId, friends.username, friends.imgUrl
     FROM places AS p
-    INNER JOIN userplaces AS friendplaces ON p.id=friendplaces.placeId
+    INNER JOIN userplaces AS friendplaces ON p.id=friendplaces.placeId and friendplaces.dateChecked is not null
     INNER JOIN users AS friends on friendplaces.userId=friends.id
     INNER JOIN userFollowers AS uf ON friendplaces.userId=uf.followsUserId AND uf.userId=${_userId}
     INNER JOIN placetypes AS pt ON p.placeTypeId=pt.id
