@@ -76,7 +76,8 @@
             <div class="content">
               <div class="flex-row">
                 <div class="flex-cell">
-                  <h3>Places <i class="material-icons" ng-click="showNewPlaceDialog()">add_circle</i></h3>
+                  <h3>Places <i class="material-icons" ng-click="showNewPlaceDialog()" ng-if="user.id == list.creatorUserId">add_circle</i></h3>
+                  Mark the places you've visited below
                 </div>
                 <div class="flex-cell fixed subtle">
                   {{ list.places.length }}
