@@ -179,6 +179,7 @@ app.service("UserService", ["$http", "$rootScope", "$timeout", "PLACES_SERVICE_U
     $rootScope.$broadcast("signedout", {});
     try {
       localStorage.removeItem('authToken')
+      localStorage.removeItem('user')
     } catch(err) { }
   }
 
