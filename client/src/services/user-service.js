@@ -126,6 +126,7 @@ app.service("UserService", ["$http", "$rootScope", "$timeout", "PLACES_SERVICE_U
     var parsed = JSON.parse(atob(parts[1]));
     user = parsed.user;
     initUser(user);
+    $rootScope.user = user;
 
     try {
       localStorage.setItem('authToken', authToken);
