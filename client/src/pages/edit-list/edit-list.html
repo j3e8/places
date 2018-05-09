@@ -111,8 +111,8 @@
                         <span ng-show="place.region">near {{ place.region }}</span>
                       </div>
                     </div>
-                    <div class="flex-cell fixed" ng-show="place.creatorUserId == user.id"><i class="material-icons tools clickable" ng-click="editPlace(place)">edit</i></div>
-                    <div class="flex-cell fixed"><i class="material-icons tools" ng-click="removePlace(place)">close</i></div>
+                    <div class="flex-cell fixed" ng-show="editMode"><i class="material-icons tools clickable" ng-click="editPlace(place)">edit</i></div>
+                    <div class="flex-cell fixed" ng-show="editMode"><i class="material-icons tools" ng-click="removePlace(place)">close</i></div>
                   </div>
                 </li>
               </ul>
