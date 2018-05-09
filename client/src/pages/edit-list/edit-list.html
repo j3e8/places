@@ -3,7 +3,7 @@
     <div class="flex-row spaced">
       <div class="flex-cell fixed">
         <img class="list-icon clickable" ng-src="{{ list.iconUrl }}" ng-click="chooseIcon()">
-        <div class="edit-image text-center" ng-if="user.id == list.creatorUserId">
+        <div class="edit-image text-center" ng-if="editMode">
           <span class="clickable" ng-click="chooseIcon()">Edit <i class="material-icons clickable">edit</i></span>
         </div>
       </div>
@@ -11,7 +11,7 @@
         <h1>
           <div ng-hide="editing.listName">
             {{ list.listName }}
-            <span ng-if="user.id == list.creatorUserId" ng-click="toggleEditField('listName')" class="clickable"><i class="material-icons">edit</i></span>
+            <span ng-if="editMode" ng-click="toggleEditField('listName')" class="clickable"><i class="material-icons">edit</i></span>
           </div>
           <div ng-show="editing.listName" class="flex-row mini-spaced">
             <div class="flex-cell">
@@ -23,14 +23,16 @@
             </div>
           </div>
         </h1>
-        <span class="subtle">
+        <span class="subtle" ng-if="list.username">
           Created by
           <a ng-href="/user/{{ list.creatorUserId }}" ng-hide="list.official">{{ list.username }}</a>
           <span ng-show="list.official" class="purple">kulana</span>
         </span>
         <div>
           <div ng-hide="editing.description">
-            {{ list.description }} <i class="material-icons clickable" ng-click="toggleEditField('description')" ng-if="user.id == list.creatorUserId">edit</i>
+            {{ list.description }}
+            <span ng-if="!list.description"><i>This list doesn't have a description</i></span>
+            <i class="material-icons clickable" ng-click="toggleEditField('description')" ng-if="editMode">edit</i>
           </div>
           <div class="flex-row mini-spaced" ng-show="editing.description">
             <div class="flex-cell">
@@ -43,7 +45,7 @@
           </div>
         </div>
       </div>
-      <div class="flex-cell fixed subtle text-right">
+      <div class="flex-cell fixed subtle text-right" ng-show="list.id">
         <span class="highlight">{{ list.numberOfFollowers }}</span>
         <span ng-show="list.numberOfFollowers == 1">follower</span>
         <span ng-show="list.numberOfFollowers != 1">followers</span>
@@ -76,8 +78,9 @@
             <div class="content">
               <div class="flex-row">
                 <div class="flex-cell">
-                  <h3>Places <i class="material-icons" ng-click="showNewPlaceDialog()" ng-if="user.id == list.creatorUserId">add_circle</i></h3>
-                  Mark the places you've visited below
+                  <h3>Places <i class="material-icons" ng-click="showNewPlaceDialog()" ng-if="editMode">add_circle</i></h3>
+                  <div ng-show="editMode">Add places to your list and then mark the ones you've visited</div>
+                  <div ng-hide="editMode">Mark the places you've visited below</div>
                 </div>
                 <div class="flex-cell fixed subtle">
                   {{ list.places.length }}

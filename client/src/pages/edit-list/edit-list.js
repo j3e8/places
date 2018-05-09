@@ -6,6 +6,7 @@ function($scope, $routeParams, UserService, MapService, ClusterService, PlaceSer
     places: []
   };
   $scope.editing = {};
+  $scope.editMode = false;
 
   var map, clusterer;
 
@@ -22,6 +23,13 @@ function($scope, $routeParams, UserService, MapService, ClusterService, PlaceSer
     clusterer = ClusterService.createClusterer(map, $scope.placeClicked);
     if ($routeParams.listId) {
       loadList($routeParams.listId);
+    }
+    else {
+      $scope.editMode = true;
+      $scope.editing = {
+        'listName': true
+      }
+      $scope.list.listName = 'Untitled List';
     }
   })
   .catch(function(err) {
@@ -45,6 +53,7 @@ function($scope, $routeParams, UserService, MapService, ClusterService, PlaceSer
     ListService.get(listId)
     .then(function(list) {
       $scope.list = list;
+      $scope.editMode = $scope.list.creatorUserId == $scope.user.id ? true : false;
       var listBounds = ListService.calculateBounds($scope.list);
       MapService.setMapToContainList(map, listBounds);
       $scope.list.places.forEach(function(place) {
@@ -234,17 +243,8 @@ function($scope, $routeParams, UserService, MapService, ClusterService, PlaceSer
   }
 
   $scope.saveList = function() {
-    $scope.saveError = null;
     if (!$scope.list.listName) {
-      $scope.saveError = "You must provide a list name";
-      return;
-    }
-    if (!$scope.list.places.length) {
-      $scope.saveError = "You must add at least one place before saving";
-      return;
-    }
-    if (!$scope.list.iconId) {
-      $scope.saveError = "You must choose an icon for your list";
+      alert("You must provide a list name in order to save your list", true);
       return;
     }
     requirePassword({
