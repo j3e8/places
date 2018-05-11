@@ -1,4 +1,5 @@
 module.exports = {
+  countPlaces: require('./count-places'),
   deleteUserPlace: require('./delete-user-place'),
   getPlace: require('./get-place'),
   getPlacesOnList: require('./get-places-on-list'),

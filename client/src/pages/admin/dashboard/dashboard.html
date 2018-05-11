@@ -1,16 +1,9 @@
 <div class="content">
   <h1>Dashboard</h1>
-  <div>{{ totalLists }} lists</div>
 
-  <section ng-show="recentLists.length">
-    <h2>Recent Lists</h2>
-    <div ng-repeat="list in recentLists">
-      <a ng-href="/admin/list/{{ list.id }}">{{ list.name }}</a>
-    </div>
-  </section>
-
-  <div class="breathe">
-    <a class="button" href="/admin/list">New list</a>
+  <div class="text-lg">
+    <div><span class="purple">{{ totalUsers }}</span> users</div>
+    <div><span class="purple">{{ totalLists }}</span> lists</div>
+    <div><span class="purple">{{ totalPlaces }}</span> places</div>
   </div>
-
 </div>

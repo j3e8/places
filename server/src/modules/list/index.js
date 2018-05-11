@@ -1,5 +1,6 @@
 module.exports = {
   addPlacesToList: require('./add-places-to-list'),
+  countLists: require('./count-lists'),
   createList: require('./create-list'),
   deleteOtherPlacesFromList: require('./delete-other-places-from-list'),
   getList: require('./get-list'),
