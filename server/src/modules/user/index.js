@@ -4,6 +4,7 @@ module.exports = {
   createUser: require('./create-user'),
   deleteUser: require('./delete-user'),
   follow: require('./follow'),
+  getRecentUsers: require('./get-recent-users'),
   getUser: require('./get-user'),
   searchUsers: require('./search-users'),
   unfollow: require('./unfollow'),

@@ -8,4 +8,23 @@ module.exports = function(app) {
     .then((result) => res.json(result))
     .catch((err) => ErrorHandler.respondWithError(res, err));
   });
+
+  app.get('/api/admin/users/recent', jwt.requirejwt, function(req, res) {
+    Admin.getRecentUsers(req.user)
+    .then((result) => res.json(result))
+    .catch((err) => ErrorHandler.respondWithError(res, err));
+  });
+
+  app.get('/api/admin/lists/recent', jwt.requirejwt, function(req, res) {
+    Admin.getRecentLists(req.user)
+    .then((result) => res.json(result))
+    .catch((err) => ErrorHandler.respondWithError(res, err));
+  });
+
+  app.get('/api/admin/places/recent', jwt.requirejwt, function(req, res) {
+    Admin.getRecentPlaces(req.user)
+    .then((result) => res.json(result))
+    .catch((err) => ErrorHandler.respondWithError(res, err));
+  });
+
 }

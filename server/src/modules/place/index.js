@@ -4,6 +4,7 @@ module.exports = {
   getPlace: require('./get-place'),
   getPlacesOnList: require('./get-places-on-list'),
   getPopularPlaces: require('./get-popular-places'),
+  getRecentPlaces: require('./get-recent-places'),
   getRecentPlacesForUser: require('./get-recent-places-for-user'),
   getRecentPlacesForUsersNetwork: require('./get-recent-places-for-users-network'),
   insertPlace: require('./insert-place'),

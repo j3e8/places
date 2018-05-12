@@ -8,6 +8,7 @@ module.exports = {
   getListsFollowedByUser: require('./get-lists-followed-by-user'),
   getListsForPlace: require('./get-lists-for-place'),
   getPopularLists: require('./get-popular-lists'),
+  getRecentLists: require('./get-recent-lists'),
   getRecentListsForUser: require('./get-recent-lists-for-user'),
   getRecentListsForUsersNetwork: require('./get-recent-lists-for-users-network'),
   followList: require('./follow-list'),

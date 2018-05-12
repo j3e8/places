@@ -9,4 +9,11 @@ app.controller("adminDashboardController", function($scope, ReportService) {
   })
   .catch(function(err) { });
 
+  ReportService.getRecentUsers()
+  .then(function(users) {
+    $scope.recentUsers = users;
+    $scope.$apply();
+  })
+  .catch(function(err) { });
+
 });
