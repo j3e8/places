@@ -15,6 +15,15 @@ list-tile {
     .list-description {
 
     }
+    &.sm {
+      padding: 6px 3px;
+      img.list-icon {
+        height: 40px;
+      }
+      .list-name {
+        font-size: 14px;
+      }
+    }
   }
   &:last-child {
     div.list {

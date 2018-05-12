@@ -3,7 +3,8 @@ app.directive("placeTile", [function() {
     restrict: 'E',
     scope: {
       place: '=',
-      onEdit: '='
+      onEdit: '=',
+      size: '@'
     },
     templateUrl: '/components/place-tile/place-tile.html',
     link: function($scope, $elem, attrs) {

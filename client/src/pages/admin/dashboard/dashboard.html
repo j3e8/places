@@ -9,21 +9,17 @@
 
   <section class="space">
     <h2>Recent users</h2>
-    <div ng-repeat="user in recentUsers">
-      <div class="flex-row spaced vertical-center">
-        <div class="flex-cell fixed">
-          <div class="img-container">
-            <img ng-src="{{ user.imgUrl }}">
-          </div>
-        </div>
-        <div class="flex-cell fixed20">
-          {{ user.username }}
-        </div>
-        <div class="flex-cell fixed20">
-          {{ user.dateCreated | date:'MMM d, yyyy' }}
-        </div>
-      </div>
-    </div>
+    <user-tile ng-repeat="user in recentUsers" user="user" size="sm"></user-tile>
+  </section>
+
+  <section class="space">
+    <h2>Recent lists</h2>
+    <list-tile ng-repeat="list in recentLists" list="list" size="sm"></list-tile>
+  </section>
+
+  <section class="space">
+    <h2>Recent places</h2>
+    <place-tile ng-repeat="place in recentPlaces" place="place" size="sm"></place-tile>
   </section>
 
 </div>

@@ -16,4 +16,18 @@ app.controller("adminDashboardController", function($scope, ReportService) {
   })
   .catch(function(err) { });
 
+  ReportService.getRecentLists()
+  .then(function(lists) {
+    $scope.recentLists = lists;
+    $scope.$apply();
+  })
+  .catch(function(err) { });
+
+  ReportService.getRecentPlaces()
+  .then(function(places) {
+    $scope.recentPlaces = places;
+    $scope.$apply();
+  })
+  .catch(function(err) { });
+
 });

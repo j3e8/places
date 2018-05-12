@@ -3,7 +3,8 @@ app.directive("listTile", [function() {
     restrict: 'E',
     scope: {
       list: '=',
-      userId: '='
+      userId: '=',
+      size: '@'
     },
     templateUrl: '/components/list-tile/list-tile.html',
     link: function($scope, elem, attrs) {

@@ -8,6 +8,15 @@ place-tile {
       font-weight: 500;
       color: #45c5ff;
     }
+    &.sm {
+      padding: 6px 3px;
+      .place-name {
+        font-size: 14px;
+      }
+    }
+    i.material-icons {
+      font-size: 1.4em;
+    }
   }
   &:last-child {
     div.place {
