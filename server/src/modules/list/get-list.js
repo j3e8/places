@@ -1,7 +1,10 @@
 const db = require('../../connections/db');
 const PlaceModule = require('../place');
 
-module.exports = function(listId, userId) {
+module.exports = function(listId, forUserId, userId) {
+  if (!userId) {
+    userId = forUserId;
+  }
   let list;
   let _listId = db.escape(listId);
   let _userId = db.escape(userId);
@@ -23,7 +26,7 @@ module.exports = function(listId, userId) {
       list = rows[0];
       list.official = list.official ? true : false;
       list.isFollowed = list.isFollowed ? true : false;
-      return PlaceModule.getPlacesOnList(listId, userId)
+      return PlaceModule.getPlacesOnList(listId, forUserId)
       .then((places) => {
         list.places = places;
         return Promise.resolve(list);

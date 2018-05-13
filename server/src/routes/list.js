@@ -28,7 +28,7 @@ module.exports = function(app) {
   });
 
   app.get('/api/list/:listId/user/:userId', jwt.optionaljwt, function(req, res) {
-    List.getListForUser(req.params.listId, req.params.userId)
+    List.getListForUser(req.params.listId, req.params.userId, req.user)
     .then((result) => res.json(result))
     .catch((err) => ErrorHandler.respondWithError(res, err));
   });

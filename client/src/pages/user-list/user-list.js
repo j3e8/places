@@ -79,6 +79,25 @@ app.controller("userListController", ["$scope", "$routeParams", "MapService", "C
     });
   }
 
+  $scope.followList = function() {
+    if (!$scope.user || !$scope.user.id) {
+      return;
+    }
+    requirePassword({
+      afterAuthenticate: function() {
+        ListService.follow($scope.user.id, $scope.list.id)
+        .then(function() {
+          $location.path('/list/' + $scope.list.id);
+          $scope.$apply();
+        })
+        .catch(function(err) {
+          console.error(err);
+          $scope.$apply();
+        });
+      }
+    });
+  }
+
   function initMap() {
     map = new google.maps.Map(document.getElementById('list-map'), {
       center: new google.maps.LatLng($scope.centerCoords),
