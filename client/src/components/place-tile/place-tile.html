@@ -22,7 +22,7 @@
     <div class="flex-cell fixed subtle" ng-show="place.distance !== undefined">
       {{ place.distance.toFixed(1) }} mi
     </div>
-    <div class="flex-cell fixed" ng-show="place.creatorUserId == $root.user.id">
+    <div class="flex-cell fixed" ng-show="editable && place.creatorUserId == $root.user.id">
       <i class="material-icons clickable" ng-click="editPlace()">edit</i>
     </div>
   </div>

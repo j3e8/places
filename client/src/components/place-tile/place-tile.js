@@ -3,6 +3,7 @@ app.directive("placeTile", [function() {
     restrict: 'E',
     scope: {
       place: '=',
+      editable: '=',
       onEdit: '=',
       size: '@'
     },
