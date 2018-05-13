@@ -4,6 +4,7 @@ app.controller("userListController", ["$scope", "$routeParams", "MapService", "C
 
   $scope.placeDialogIsDisplayed = undefined;
   $scope.centerCoords = DEFAULT_COORDS;
+  $scope.signedInUser = UserService.getUser();
 
   UserService.getUserById($routeParams.userId)
   .then(function(u) {
@@ -85,7 +86,7 @@ app.controller("userListController", ["$scope", "$routeParams", "MapService", "C
     }
     requirePassword({
       afterAuthenticate: function() {
-        ListService.follow($scope.user.id, $scope.list.id)
+        ListService.follow($scope.signedInUser.id, $scope.list.id)
         .then(function() {
           $location.path('/list/' + $scope.list.id);
           $scope.$apply();
