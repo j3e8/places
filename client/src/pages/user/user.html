@@ -32,7 +32,7 @@
           </div>
           <div class="flex-cell" id="place-list">
             <div class="content">
-              <place-tile ng-repeat="place in places" place="place" editable></place-tile>
+              <place-tile ng-repeat="place in places" place="place"></place-tile>
             </div>
           </div>
         </div>
@@ -44,14 +44,14 @@
   <section class="content" ng-hide="!createdLists.length">
     <h2>Lists created by {{ user.username }}</h2>
     <div>
-      <list-tile ng-repeat="list in createdLists" list="list" user-id="user.id" editable></list-tile>
+      <list-tile ng-repeat="list in createdLists" list="list" user-id="user.id"></list-tile>
     </div>
   </section>
 
   <section class="content" ng-hide="!followedLists.length">
     <h2>Lists followed by {{ user.username }}</h2>
     <div>
-      <list-tile ng-repeat="list in followedLists" list="list" user-id="user.id" editable></list-tile>
+      <list-tile ng-repeat="list in followedLists" list="list" user-id="user.id"></list-tile>
     </div>
   </section>
 
