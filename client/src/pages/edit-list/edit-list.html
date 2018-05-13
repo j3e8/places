@@ -53,6 +53,11 @@
           <button ng-click="handleFollowChange()" ng-show="!list.isFollowed">Follow</button>
           <button ng-click="handleFollowChange()" class="cancel" ng-show="list.isFollowed">Unfollow</button>
         </div>
+        <div class="gap" ng-if="user.userType == 'admin'">
+          <div class="text-right">
+            <input type="checkbox" id="official_list_checkbox" ng-model="list.official" ng-change="updateAdminFlag()"> <label for="official_list_checkbox">Admin list</label>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -65,15 +70,6 @@
       <div class="flex-cell list-cell">
 
         <div class="flex-column">
-          <div class="flex-cell fixed" ng-if="editMode">
-            <div class="content">
-              <div class="gap">
-                <div class="text-right" ng-if="user.userType == 'admin'">
-                  <input type="checkbox" id="official_list_checkbox" ng-model="list.official" ng-change="updateAdminFlag()"> <label for="official_list_checkbox">Admin list</label>
-                </div>
-              </div>
-            </div>
-          </div>
           <div class="flex-cell fixed">
             <div class="content">
               <div class="flex-row">
