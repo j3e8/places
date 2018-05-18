@@ -4,11 +4,13 @@ app.controller("signinController", ["$scope", "$location", "UserService", functi
 
   $scope.errorMessage = null;
 
+  $scope.redirect = $location.search().redirect;
+
   $scope.signin = function() {
     $scope.errorMessage = null;
     UserService.authenticate($scope.username, $scope.password)
     .then(function() {
-      $location.path('/home');
+      $location.path($scope.redirect || '/home').search('redirect', null);
       $scope.$apply();
     })
     .catch(function(err) {

@@ -26,7 +26,8 @@ function($rootScope, $http, $location, PLACES_SERVICE_URL, UserService) {
       $location.path('/home');
     }
     else if (!$rootScope.user && unauthenticatedRoutes.indexOf($location.path()) == -1) {
-      $location.path('/');
+      var path = $location.url();
+      $location.path('/').search('redirect', path);
     }
   }
 }]);

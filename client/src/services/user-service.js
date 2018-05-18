@@ -93,7 +93,7 @@ app.service("UserService", ["$http", "$rootScope", "$timeout", "PLACES_SERVICE_U
   }
 
   UserService.signOut = function() {
-    destroyToken();
+    destroyToken(true);
   }
 
   UserService.unfollow = function(userId, followsUserId) {
@@ -174,14 +174,19 @@ app.service("UserService", ["$http", "$rootScope", "$timeout", "PLACES_SERVICE_U
     });
   }
 
-  function destroyToken() {
+  function destroyToken(full) {
     authToken = null;
     $http.defaults.headers.common.Authorization = undefined;
-    $rootScope.$broadcast("signedout", {});
     try {
       localStorage.removeItem('authToken')
-      localStorage.removeItem('user')
     } catch(err) { }
+
+    if (full) {
+      $rootScope.$broadcast("signedout", {});
+      try {
+        localStorage.removeItem('user')
+      } catch(err) { }
+    }
   }
 
   return UserService;

@@ -5,6 +5,8 @@ app.controller("signupController", ["$scope", "$location", "UserService", functi
 
   $scope.errorMessage = null;
 
+  $scope.redirect = $location.search().redirect;
+
   $scope.emailPattern = /^[a-z0-9\.\-_]+@[a-z0-9\.\-_]+\.[a-z]+$/i;
   $scope.usernamePattern = /^[a-z0-9\.\-_]+$/i;
 
@@ -13,7 +15,7 @@ app.controller("signupController", ["$scope", "$location", "UserService", functi
     if ($scope.signupForm.$valid) {
       UserService.create($scope.username, $scope.email, $scope.password)
       .then(function() {
-        $location.path('/home');
+        $location.path($scope.redirect || '/home').search('redirect', null);
         $scope.$apply();
       })
       .catch(function(err) {
