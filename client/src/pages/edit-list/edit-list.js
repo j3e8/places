@@ -291,7 +291,12 @@ function($scope, $routeParams, UserService, MapService, ClusterService, PlaceSer
       return ListService.update(list.id, list);
     }
     else {
-      return ListService.create(list);
+      return ListService.create(list)
+      .then(function(l) {
+        list = l;
+        return ListService.follow($scope.user.id, list.id);
+      })
+      .then(function() { return Promise.resolve(list) });
     }
   }
 
