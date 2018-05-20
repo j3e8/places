@@ -1,4 +1,4 @@
-app.controller("adminDashboardController", function($scope, ReportService) {
+app.controller("adminDashboardController", function($scope, ReportService, requirePassword) {
 
   requirePassword({
     afterAuthenticate: function() {
@@ -35,5 +35,5 @@ app.controller("adminDashboardController", function($scope, ReportService) {
 
     }
   });
-  
+
 });
