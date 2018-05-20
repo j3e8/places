@@ -12,18 +12,12 @@ app.service("ClusterService", ["MapService", "PlaceService", "Shape", "$timeout"
     };
 
     google.maps.event.addListener(map, 'zoom_changed', function() {
-      clearTimeout(clusterer._zoom_changed_timeout);
-      clusterer._zoom_changed_timeout = setTimeout(function() {
-        ClusterService.update(clusterer);
-      }, 50);
+      ClusterService.update(clusterer);
     });
 
     google.maps.event.addListener(map, 'bounds_changed', function() {
       clusterer.mapReady = true;
-      clearTimeout(clusterer._bounds_changed_timeout);
-      clusterer._bounds_changed_timeout = setTimeout(function() {
-        ClusterService.update(clusterer);
-      }, 50);
+      ClusterService.update(clusterer);
     });
 
     return clusterer;
@@ -43,7 +37,10 @@ app.service("ClusterService", ["MapService", "PlaceService", "Shape", "$timeout"
   }
 
   ClusterService.update = function(clusterer) {
-    calculate(clusterer);
+    clearTimeout(clusterer._something_changed_timeout);
+    clusterer._something_changed_timeout = setTimeout(function() {
+      calculate(clusterer);
+    }, 400);
   }
 
   function calculate(clusterer) {
@@ -114,7 +111,8 @@ app.service("ClusterService", ["MapService", "PlaceService", "Shape", "$timeout"
 
   function isClusterWithinMapBounds(cluster, mapBounds) {
     var validLat, validLng;
-    var DEGREE_BUFFER = 2.0;
+    var PCT_BUFFER = 0.1;
+    var DEGREE_BUFFER = (mapBounds.maxLat - mapBounds.minLat) * PCT_BUFFER;
 
     if (cluster.maxLat >= mapBounds.minLat - DEGREE_BUFFER && cluster.minLat <= mapBounds.maxLat + DEGREE_BUFFER) {
       validLat = true;
