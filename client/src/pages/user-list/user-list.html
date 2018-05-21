@@ -21,6 +21,9 @@
           <button ng-click="followList()">Follow</button>
         </div>
         <div ng-show="!list.isFollowed">Follow this list to make a copy of your own</div>
+        <div ng-show="list.creatorUserId == signedInUser.id" class="gap">
+          <a ng-href="/list/{{ list.id }}" class="button"><i class="material-icons">edit</i> <span>Edit</span></a>
+        </div>
       </div>
     </div>
   </div>
