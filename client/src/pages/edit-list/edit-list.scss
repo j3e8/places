@@ -1,4 +1,27 @@
 .new-list-page {
+  .flex-row {
+    & > .flex-cell.icon-cell {
+      @media (max-width: 540px) {
+        order: 1;
+      }
+    }
+    & > .flex-cell.info-cell {
+      @media (max-width: 540px) {
+        order: 3;
+        flex: 0 0 100%;
+        -webkit-flex: 0 0 100%;
+      }
+    }
+    & > .flex-cell.action-cell {
+      flex: 0 0 auto;
+      -webkit-flex: 0 0 auto;
+      @media (max-width: 540px) {
+        order: 2;
+        flex: 1 1 1px;
+        -webkit-flex: 1 1 1px;
+      }
+    }
+  }
   i.material-icons {
     font-size: 1.4em;
   }

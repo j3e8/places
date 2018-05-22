@@ -1,13 +1,13 @@
 <div class="flex-column new-list-page">
   <div class="flex-cell fixed list-info">
-    <div class="flex-row spaced">
-      <div class="flex-cell fixed">
+    <div class="flex-row spaced wrap">
+      <div class="flex-cell fixed icon-cell">
         <img class="list-icon clickable" ng-src="{{ list.iconUrl }}" ng-click="chooseIcon()">
         <div class="edit-image text-center" ng-if="editMode">
           <span class="clickable" ng-click="chooseIcon()">Edit <i class="material-icons clickable">edit</i></span>
         </div>
       </div>
-      <div class="flex-cell">
+      <div class="flex-cell info-cell">
         <h1>
           <div ng-hide="editing.listName">
             {{ list.listName }}
@@ -45,7 +45,7 @@
           </div>
         </div>
       </div>
-      <div class="flex-cell fixed subtle text-right" ng-show="list.id">
+      <div class="flex-cell subtle text-right action-cell" ng-show="list.id">
         <span class="highlight">{{ list.numberOfFollowers }}</span>
         <span ng-show="list.numberOfFollowers == 1">follower</span>
         <span ng-show="list.numberOfFollowers != 1">followers</span>
