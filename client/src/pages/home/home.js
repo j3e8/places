@@ -29,7 +29,7 @@ app.controller("homeController", ["$scope", "PlaceService", "UserService", "List
     $scope.activities.sort(function(a, b) {
       var dateA = a.activityType == 'userPlace' ? a.dateChecked : a.dateFollowed;
       var dateB = b.activityType == 'userPlace' ? b.dateChecked : b.dateFollowed;
-      return Date.parse(dateA) - Date.parse(dateB);
+      return Date.parse(dateB) - Date.parse(dateA);
     });
     $scope.$apply();
   })
