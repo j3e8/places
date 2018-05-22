@@ -1,10 +1,10 @@
 <div class="flex-column list-page">
   <div class="flex-cell fixed list-info">
-    <div class="flex-row spaced">
-      <div class="flex-cell fixed">
+    <div class="flex-row spaced wrap">
+      <div class="flex-cell fixed icon-cell">
         <img class="list-icon clickable" ng-src="{{ list.iconUrl }}">
       </div>
-      <div class="flex-cell">
+      <div class="flex-cell info-cell">
         <h1><a ng-href="/list/{{ list.id }}">{{ list.listName }}</a> for <a ng-href="/user/{{ user.id }}">{{ user.username }}</a></h1>
         <span class="subtle">
           Created by
@@ -13,7 +13,7 @@
         </span>
         <div>{{ list.description }}</div>
       </div>
-      <div class="flex-cell fixed subtle text-right">
+      <div class="flex-cell subtle text-right action-cell">
         <span class="highlight">{{ list.numberOfFollowers }}</span>
         <span ng-show="list.numberOfFollowers == 1">follower</span>
         <span ng-show="list.numberOfFollowers != 1">followers</span>
