@@ -140,6 +140,9 @@ function($scope, $routeParams, UserService, MapService, ClusterService, PlaceSer
   }
 
   $scope.getShareableLink = function() {
+    if (!$scope.list || !$scope.user) {
+      return '';
+    }
     return HOST + '/list/' + $scope.list.id + "/user/" + $scope.user.id;
   }
 

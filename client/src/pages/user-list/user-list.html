@@ -68,7 +68,7 @@
                 <li ng-repeat="place in list.places | filter:{placeName: placeFilter}" ng-class="{ 'highlighted': place.highlighted }" id="place_{{ place.id }}">
                   <div class="flex-row mini-spaced">
                     <div class="flex-cell fixed">
-                      <input id="place_{{ place.id }}_checkbox" type="checkbox" ng-model="place.isChecked" ng-change="handleCheckboxClick(place)" disabled> <label for="place_{{ place.id }}_checkbox"></label>
+                      <input id="place_{{ place.id }}_checkbox" type="checkbox" ng-model="place.isChecked" ng-change="handleCheckboxClick(place)" ng-disabled="list.creatorUserId != signedInUser.id"> <label for="place_{{ place.id }}_checkbox"></label>
                     </div>
                     <div class="flex-cell fixed" ng-if="place.placeImgUrl">
                       <img ng-src="{{ place.placeImgUrl }}">

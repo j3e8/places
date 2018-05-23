@@ -116,7 +116,35 @@ app.controller("userListController", ["$scope", "$routeParams", "MapService", "C
   }
 
   $scope.getShareableLink = function() {
+    if (!$scope.list || !$scope.user) {
+      return '';
+    }
     return HOST + '/list/' + $scope.list.id + "/user/" + $scope.user.id;
+  }
+
+  $scope.handleCheckboxClick = function(place) {
+    console.log('handleCheckboxClick');
+    requirePassword({
+      afterAuthenticate: function() {
+        var p = Object.assign({}, place);
+        p.gmObject = undefined;
+        if (!p.isChecked) {
+          p.dateChecked = undefined;
+        }
+        PlaceService.updateUserPlace($scope.user.id, p)
+        .then(function(p) {
+          place.dateChecked = p.dateChecked;
+          MapService.updatePlaceOnMap(map, place);
+          var action = p.dateChecked ? 'Saved' : 'Removed';
+          var reminder = $scope.list.isFollowed ? '' : 'Be sure to follow this list if you want to track your progress.';
+          alert(action + " your visit to " + place.placeName + ". " + reminder);
+          $scope.$apply();
+        })
+        .catch(function(err) {
+          $scope.$apply();
+        });
+      }
+    });
   }
 
   function initMap() {
