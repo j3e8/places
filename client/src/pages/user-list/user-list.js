@@ -1,4 +1,4 @@
-app.controller("userListController", ["$scope", "$routeParams", "MapService", "ClusterService", "PlaceService", "ListService", "UserService", "alert", "$timeout", "$location", "requirePassword", function($scope, $routeParams, MapService, ClusterService, PlaceService, ListService, UserService, alert, $timeout, $location, requirePassword) {
+app.controller("userListController", ["$scope", "$routeParams", "MapService", "ClusterService", "PlaceService", "ListService", "UserService", "alert", "$timeout", "$location", "requirePassword", "HOST", function($scope, $routeParams, MapService, ClusterService, PlaceService, ListService, UserService, alert, $timeout, $location, requirePassword, HOST) {
   var map, clusterer;
   var DEFAULT_COORDS = { lat: 39.5464, lng: -97.3296 };
 
@@ -97,6 +97,26 @@ app.controller("userListController", ["$scope", "$routeParams", "MapService", "C
         });
       }
     });
+  }
+
+  $scope.toggleShareableLink = function() {
+    $scope.shareableLinkIsDisplayed = $scope.shareableLinkIsDisplayed ? false : true;
+    if ($scope.shareableLinkIsDisplayed) {
+      $timeout(function() {
+        try {
+          var el = document.getElementById('shareable-link');
+          el.select();
+          document.execCommand('copy');
+          alert("Copied link to clipboard");
+        } catch(ex) {
+          console.error(ex);
+        }
+      }, 10);
+    }
+  }
+
+  $scope.getShareableLink = function() {
+    return HOST + '/list/' + $scope.list.id + "/user/" + $scope.user.id;
   }
 
   function initMap() {

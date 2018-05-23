@@ -1,5 +1,5 @@
-app.controller("editListController", ["$scope", "$routeParams", "UserService", "MapService", "ClusterService", "PlaceService", "ListService", "alert", "$timeout", "$location", "requirePassword",
-function($scope, $routeParams, UserService, MapService, ClusterService, PlaceService, ListService, alert, $timeout, $location, requirePassword) {
+app.controller("editListController", ["$scope", "$routeParams", "UserService", "MapService", "ClusterService", "PlaceService", "ListService", "alert", "$timeout", "$location", "requirePassword", "HOST",
+function($scope, $routeParams, UserService, MapService, ClusterService, PlaceService, ListService, alert, $timeout, $location, requirePassword, HOST) {
   $scope.user = UserService.getUser();
   $scope.newPlaceDialogIsDisplayed = undefined;
   $scope.list = {
@@ -121,6 +121,26 @@ function($scope, $routeParams, UserService, MapService, ClusterService, PlaceSer
         $scope.newPlaceDialogIsDisplayed = true;
       }
     });
+  }
+
+  $scope.toggleShareableLink = function() {
+    $scope.shareableLinkIsDisplayed = $scope.shareableLinkIsDisplayed ? false : true;
+    if ($scope.shareableLinkIsDisplayed) {
+      $timeout(function() {
+        try {
+          var el = document.getElementById('shareable-link');
+          el.select();
+          document.execCommand('copy');
+          alert("Copied link to clipboard");
+        } catch(ex) {
+          console.error(ex);
+        }
+      }, 10);
+    }
+  }
+
+  $scope.getShareableLink = function() {
+    return HOST + '/list/' + $scope.list.id + "/user/" + $scope.user.id;
   }
 
   $scope.handleFollowChange = function() {

@@ -45,13 +45,23 @@
           </div>
         </div>
       </div>
+      <div class="flex-cell text-right share-cell" ng-show="list.id">
+        <button ng-click="toggleShareableLink()" ng-hide="shareableLinkIsDisplayed"><i class="material-icons">link</i> <span>Share</span></button>
+        <div ng-show="shareableLinkIsDisplayed" id="shareable-link-container">
+          <div class="flex-row vertical-center mini-spaced">
+            <div class="flex-cell"><label>Shareable link</label></div>
+            <div class="flex-cell fixed"><i class="material-icons clickable" ng-click="toggleShareableLink()">close</i></div>
+          </div>
+          <div><input type="text" ng-value="getShareableLink()" id="shareable-link"></div>
+        </div>
+      </div>
       <div class="flex-cell subtle text-right action-cell" ng-show="list.id">
-        <span class="highlight">{{ list.numberOfFollowers }}</span>
-        <span ng-show="list.numberOfFollowers == 1">follower</span>
-        <span ng-show="list.numberOfFollowers != 1">followers</span>
+        <button ng-click="handleFollowChange()" ng-show="!list.isFollowed">Follow</button>
+        <button ng-click="handleFollowChange()" class="cancel" ng-show="list.isFollowed">Unfollow</button>
         <div class="gap">
-          <button ng-click="handleFollowChange()" ng-show="!list.isFollowed">Follow</button>
-          <button ng-click="handleFollowChange()" class="cancel" ng-show="list.isFollowed">Unfollow</button>
+          <span class="highlight">{{ list.numberOfFollowers }}</span>
+          <span ng-show="list.numberOfFollowers == 1">follower</span>
+          <span ng-show="list.numberOfFollowers != 1">followers</span>
         </div>
         <div class="gap" ng-if="user.userType == 'admin'">
           <div class="text-right">
