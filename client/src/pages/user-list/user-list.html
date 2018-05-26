@@ -25,13 +25,13 @@
       </div>
       <div class="flex-cell subtle text-right action-cell">
         <button ng-click="followList()" ng-show="!list.isFollowed">Follow</button>
-        <div ng-show="list.creatorUserId == signedInUser.id" class="gap">
-          <a ng-href="/list/{{ list.id }}"><i class="material-icons">edit</i> <span>Edit</span></a>
-        </div>
         <div class="gap">
           <span class="highlight">{{ list.numberOfFollowers }}</span>
           <span ng-show="list.numberOfFollowers == 1">follower</span>
           <span ng-show="list.numberOfFollowers != 1">followers</span>
+        </div>
+        <div ng-show="list.creatorUserId == signedInUser.id" class="gap">
+          <a ng-href="/list/{{ list.id }}"><i class="material-icons">edit</i> <span>Edit</span></a>
         </div>
       </div>
     </div>
