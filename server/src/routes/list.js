@@ -21,6 +21,12 @@ module.exports = function(app) {
     .catch((err) => ErrorHandler.respondWithError(res, err));
   });
 
+  app.put('/api/list/:listId/viewed', jwt.optionaljwt, function(req, res) {
+    List.markListAsRecentlyViewed(req.user, req.params.listId)
+    .then((result) => res.json(result))
+    .catch((err) => ErrorHandler.respondWithError(res, err));
+  });
+
   app.get('/api/list/:listId', jwt.optionaljwt, function(req, res) {
     List.getList(req.params.listId, req.user)
     .then((result) => res.json(result))

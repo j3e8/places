@@ -11,7 +11,7 @@ module.exports = function(userId) {
     INNER JOIN userlists AS me ON l.id=me.listId AND me.userId=${_userId}
     INNER JOIN users AS u ON me.userId=u.id
     LEFT JOIN icons AS i ON l.iconId=i.id
-    ORDER BY me.dateFollowed DESC
+    ORDER BY me.lastViewed DESC
     LIMIT 10`
   );
 }

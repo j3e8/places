@@ -14,5 +14,6 @@ module.exports = {
   followList: require('./follow-list'),
   searchLists: require('./search-lists'),
   unfollowList: require('./unfollow-list'),
-  updateList: require('./update-list')
+  updateList: require('./update-list'),
+  markListAsRecentlyViewed: require('./mark-list-as-recently-viewed')
 }

@@ -18,6 +18,7 @@ module.exports = function(userId) {
       LEFT JOIN userplaces as up ON up.placeId=lp.placeId AND up.userId=${_userId}
       GROUP BY l.id
     ) as tmp ON l.id=tmp.id
+    ORDER BY ul.lastViewed DESC
   `)
   .then((rows) => {
     rows.forEach((row) => {

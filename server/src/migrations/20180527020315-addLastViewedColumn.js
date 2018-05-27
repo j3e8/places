@@ -15,7 +15,7 @@ exports.setup = function(options, seedLink) {
 };
 
 exports.up = function(db, callback) {
-  allowNull(db)
+  addcolumn(db)
   .then(() => callback())
   .catch((err) => console.log("Error", err));
 };
@@ -30,10 +30,10 @@ exports._meta = {
   "version": 1
 };
 
-function allowNull(db) {
+function addcolumn(db) {
   return new Promise((resolve, reject) => {
-    db.runSql(`ALTER TABLE userplaces
-      MODIFY COLUMN dateChecked datetime default null
+    db.runSql(`ALTER TABLE userlists
+      ADD COLUMN lastViewed datetime not null default current_timestamp
     `,
     function(err) {
       if (err) return reject(err);
@@ -44,8 +44,8 @@ function allowNull(db) {
 
 function revert(db) {
   return new Promise((resolve, reject) => {
-    db.runSql(`ALTER TABLE userplaces
-      MODIFY COLUMN dateChecked datetime NOT NULL DEFAULT NOW()
+    db.runSql(`ALTER TABLE userlists
+      DROP COLUMN lastViewed
     `,
     function(err) {
       if (err) return reject(err);

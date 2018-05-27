@@ -7,6 +7,7 @@ module.exports = {
   getPopularLists: require('./get-popular-lists'),
   getRecentListsForUsersNetwork: require('./get-recent-lists-for-users-network'),
   followList: require('./follow-list'),
+  markListAsRecentlyViewed: require('./mark-list-as-recently-viewed'),
   searchLists: require('./search-lists'),
   unfollowList: require('./unfollow-list'),
   updateList: require('./update-list')
