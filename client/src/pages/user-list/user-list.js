@@ -13,6 +13,11 @@ app.controller("userListController", ["$scope", "$routeParams", "MapService", "C
   })
   .catch(function(e) { });
 
+  if ($routeParams.userId == $scope.signedInUser.id) {
+    ListService.markListAsRecentlyViewed($routeParams.listId)
+    .catch(function(err) { });
+  }
+
   MapService.load()
   .then(function() {
     initMap();

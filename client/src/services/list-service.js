@@ -120,6 +120,17 @@ app.service("ListService", ["$http", "PLACES_SERVICE_URL", "PlaceService", funct
     return pl ? true : false;
   }
 
+  ListService.markListAsRecentlyViewed = function(listId) {
+    return new Promise(function(resolve, reject) {
+      $http.put(PLACES_SERVICE_URL + '/list/' + listId + '/viewed')
+      .then(function(response) {
+        resolve(response.data);
+      }, function(err) {
+        reject(err);
+      });
+    });
+  }
+
   ListService.follow = function(userId, listId) {
     return new Promise(function(resolve, reject) {
       $http.post(PLACES_SERVICE_URL + '/user/' + userId + '/list/' + listId)
