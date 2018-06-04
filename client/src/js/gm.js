@@ -14,7 +14,7 @@ function initGoogleMaps() {
     }
   }
   console.warn('angular not ready yet');
-  setTimeout(initMap, 10);
+  setTimeout(initGoogleMaps, 10);
 }
 
 var CUSTOM_MAP_STYLES = [
