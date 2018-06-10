@@ -1,6 +1,8 @@
-app.controller("userListController", ["$scope", "$routeParams", "MapService", "ClusterService", "PlaceService", "ListService", "UserService", "alert", "$timeout", "$location", "requirePassword", "HOST", function($scope, $routeParams, MapService, ClusterService, PlaceService, ListService, UserService, alert, $timeout, $location, requirePassword, HOST) {
+app.controller("userListController", ["$scope", "$routeParams", "MapService", "ClusterService", "PlaceService", "ListService", "UserService", "alert", "$timeout", "$location", "requirePassword", "HOST", "ImageService",
+function($scope, $routeParams, MapService, ClusterService, PlaceService, ListService, UserService, alert, $timeout, $location, requirePassword, HOST, ImageService) {
   var map, clusterer;
   var DEFAULT_COORDS = { lat: 39.5464, lng: -97.3296 };
+  var placeForLastPhotoUpload;
 
   $scope.placeDialogIsDisplayed = undefined;
   $scope.centerCoords = DEFAULT_COORDS;
@@ -98,6 +100,79 @@ app.controller("userListController", ["$scope", "$routeParams", "MapService", "C
         })
         .catch(function(err) {
           console.error(err);
+          $scope.$apply();
+        });
+      }
+    });
+  }
+
+  $scope.toggleActionsForPlace = function(place) {
+    place.actionsAreDisplayed = place.actionsAreDisplayed ? false : true;
+  }
+
+  $scope.choosePhotoForPlace = function(place) {
+    document.getElementById('photo_upload').click();
+    placeForLastPhotoUpload = place;
+  }
+
+  $scope.onImageChosen = function(event) {
+    if (!placeForLastPhotoUpload) {
+      return;
+    }
+
+    placeForLastPhotoUpload.isUploadingPhoto = true;
+
+    if (event.target.files && event.target.files.length) {
+      var file = event.target.files[0];
+      var reader = new FileReader();
+      reader.onload = function(event) {
+        if (placeForLastPhotoUpload) {
+          placeForLastPhotoUpload.img_file = event.target.result;
+          ImageService.createThumbnail(placeForLastPhotoUpload.img_file, afterCreateThumbnail.bind(placeForLastPhotoUpload, placeForLastPhotoUpload));
+          $scope.$apply();
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  function afterCreateThumbnail(place, thumb64) {
+    $scope.$apply(function() {
+      place.img_file_thumb = thumb64;
+      requirePassword({
+        afterAuthenticate: function() {
+          PlaceService.updateUserPlace($scope.user.id, place)
+          .then(function() {
+            place.isUploadingPhoto = false;
+            place.actionsAreDisplayed = false;
+            $scope.$apply();
+          })
+          .catch(function(err) {
+            console.error(err);
+            place.isUploadingPhoto = false;
+            $scope.$apply();
+          });
+        }
+      });
+    });
+  }
+
+  $scope.saveUserPlaceDetails = function(place) {
+    if (!place.placeDescription) {
+      place.actionsAreDisplayed = false;
+      return;
+    }
+    requirePassword({
+      afterAuthenticate: function() {
+        PlaceService.updateUserPlace($scope.user.id, place)
+        .then(function() {
+          place.isSaving = false;
+          place.actionsAreDisplayed = false;
+          $scope.$apply();
+        })
+        .catch(function(err) {
+          console.error(err);
+          place.isSaving = false;
           $scope.$apply();
         });
       }

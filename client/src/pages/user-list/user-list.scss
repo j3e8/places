@@ -111,6 +111,7 @@
         margin: 0;
         padding: 0;
         li {
+          position: relative;
           label {
             &:before {
               margin-right: 0;
@@ -134,6 +135,11 @@
           .place-type {
             color: #888;
             font-size: 13px;
+          }
+          .place-actions {
+            i.material-icons {
+              vertical-align: middle;
+            }
           }
         }
       }
