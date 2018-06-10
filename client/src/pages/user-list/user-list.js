@@ -1,4 +1,5 @@
-app.controller("userListController", ["$scope", "$routeParams", "MapService", "ClusterService", "PlaceService", "ListService", "UserService", "alert", "$timeout", "$location", "requirePassword", "HOST", function($scope, $routeParams, MapService, ClusterService, PlaceService, ListService, UserService, alert, $timeout, $location, requirePassword, HOST) {
+app.controller("userListController", ["$scope", "$routeParams", "MapService", "ClusterService", "PlaceService", "ListService", "UserService", "alert", "$timeout", "$location", "requirePassword", "HOST", "ImageService",
+function($scope, $routeParams, MapService, ClusterService, PlaceService, ListService, UserService, alert, $timeout, $location, requirePassword, HOST, ImageService) {
   var map, clusterer;
   var DEFAULT_COORDS = { lat: 39.5464, lng: -97.3296 };
   var placeForLastPhotoUpload;
@@ -127,7 +128,7 @@ app.controller("userListController", ["$scope", "$routeParams", "MapService", "C
       reader.onload = function(event) {
         if (placeForLastPhotoUpload) {
           placeForLastPhotoUpload.img_file = event.target.result;
-          processPhotoForPlace(placeForLastPhotoUpload);
+          ImageService.createThumbnail(placeForLastPhotoUpload.img_file, afterCreateThumbnail.bind(placeForLastPhotoUpload, placeForLastPhotoUpload));
           $scope.$apply();
         }
       };
@@ -135,40 +136,46 @@ app.controller("userListController", ["$scope", "$routeParams", "MapService", "C
     }
   }
 
-  function processPhotoForPlace(place) {
-    // create a canvas object of the right dimensions
-    // draw the photo to canvas
-    // export the canvas as a jpg
-    // upload the resulting image
-    // place.img_file_thumb = 
-    PlaceService.updateUserPlace($scope.user.id, place)
-    .then(function() {
-      place.isUploadingPhoto = false;
-      place.actionsAreDisplayed = false;
-      $scope.$apply();
-    })
-    .catch(function(err) {
-      console.error(err);
-      place.isUploadingPhoto = false;
-      $scope.$apply();
+  function afterCreateThumbnail(place, thumb64) {
+    $scope.$apply(function() {
+      place.img_file_thumb = thumb64;
+      requirePassword({
+        afterAuthenticate: function() {
+          PlaceService.updateUserPlace($scope.user.id, place)
+          .then(function() {
+            place.isUploadingPhoto = false;
+            place.actionsAreDisplayed = false;
+            $scope.$apply();
+          })
+          .catch(function(err) {
+            console.error(err);
+            place.isUploadingPhoto = false;
+            $scope.$apply();
+          });
+        }
+      });
     });
   }
 
   $scope.saveUserPlaceDetails = function(place) {
-    if (!place.description) {
+    if (!place.placeDescription) {
       place.actionsAreDisplayed = false;
       return;
     }
-    PlaceService.updateUserPlace($scope.user.id, place)
-    .then(function() {
-      place.isSaving = false;
-      place.actionsAreDisplayed = false;
-      $scope.$apply();
-    })
-    .catch(function(err) {
-      console.error(err);
-      place.isSaving = false;
-      $scope.$apply();
+    requirePassword({
+      afterAuthenticate: function() {
+        PlaceService.updateUserPlace($scope.user.id, place)
+        .then(function() {
+          place.isSaving = false;
+          place.actionsAreDisplayed = false;
+          $scope.$apply();
+        })
+        .catch(function(err) {
+          console.error(err);
+          place.isSaving = false;
+          $scope.$apply();
+        });
+      }
     });
   }
 

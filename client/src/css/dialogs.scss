@@ -23,6 +23,11 @@
   border: none;
   transition: 0.4s;
   opacity: 0;
+  @media (max-width: 840px) {
+    width: calc(100% - 40px);
+    left: 20px;
+    margin-left: 0;
+  }
 }
 .dialog-box.with-header {
   padding: 0;

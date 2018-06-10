@@ -26,4 +26,4 @@ app.service("ImageService", [function() {
   }
 
   return ImageService;
-}];
+}]);
