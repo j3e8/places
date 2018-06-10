@@ -25,6 +25,7 @@
     "db-migrate-mysql": "^1.1.7",
     "express": "^4.14.0",
     "jsonwebtoken": "^7.4.1",
+    "moment": "^2.22.2",
     "node-mysql": "^0.4.2"
   }
 }
