@@ -203,7 +203,6 @@ function($scope, $routeParams, MapService, ClusterService, PlaceService, ListSer
   }
 
   $scope.handleCheckboxClick = function(place) {
-    console.log('handleCheckboxClick');
     requirePassword({
       afterAuthenticate: function() {
         var p = Object.assign({}, place);

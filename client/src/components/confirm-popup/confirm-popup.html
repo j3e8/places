@@ -1,0 +1,11 @@
+<div class="dialog-shadow" ng-show="isDisplayed" ng-class="{ 'open': isDisplayed, 'closed': isDisplayed === false }"></div>
+<div class="confirm-popup" ng-show="isDisplayed" ng-class="{ 'warning': isWarning, 'open': isDisplayed, 'closed': isDisplayed === false }">
+  {{ message }}
+
+  <hr>
+
+  <div class="breathe text-center">
+    <button ng-click="okay()" ng-style="{ 'background-color': brand.colors.brandColor, 'color': brand.colors.brandTextColor }">Okay</button>
+    <button class="cancel" ng-click="cancel()">Cancel</button>
+  </div>
+</div>

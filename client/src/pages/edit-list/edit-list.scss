@@ -76,7 +76,8 @@
     background-color: #f0f0f0;
   }
   .list-cell {
-    flex: 0 0 350px;
+    flex: 0 0 400px;
+    -webkit-flex: 0 0 400px;
     background-color: #fff;
     padding: 0;
 
@@ -114,6 +115,9 @@
           padding: 10px 6px;
           font-size: 15px;
           border-top: 1px solid $blue;
+          img {
+            height: 60px;
+          }
           &:last-child {
             border-bottom: 1px solid $blue;
           }
@@ -131,9 +135,13 @@
             color: #aaa;
             font-size: 1.25em;
             cursor: pointer;
-            transition: 0.5s;
             &:hover {
-              color: $red;
+              color: $blue;
+            }
+            &.delete {
+              &:hover {
+                color: $red;
+              }
             }
           }
         }

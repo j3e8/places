@@ -1,0 +1,53 @@
+confirm-popup {
+  .confirm-popup {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    border-radius: 5px;
+    background-color: #fff;
+    padding: 20px;
+    display: none;
+    color: #000;
+    box-shadow: 1px 3px 6px 0 rgba(0, 0, 0, 0.3);
+    margin-left: -200px;
+    width: 400px;
+    z-index: 90;
+    @media (max-width: 414px) {
+      width: 300px;
+      margin-left: -150px;
+    }
+
+    &.warning {
+      color: rgba(214, 56, 79, 0.9);
+      font-weight: 500;
+    }
+
+    &.open {
+      display: block;
+      animation: fadein 0.3s ease;
+      animation-fill-mode: forwards;
+    }
+    &.closed {
+      display: none;
+      animation: fadeout 0.5s ease;
+      animation-fill-mode: forwards;
+    }
+
+    @keyframes fadein {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @-webkit-keyframes fadein {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes fadeout {
+      from { opacity: 1; }
+      to { opacity: 0; }
+    }
+    @-webkit-keyframes fadeout {
+      from { opacity: 1; }
+      to { opacity: 0; }
+    }
+  }
+}
