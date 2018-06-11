@@ -103,22 +103,53 @@
             <div class="content">
               <ul ng-show="list.places.length">
                 <li ng-repeat="place in list.places | filter:{placeName: placeFilter}" ng-class="{ 'highlighted': place.highlighted }" id="place_{{ place.id }}">
-                  <div class="flex-row mini-spaced vertical-center">
+                  <div class="flex-row mini-spaced vertical-top">
                     <div class="flex-cell fixed">
                       <input id="place_{{ place.id }}_checkbox" type="checkbox" ng-model="place.isChecked" ng-change="handleCheckboxClick(place)"> <label for="place_{{ place.id }}_checkbox"></label>
                     </div>
-                    <div class="flex-cell fixed" ng-if="place.placeImgUrl">
-                      <img ng-src="{{ place.placeImgUrl }}">
-                    </div>
                     <div class="flex-cell">
-                       <span class="place-name" ng-click="highlightPlace(place)">{{ place.placeName }}</span>
-                      <div class="subtle">
-                        <span class="purple">{{ place.placeType }}</span>
-                        <span ng-show="place.region">near {{ place.region }}</span>
+                      <div class="flex-row mini-spaced">
+                        <div class="flex-cell fixed" ng-if="place.placeThumbUrl || place.img_file">
+                          <img ng-src="{{ place.placeThumbUrl }}" ng-if="!place.img_file">
+                          <img ng-src="{{ place.img_file }}" ng-if="place.img_file">
+                        </div>
+                        <div class="flex-cell">
+                           <span class="place-name" ng-click="highlightPlace(place)">{{ place.placeName }}</span>
+                          <div class="subtle">
+                            <span class="purple">{{ place.placeType }}</span>
+                            <span ng-show="place.region">near {{ place.region }}</span>
+                          </div>
+                          <div class="gap subtle" ng-show="place.placeDescription && !place.actionsAreDisplayed">
+                            {{ place.placeDescription }}
+                          </div>
+                        </div>
+                        <div class="flex-cell fixed" ng-show="editMode">
+                          <i class="material-icons tools clickable" ng-click="toggleActionsForPlace(place)">add_photo_alternate</i>
+                          <i class="material-icons tools clickable" ng-click="editPlace(place)">edit</i>
+                          <i class="material-icons tools delete" ng-click="removePlace(place)">delete</i>
+                        </div>
                       </div>
+
+                      <div ng-show="place.actionsAreDisplayed" class="place-actions">
+                        <div class="gap">
+                          <span class="clickable" ng-click="choosePhotoForPlace(place)" ng-hide="place.isUploadingPhoto">
+                            <i class="material-icons">add_photo_alternate</i>
+                            <span ng-hide="place.placeImgUrl || place.img_file">Upload photo</span>
+                            <span ng-show="place.placeImgUrl || place.img_file">Change photo</span>
+                          </span>
+                          <wait-indicator ng-show="place.isUploadingPhoto" size="sm"></wait-indicator>
+                        </div>
+                        <div class="gap">
+                          <label>Details</label>
+                          <textarea ng-model="place.placeDescription"></textarea>
+                        </div>
+                        <div class="gap text-right">
+                          <button class="sm" ng-click="saveUserPlaceDetails(place)"><i class="material-icons">check</i></button>
+                          <button class="sm cancel" ng-click="toggleActionsForPlace(place)"><i class="material-icons">close</i></button>
+                        </div>
+                      </div>
+
                     </div>
-                    <div class="flex-cell fixed" ng-show="editMode"><i class="material-icons tools clickable" ng-click="editPlace(place)">edit</i></div>
-                    <div class="flex-cell fixed" ng-show="editMode"><i class="material-icons tools" ng-click="removePlace(place)">close</i></div>
                   </div>
                 </li>
               </ul>
@@ -130,6 +161,7 @@
     </div>
   </div>
 </div>
+<input type="file" style="display: none;" id="photo_upload" accept="image/jpeg" onchange="angular.element(document.getElementById('photo_upload')).scope().onImageChosen(event)">
 
 <place-dialog ng-show="newPlaceDialogIsDisplayed" show="newPlaceDialogIsDisplayed" center="centerCoords" zoom="zoom" place-id="placeToEditId" on-save="afterPlaceSave" on-cancel="closeNewPlaceDialog"></place-dialog>
 <icon-dialog ng-show="iconDialogIsDisplayed" selected-icon-id="list.iconId" show="iconDialogIsDisplayed" on-save="updateIcon" on-cancel="closeIconDialog"></icon-dialog>

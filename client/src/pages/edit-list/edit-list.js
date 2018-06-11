@@ -1,5 +1,5 @@
-app.controller("editListController", ["$scope", "$routeParams", "UserService", "MapService", "ClusterService", "PlaceService", "ListService", "alert", "$timeout", "$location", "requirePassword", "HOST",
-function($scope, $routeParams, UserService, MapService, ClusterService, PlaceService, ListService, alert, $timeout, $location, requirePassword, HOST) {
+app.controller("editListController", ["$scope", "$routeParams", "UserService", "MapService", "ClusterService", "PlaceService", "ListService", "alert", "$timeout", "$location", "requirePassword", "HOST", "ImageService", "confirm",
+function($scope, $routeParams, UserService, MapService, ClusterService, PlaceService, ListService, alert, $timeout, $location, requirePassword, HOST, ImageService, confirm) {
   $scope.user = UserService.getUser();
   $scope.newPlaceDialogIsDisplayed = undefined;
   $scope.list = {
@@ -260,9 +260,12 @@ function($scope, $routeParams, UserService, MapService, ClusterService, PlaceSer
   }
 
   $scope.removePlace = function(place) {
-    $scope.list.places.splice($scope.list.places.indexOf(place), 1);
-    ClusterService.removePlaceFromClusterer(clusterer, place);
-    ClusterService.update(clusterer);
+    confirm("Are you sure you want to remove " + place.placeName + " from this list?", function() {
+      $scope.saveList();
+      $scope.list.places.splice($scope.list.places.indexOf(place), 1);
+      ClusterService.removePlaceFromClusterer(clusterer, place);
+      ClusterService.update(clusterer);
+    });
   }
 
   $scope.closeNewPlaceDialog = function() {
@@ -303,6 +306,79 @@ function($scope, $routeParams, UserService, MapService, ClusterService, PlaceSer
 
   $scope.cancelList = function() {
     $location.path('/home');
+  }
+
+  $scope.toggleActionsForPlace = function(place) {
+    place.actionsAreDisplayed = place.actionsAreDisplayed ? false : true;
+  }
+
+  $scope.choosePhotoForPlace = function(place) {
+    document.getElementById('photo_upload').click();
+    placeForLastPhotoUpload = place;
+  }
+
+  $scope.onImageChosen = function(event) {
+    if (!placeForLastPhotoUpload) {
+      return;
+    }
+
+    placeForLastPhotoUpload.isUploadingPhoto = true;
+
+    if (event.target.files && event.target.files.length) {
+      var file = event.target.files[0];
+      var reader = new FileReader();
+      reader.onload = function(event) {
+        if (placeForLastPhotoUpload) {
+          placeForLastPhotoUpload.img_file = event.target.result;
+          ImageService.createThumbnail(placeForLastPhotoUpload.img_file, afterCreateThumbnail.bind(placeForLastPhotoUpload, placeForLastPhotoUpload));
+          $scope.$apply();
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  function afterCreateThumbnail(place, thumb64) {
+    $scope.$apply(function() {
+      place.img_file_thumb = thumb64;
+      requirePassword({
+        afterAuthenticate: function() {
+          PlaceService.updateUserPlace($scope.user.id, place)
+          .then(function() {
+            place.isUploadingPhoto = false;
+            place.actionsAreDisplayed = false;
+            $scope.$apply();
+          })
+          .catch(function(err) {
+            console.error(err);
+            place.isUploadingPhoto = false;
+            $scope.$apply();
+          });
+        }
+      });
+    });
+  }
+
+  $scope.saveUserPlaceDetails = function(place) {
+    if (!place.placeDescription) {
+      place.actionsAreDisplayed = false;
+      return;
+    }
+    requirePassword({
+      afterAuthenticate: function() {
+        PlaceService.updateUserPlace($scope.user.id, place)
+        .then(function() {
+          place.isSaving = false;
+          place.actionsAreDisplayed = false;
+          $scope.$apply();
+        })
+        .catch(function(err) {
+          console.error(err);
+          place.isSaving = false;
+          $scope.$apply();
+        });
+      }
+    });
   }
 
   function createOrUpdate() {
