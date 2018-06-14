@@ -173,12 +173,24 @@ app.service("ClusterService", ["MapService", "PlaceService", "Shape", "$timeout"
           maxLng: bounds.maxLng,
           isChecked: nearby[0].isChecked,
           places: nearby,
-          hash: nearby.map(function(n) { return n.id; }).join(',')
+          hash: nearby.map(function(n) { return n.id; }).join(','),
+          placeThumbUrl: chooseThumbUrl(nearby)
         }
         clusters.push(cluster);
       }
     });
     return clusters;
+  }
+
+  function chooseThumbUrl(places) {
+    var valid = places.filter(function(p) {
+      return p.placeThumbUrl;
+    });
+    if (!valid.length) {
+      return undefined;
+    }
+    var r = Math.floor(Math.random() * valid.length);
+    return valid[r].placeThumbUrl;
   }
 
   function calculateBounds(places) {

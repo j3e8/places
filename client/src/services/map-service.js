@@ -71,6 +71,9 @@ app.service("MapService", ["$rootScope", "Shape", function($rootScope, Shape) {
       if (clickHandler) {
         google.maps.event.addListener(place.gmObject, "click", clickHandler);
       }
+      if (place.placeThumbUrl) {
+        replaceIconWithThumbnail(gmObject, place.placeThumbUrl);
+      }
     }
   }
 
@@ -94,6 +97,18 @@ app.service("MapService", ["$rootScope", "Shape", function($rootScope, Shape) {
       },
       map: map
     });
+    if (cluster.placeThumbUrl) {
+      replaceIconWithThumbnail(cluster.gmObject, cluster.placeThumbUrl);
+    }
+  }
+
+  function replaceIconWithThumbnail(gmObject, placeThumbUrl) {
+    var img = new Image();
+    img.src = placeThumbUrl;
+    img.onload = function() {
+      var imgIcon = buildThumbForImage(img);
+      gmObject.setIcon(imgIcon);
+    }
   }
 
   MapService.findContainingRegion = function(shapeData) {
@@ -180,7 +195,6 @@ app.service("MapService", ["$rootScope", "Shape", function($rootScope, Shape) {
   }
 
   MapService.setMapToContainList = function(map, listBounds) {
-    console.log('setMapToContainList', listBounds);
     if (!listBounds || !listBounds.minLat || !listBounds.maxLat || !listBounds.minLng || !listBounds.maxLng) {
       return;
     }
@@ -244,6 +258,29 @@ app.service("MapService", ["$rootScope", "Shape", function($rootScope, Shape) {
       labelOrigin: new google.maps.Point(s2, s2),
       anchor: new google.maps.Point(s2, s2),
       scaledSize: new google.maps.Size(s, s)
+    }
+    return icon;
+  }
+
+  function buildThumbForImage(img) {
+    var MAX_SIDE = 48;
+    var aspect = img.width / img.height;
+    var w,h;
+    if (aspect >= 1) {
+      w = MAX_SIDE;
+      h = w / aspect;
+    }
+    else {
+      h = MAX_SIDE;
+      w = h * aspect;
+    }
+    var icon = {
+      url: img.src,
+      size: new google.maps.Size(img.width, img.height),
+      origin: new google.maps.Point(0, 0),
+      labelOrigin: new google.maps.Point(Math.round(w/2), Math.round(h/2)),
+      anchor: new google.maps.Point(Math.round(w/2), Math.round(h/2)),
+      scaledSize: new google.maps.Size(w, h)
     }
     return icon;
   }
