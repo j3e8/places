@@ -5,6 +5,7 @@ app.service("ClusterService", ["MapService", "PlaceService", "Shape", "$timeout"
   ClusterService.createClusterer = function(map, clickHandler) {
     var clusterer = {
       clickHandler: clickHandler,
+      highlightedClusters: [],
       notVisitedClusters: [],
       visitedClusters: [],
       map: map,
@@ -48,10 +49,14 @@ app.service("ClusterService", ["MapService", "PlaceService", "Shape", "$timeout"
       return $timeout(calculate.bind(this, clusterer), 50);
     }
 
+    var highlighted = [];
     var visited = [];
     var notVisited = [];
     clusterer.places.forEach(function(place) {
-      if (place.isChecked) {
+      if (place.highlighted) {
+        highlighted.push(place);
+      }
+      else if (place.isChecked) {
         visited.push(place);
       }
       else {
@@ -67,6 +72,26 @@ app.service("ClusterService", ["MapService", "PlaceService", "Shape", "$timeout"
       minLng: sw.lng(),
       maxLng: ne.lng()
     }
+
+    var hc = createClusters(clusterer, highlighted).filter(function(c) { return isClusterWithinMapBounds(c, mapBounds); });
+    // remove clusters no longer in array
+    clusterer.highlightedClusters.forEach(function(c) {
+      var found = hc.find(function(c2) { return c.hash == c2.hash; });
+      if (!found) {
+        MapService.removeClusterFromMap(c);
+      }
+    });
+    // add clusters that are new
+    hc.forEach(function(c) {
+      var found = clusterer.highlightedClusters.find(function(c2) { return c.hash == c2.hash; });
+      if (!found) {
+        MapService.addClusterToMap(clusterer.map, c, clusterer.clickHandler);
+      }
+      else {
+        c.gmObject = found.gmObject;
+      }
+    });
+    clusterer.highlightedClusters = hc;
 
     var vc = createClusters(clusterer, visited).filter(function(c) { return isClusterWithinMapBounds(c, mapBounds); });
     // remove clusters no longer in array
@@ -141,7 +166,7 @@ app.service("ClusterService", ["MapService", "PlaceService", "Shape", "$timeout"
       if (nearby && nearby.length) {
         var bounds = calculateBounds(nearby);
         var cluster = {
-          highlighted: false,
+          highlighted: nearby[0].highlighted,
           minLat: bounds.minLat,
           maxLat: bounds.maxLat,
           minLng: bounds.minLng,
@@ -169,6 +194,9 @@ app.service("ClusterService", ["MapService", "PlaceService", "Shape", "$timeout"
   }
 
   function getClusterablePlaces(clusterer, place, places, pigeon) {
+    if (pigeon[places.indexOf(place)]) {
+      return;
+    }
     if (place.shapeType != 'point') {
       pigeon[places.indexOf(place)] = true;
       return [ place ];

@@ -61,7 +61,8 @@ function($scope, $routeParams, MapService, ClusterService, PlaceService, ListSer
 
     if (clickedPlace) {
       clickedPlace.highlighted = true;
-      MapService.updatePlaceOnMap(map, clickedPlace);
+      // MapService.updatePlaceOnMap(map, clickedPlace);
+      ClusterService.update(clusterer);
 
       // scroll to the place on the list
       var li = document.getElementById('place_' + clickedPlace.id);
@@ -76,14 +77,16 @@ function($scope, $routeParams, MapService, ClusterService, PlaceService, ListSer
   $scope.highlightPlace = function(place) {
     $scope.unhighlightAllPlaces();
     place.highlighted = true;
-    MapService.updatePlaceOnMap(map, place);
+    // MapService.updatePlaceOnMap(map, place);
+    ClusterService.update(clusterer);
     MapService.zoomToPlace(map, place);
   }
 
   $scope.unhighlightAllPlaces = function() {
     $scope.list.places.forEach(function(place) {
       place.highlighted = false;
-      MapService.updatePlaceOnMap(map, place);
+      // MapService.updatePlaceOnMap(map, place);
+      ClusterService.update(clusterer);
     });
   }
 
@@ -213,7 +216,8 @@ function($scope, $routeParams, MapService, ClusterService, PlaceService, ListSer
         PlaceService.updateUserPlace($scope.user.id, p)
         .then(function(p) {
           place.dateChecked = p.dateChecked;
-          MapService.updatePlaceOnMap(map, place);
+          // MapService.updatePlaceOnMap(map, place);
+          ClusterService.update(clusterer);
           var action = p.dateChecked ? 'Saved' : 'Removed';
           var reminder = $scope.list.isFollowed ? '' : 'Be sure to follow this list if you want to track your progress.';
           alert(action + " your visit to " + place.placeName + ". " + reminder);
