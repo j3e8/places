@@ -200,6 +200,37 @@ hr {
   color: $red;
 }
 
+.bg-blue {
+  background-color: $blue;
+  color: #fff;
+}
+
+.bg-purple {
+  background-color: $purple;
+  color: #fff;
+}
+
+.bg-green {
+  background-color: $green;
+  color: #fff;
+}
+
+.bg-yellow {
+  background-color: $yellow;
+  color: #444;
+}
+
+.bg-red {
+  background-color: $red;
+  color: #fff;
+}
+
+.message {
+  padding: 10px;
+  border: rgba(0,0,0,0.1);
+  margin: 10px 0 20px 0;
+}
+
 .mobile-only {
   display: none;
 }
