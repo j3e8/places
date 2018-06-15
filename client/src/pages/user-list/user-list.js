@@ -15,7 +15,7 @@ function($scope, $routeParams, MapService, ClusterService, PlaceService, ListSer
   })
   .catch(function(e) { });
 
-  if ($routeParams.userId == $scope.signedInUser.id) {
+  if ($scope.signedInUser && $routeParams.userId == $scope.signedInUser.id) {
     ListService.markListAsRecentlyViewed($routeParams.listId)
     .catch(function(err) { });
   }

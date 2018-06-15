@@ -108,6 +108,7 @@ app.service("MapService", ["$rootScope", "Shape", function($rootScope, Shape) {
     img.onload = function() {
       var imgIcon = buildThumbForImage(img);
       gmObject.setIcon(imgIcon);
+      gmObject.setZIndex(10000);
     }
   }
 
