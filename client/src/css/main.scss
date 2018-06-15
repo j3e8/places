@@ -238,12 +238,14 @@ hr {
 @media (max-width: 800px) {
   .flex-row.mobile-wrap & > .flex-cell {
     flex-wrap: wrap;
+    -webkit-flex-wrap: wrap;
     flex: 0 0 100%;
     -webkit-flex: 0 0 100%;
     -moz-flex: 0 0 100%;
   }
   .flex-row.spaced.mobile-wrap & > .flex-cell {
     flex-wrap: wrap;
+    -webkit-flex-wrap: wrap;
     flex: 0 0 calc(100% - 20px);
     -webkit-flex: 0 0 calc(100% - 20px);
     -moz-flex: 0 0 calc(100% - 20px);
