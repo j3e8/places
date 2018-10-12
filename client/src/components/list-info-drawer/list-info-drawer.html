@@ -1,0 +1,51 @@
+<div id="clear-click" ng-click="onClick(1)"></div>
+<div class="drawer">
+  <div class="flex-row spaced wrap">
+    <div class="flex-cell fixed icon-cell">
+      <img class="list-icon clickable" ng-src="{{ list.iconUrl }}">
+    </div>
+    <div class="flex-cell info-cell">
+      <h1><a ng-href="/list/{{ list.id }}">{{ list.listName }}</a></h1>
+      for <a ng-href="/user/{{ user.id }}">{{ user.username }}</a>
+    </div>
+  </div>
+
+  <div class="breathe">
+    <span class="subtle">
+      Created by
+      <a ng-href="/user/{{ list.creatorUserId }}" ng-hide="list.official">{{ list.username }}</a>
+      <span ng-show="list.official" class="purple">kulana</span>
+    </span>
+    <div>{{ list.description }}</div>
+  </div>
+
+  <div class="breathe">
+    <div class="flex-row vertical-bottom">
+      <div class="flex-cell">
+        <button class="sm" ng-click="followList()" ng-show="!list.isFollowed">Follow</button>
+        <div class="gap">
+          <span class="highlight">{{ list.numberOfFollowers }}</span>
+          <span ng-show="list.numberOfFollowers == 1">follower</span>
+          <span ng-show="list.numberOfFollowers != 1">followers</span>
+        </div>
+        <div ng-show="list.creatorUserId == signedInUser.id" class="gap">
+          <a ng-href="/list/{{ list.id }}"><i class="material-icons">edit</i> <span>Edit</span></a>
+        </div>
+        <div ng-show="!list.isFollowed">Follow this list to make a copy of your own</div>
+      </div>
+      <div class="flex-cell fixed text-right">
+        <button class="sm" ng-click="toggleShareableLink()" ng-hide="shareableLinkIsDisplayed"><i class="material-icons">link</i> <span>Share</span></button>
+        <div ng-show="shareableLinkIsDisplayed" id="shareable-link-container">
+          <div class="flex-row vertical-center mini-spaced">
+            <div class="flex-cell"><label>Shareable link</label></div>
+            <div class="flex-cell fixed"><i class="material-icons clickable" ng-click="toggleShareableLink()">close</i></div>
+          </div>
+          <div><input type="text" ng-value="getShareableLink()" id="shareable-link"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<input type="file" style="display: none;" id="photo_upload" accept="image/jpeg" onchange="angular.element(document.getElementById('photo_upload')).scope().onImageChosen(event)">

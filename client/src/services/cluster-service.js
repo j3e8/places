@@ -41,7 +41,7 @@ app.service("ClusterService", ["MapService", "PlaceService", "Shape", "$timeout"
     clearTimeout(clusterer._something_changed_timeout);
     clusterer._something_changed_timeout = setTimeout(function() {
       calculate(clusterer);
-    }, 400);
+    }, 150);
   }
 
   function calculate(clusterer) {
@@ -81,6 +81,25 @@ app.service("ClusterService", ["MapService", "PlaceService", "Shape", "$timeout"
         MapService.removeClusterFromMap(c);
       }
     });
+    var vc = createClusters(clusterer, visited).filter(function(c) { return isClusterWithinMapBounds(c, mapBounds); });
+    // remove clusters no longer in array
+    clusterer.visitedClusters.forEach(function(c) {
+      var found = vc.find(function(c2) { return c.hash == c2.hash; });
+      if (!found) {
+        MapService.removeClusterFromMap(c);
+      }
+    });
+    var nvc = createClusters(clusterer, notVisited).filter(function(c) { return isClusterWithinMapBounds(c, mapBounds); });
+    // remove clusters no longer in array
+    clusterer.notVisitedClusters.forEach(function(c) {
+      var found = nvc.find(function(c2) { return c.hash == c2.hash; });
+      if (!found) {
+        MapService.removeClusterFromMap(c);
+      }
+    });
+
+
+
     // add clusters that are new
     hc.forEach(function(c) {
       var found = clusterer.highlightedClusters.find(function(c2) { return c.hash == c2.hash; });
@@ -93,14 +112,6 @@ app.service("ClusterService", ["MapService", "PlaceService", "Shape", "$timeout"
     });
     clusterer.highlightedClusters = hc;
 
-    var vc = createClusters(clusterer, visited).filter(function(c) { return isClusterWithinMapBounds(c, mapBounds); });
-    // remove clusters no longer in array
-    clusterer.visitedClusters.forEach(function(c) {
-      var found = vc.find(function(c2) { return c.hash == c2.hash; });
-      if (!found) {
-        MapService.removeClusterFromMap(c);
-      }
-    });
     // add clusters that are new
     vc.forEach(function(c) {
       var found = clusterer.visitedClusters.find(function(c2) { return c.hash == c2.hash; });
@@ -113,14 +124,6 @@ app.service("ClusterService", ["MapService", "PlaceService", "Shape", "$timeout"
     });
     clusterer.visitedClusters = vc;
 
-    var nvc = createClusters(clusterer, notVisited).filter(function(c) { return isClusterWithinMapBounds(c, mapBounds); });
-    // remove clusters no longer in array
-    clusterer.notVisitedClusters.forEach(function(c) {
-      var found = nvc.find(function(c2) { return c.hash == c2.hash; });
-      if (!found) {
-        MapService.removeClusterFromMap(c);
-      }
-    });
     // add clusters that are new
     nvc.forEach(function(c) {
       var found = clusterer.notVisitedClusters.find(function(c2) { return c.hash == c2.hash; });
@@ -173,7 +176,7 @@ app.service("ClusterService", ["MapService", "PlaceService", "Shape", "$timeout"
           maxLng: bounds.maxLng,
           isChecked: nearby[0].isChecked,
           places: nearby,
-          hash: nearby.map(function(n) { return n.id; }).join(','),
+          hash: nearby.map(function(n) { return n.id + '|' + (n.highlighted ? '1' : '0') + '|' + (n.isChecked ? '1' : '0'); }).join(','),
           placeThumbUrl: chooseThumbUrl(nearby)
         }
         clusters.push(cluster);
@@ -239,6 +242,7 @@ app.service("ClusterService", ["MapService", "PlaceService", "Shape", "$timeout"
         nearby.push(p);
       }
     }
+    nearby.sort(function(a, b) { return a.id - b.id; });
     return nearby;
   }
 
