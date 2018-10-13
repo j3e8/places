@@ -15,6 +15,16 @@
   <div class="flex-column">
     <div class="flex-cell fixed">
       <div class="content">
+        <div id="desktop-header" class="flex-row vertical-bottom">
+          <div class="flex-cell">
+            <h2>Places</h2>
+          </div>
+          <div class="flex-cell fixed">
+            {{ list.places.length }}
+            <span ng-show="list.places.length == 1">place</span>
+            <span ng-show="list.places.length != 1">places</span>
+          </div>
+        </div>
         <div id="place-search">
           <input id="search-box" type="text" ng-model="placeFilter" placeholder="Filter places">
         </div>

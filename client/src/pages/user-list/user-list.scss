@@ -5,4 +5,14 @@
     font-size: 1.4em;
   }
 
+  @media (min-width: $mobile_app_width) {
+    display: flex;
+    flex-direction: column;
+
+    .list-places-map {
+      display: flex;
+      flex-wrap: wrap;
+      flex: 1 1 1px;
+    }
+  }
 }

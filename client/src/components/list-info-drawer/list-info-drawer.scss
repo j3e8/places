@@ -1,11 +1,17 @@
 list-info-drawer {
   display: block;
-  height: 100%;
-  position: absolute;
-  left: 0;
-  width: 100%;
-  top: 0;
   padding: 15px;
+
+  @media (min-width: $mobile_app_width) {
+    flex: 0 0 auto;
+  }
+  @media (max-width: $mobile_app_width) {
+    height: 100%;
+    position: absolute;
+    left: 0;
+    width: 100%;
+    top: 0;
+  }
 
   &.covered {
     /* click shadow */
