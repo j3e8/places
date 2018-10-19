@@ -9,14 +9,14 @@ list-map-drawer {
     background-color: #f0f0f0;
   }
 
-  @media (min-width: $mobile_app_width) {
+  @media (min-width: $desktop_min_width) {
     flex: 1 1 1px;
     order: 2;
 
     header {
       display: none;
     }
-    
+
     #list-map {
       height: 100%;
     }

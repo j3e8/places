@@ -2,7 +2,7 @@ list-info-drawer {
   display: block;
   padding: 15px;
 
-  @media (min-width: $mobile_app_width) {
+  @media (min-width: $desktop_min_width) {
     flex: 0 0 auto;
   }
   @media (max-width: $mobile_app_width) {
