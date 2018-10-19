@@ -1,7 +1,7 @@
 <div class="list-page">
-  <list-info-drawer list="list" user="user" on-click="setActiveDrawer" place-changed="placeChanged" highlight-place="highlightPlace" ng-class="{ 'covered': activeDrawer > 1 }"></list-info-drawer>
+  <list-info-drawer list="list" user="user" on-click="setActiveDrawer" place-changed="placeChanged" highlight-place="highlightPlace" edit-mode="editMode" save-list="saveList" ng-class="{ 'covered': activeDrawer > 1 }"></list-info-drawer>
   <div class="list-places-map">
-    <list-places-drawer list="list" user="user" on-click="setActiveDrawer" place-changed="placeChanged" highlight-place="highlightPlace" ng-class="{ 'up': activeDrawer >= 2 }"></list-places-drawer>
-    <list-map-drawer list="list" user="user" on-click="setActiveDrawer" place-changed="placeChanged" highlight-place="highlightPlace" ng-class="{ 'up': activeDrawer >= 3 }" place-clicked="placeClicked"></list-map-drawer>
+    <list-places-drawer list="list" user="user" on-click="setActiveDrawer" place-changed="placeChanged" highlight-place="highlightPlace" edit-mode="editMode" save-list="saveList" ng-class="{ 'up': activeDrawer >= 2 }"></list-places-drawer>
+    <list-map-drawer list="list" user="user" on-click="setActiveDrawer" place-changed="placeChanged" highlight-place="highlightPlace" edit-mode="editMode" save-list="saveList" ng-class="{ 'up': activeDrawer >= 3 }" place-clicked="placeClicked"></list-map-drawer>
   </div>
 </div>

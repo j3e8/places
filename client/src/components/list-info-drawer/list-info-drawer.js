@@ -3,13 +3,25 @@ app.directive("listInfoDrawer", function(requirePassword, ListService, HOST) {
     restrict: 'E',
     scope: {
       list: '=',
+      editMode: '@',
       onClick: '<',
       placeChanged: '<',
       highlightPlace: '<',
+      saveList: '<',
       user: '='
     },
     templateUrl: '/components/list-info-drawer/list-info-drawer.html',
     link: function($scope, $elem, $attrs) {
+      $scope.editing = {};
+
+      $scope.$watch('list', function() {
+        if ($scope.list && !$scope.list.id) {
+          $scope.editing = {
+            'listName': true
+          }
+          $scope.list.listName = 'Untitled List';
+        }
+      });
 
       $scope.followList = function() {
         if (!$scope.user || !$scope.user.id) {
@@ -28,6 +40,10 @@ app.directive("listInfoDrawer", function(requirePassword, ListService, HOST) {
             });
           }
         });
+      }
+
+      $scope.toggleEditField = function(fieldName) {
+        $scope.editing[fieldName] = $scope.editing[fieldName] ? false : true;
       }
 
       $scope.toggleShareableLink = function() {
@@ -53,6 +69,32 @@ app.directive("listInfoDrawer", function(requirePassword, ListService, HOST) {
         return HOST + '/list/' + $scope.list.id + "/user/" + $scope.user.id;
       }
 
+      $scope.chooseIcon = function() {
+        if ($scope.editMode) {
+          $scope.iconDialogIsDisplayed = true;
+        }
+      }
+
+      $scope.updateIcon = function(icon) {
+        $scope.list.iconId = icon.id;
+        $scope.list.iconUrl = icon.iconUrl;
+        $scope.iconDialogIsDisplayed = false;
+        $scope.saveList();
+      }
+
+      $scope.closeIconDialog = function() {
+        $scope.iconDialogIsDisplayed = false;
+      }
+
+      $scope.updateAdminFlag = function() {
+        requirePassword({
+          afterAuthenticate: $scope.saveList
+        });
+      }
+
+      $scope.cancelList = function() {
+        $location.path('/home');
+      }
 
     }
   }

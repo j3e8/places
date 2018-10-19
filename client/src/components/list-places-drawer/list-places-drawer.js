@@ -3,9 +3,11 @@ app.directive("listPlacesDrawer", function(requirePassword, PlaceService, ImageS
     restrict: 'E',
     scope: {
       list: '=',
+      editMode: '@',
       onClick: '<',
       placeChanged: '<',
       highlightPlace: '<',
+      saveList: '<',
       user: '='
     },
     templateUrl: '/components/list-places-drawer/list-places-drawer.html',

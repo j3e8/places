@@ -2,6 +2,10 @@ list-info-drawer {
   display: block;
   padding: 15px;
 
+  i.material-icons {
+    font-size: 1.4em;
+  }
+
   @media (min-width: $desktop_min_width) {
     flex: 0 0 auto;
   }
@@ -46,6 +50,12 @@ list-info-drawer {
     }
     @media (max-width: 600px) {
       font-size: 17px;
+    }
+    i.material-icons {
+      font-size: 0.8em;
+    }
+    button {
+      margin: 0;
     }
   }
 

@@ -3,9 +3,26 @@
   <div class="flex-row spaced wrap">
     <div class="flex-cell fixed icon-cell">
       <img class="list-icon clickable" ng-src="{{ list.iconUrl }}">
+      <div class="edit-image text-center" ng-if="editMode">
+        <span class="clickable" ng-click="chooseIcon()">Edit <i class="material-icons clickable">edit</i></span>
+      </div>
     </div>
     <div class="flex-cell info-cell">
-      <h1><a ng-href="/list/{{ list.id }}">{{ list.listName }}</a></h1>
+      <h1>
+        <div ng-hide="editing.listName">
+          <a ng-href="/list/{{ list.id }}">{{ list.listName }}</a>
+          <span ng-if="editMode" ng-click="toggleEditField('listName')" class="clickable"><i class="material-icons">edit</i></span>
+        </div>
+        <div ng-show="editing.listName" class="flex-row mini-spaced">
+          <div class="flex-cell">
+            <input type="text" ng-model="list.listName" placeholder="New List">
+          </div>
+          <div class="flex-cell fixed">
+            <button class="sm" ng-click="saveList()"><i class="material-icons">check</i></button>
+            <button class="sm cancel" ng-click="toggleEditField('listName')"><i class="material-icons">close</i></button>
+          </div>
+        </div>
+      </h1>
       for <a ng-href="/user/{{ user.id }}">{{ user.username }}</a>
     </div>
   </div>
@@ -16,7 +33,22 @@
       <a ng-href="/user/{{ list.creatorUserId }}" ng-hide="list.official">{{ list.username }}</a>
       <span ng-show="list.official" class="purple">kulana</span>
     </span>
-    <div>{{ list.description }}</div>
+    <div>
+      <div ng-hide="editing.description">
+        {{ list.description }}
+        <span ng-if="!list.description"><i>This list doesn't have a description</i></span>
+        <i class="material-icons clickable" ng-click="toggleEditField('description')" ng-if="editMode">edit</i>
+      </div>
+      <div class="flex-row mini-spaced" ng-show="editing.description">
+        <div class="flex-cell">
+          <textarea ng-model="list.description" placeholder="Write a description"></textarea>
+        </div>
+        <div class="flex-cell fixed">
+          <button class="sm" ng-click="saveList()"><i class="material-icons">check</i></button>
+          <button class="sm cancel" ng-click="toggleEditField('description')"><i class="material-icons">close</i></button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="breathe">
@@ -49,3 +81,4 @@
 </div>
 
 <input type="file" style="display: none;" id="photo_upload" accept="image/jpeg" onchange="angular.element(document.getElementById('photo_upload')).scope().onImageChosen(event)">
+<icon-dialog ng-show="iconDialogIsDisplayed" selected-icon-id="list.iconId" show="iconDialogIsDisplayed" on-save="updateIcon" on-cancel="closeIconDialog"></icon-dialog>

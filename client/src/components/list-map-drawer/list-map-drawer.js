@@ -3,9 +3,11 @@ app.directive("listMapDrawer", function($routeParams, $timeout, ListService, Map
     restrict: 'E',
     scope: {
       list: '=',
+      editMode: '@',
       onClick: '<',
       placeChanged: '<',
       highlightPlace: '<',
+      saveList: '<',
       user: '='
     },
     templateUrl: '/components/list-map-drawer/list-map-drawer.html',

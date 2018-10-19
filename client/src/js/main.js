@@ -29,16 +29,16 @@ app.config(["$routeProvider", "$locationProvider", function($routeProvider, $loc
     controller: 'listsController'
   })
   .when('/list/new', {
-    templateUrl: '/pages/edit-list/edit-list.html',
-    controller: 'editListController'
+    templateUrl: '/pages/user-list/user-list.html',
+    controller: 'userListController'
   })
   .when('/list/:listId/edit', {
-    templateUrl: '/pages/edit-list/edit-list.html',
-    controller: 'editListController'
+    templateUrl: '/pages/user-list/user-list.html',
+    controller: 'userListController'
   })
   .when('/list/:listId', {
-    templateUrl: '/pages/edit-list/edit-list.html',
-    controller: 'editListController'
+    templateUrl: '/pages/user-list/user-list.html',
+    controller: 'userListController'
   })
   .when('/list/:listId/user/:userId', {
     templateUrl: '/pages/user-list/user-list.html',

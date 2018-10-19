@@ -1,10 +1,6 @@
 .list-page {
   position: relative;
 
-  i.material-icons {
-    font-size: 1.4em;
-  }
-
   @media (min-width: $desktop_min_width) {
     display: flex;
     flex-direction: column;

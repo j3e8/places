@@ -35,6 +35,7 @@ app.directive("signinDialog", ["UserService", "alert", "$rootScope", function(Us
         })
         .catch(function(err) {
           alert("Invalid username/password", true);
+          console.error(err);
           $scope.isSigningIn = false;
           $scope.$apply();
         });
