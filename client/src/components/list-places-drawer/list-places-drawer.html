@@ -1,13 +1,16 @@
 <div class="drawer">
-  <header ng-click="onClick(2)">
-    <div class="flex-row vertical-bottom">
-      <div class="flex-cell">
+  <header>
+    <div class="flex-row vertical-center spaced">
+      <div class="flex-cell" ng-click="onClick(2)">
         <h2><i class="material-icons">place</i> Places</h2>
       </div>
       <div class="flex-cell fixed">
         {{ list.places.length }}
         <span ng-show="list.places.length == 1">place</span>
         <span ng-show="list.places.length != 1">places</span>
+      </div>
+      <div class="flex-cell fixed" ng-show="editMode" id="add-cell">
+        <i class="material-icons" ng-click="showNewPlaceDialog()">add_circle</i>
       </div>
     </div>
   </header>

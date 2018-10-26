@@ -36,8 +36,10 @@ list-places-drawer {
       padding: 5px 8px;
       position: relative;
       cursor: pointer;
-      i.material-icons {
-        vertical-align: middle;
+      #add-cell {
+        i.material-icons {
+          vertical-align: middle;
+        }
       }
     }
 

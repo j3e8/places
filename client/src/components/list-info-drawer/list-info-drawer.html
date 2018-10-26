@@ -18,7 +18,7 @@
             <input type="text" ng-model="list.listName" placeholder="New List">
           </div>
           <div class="flex-cell fixed">
-            <button class="sm" ng-click="saveList()"><i class="material-icons">check</i></button>
+            <button class="sm" ng-click="save()"><i class="material-icons">check</i></button>
             <button class="sm cancel" ng-click="toggleEditField('listName')"><i class="material-icons">close</i></button>
           </div>
         </div>
@@ -44,7 +44,7 @@
           <textarea ng-model="list.description" placeholder="Write a description"></textarea>
         </div>
         <div class="flex-cell fixed">
-          <button class="sm" ng-click="saveList()"><i class="material-icons">check</i></button>
+          <button class="sm" ng-click="save()"><i class="material-icons">check</i></button>
           <button class="sm cancel" ng-click="toggleEditField('description')"><i class="material-icons">close</i></button>
         </div>
       </div>

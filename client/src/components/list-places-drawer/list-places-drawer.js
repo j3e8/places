@@ -8,11 +8,16 @@ app.directive("listPlacesDrawer", function(requirePassword, PlaceService, ImageS
       placeChanged: '<',
       highlightPlace: '<',
       saveList: '<',
+      showNewPlaceDialog: '<',
       user: '='
     },
     templateUrl: '/components/list-places-drawer/list-places-drawer.html',
     link: function($scope, $elem, $attrs) {
 
+      $scope.test = function() {
+        console.log('test');
+      }
+      
       $scope.$on('place-changed', function($evt, place) {
       });
 

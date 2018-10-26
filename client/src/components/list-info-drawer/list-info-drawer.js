@@ -1,4 +1,4 @@
-app.directive("listInfoDrawer", function(requirePassword, ListService, HOST) {
+app.directive("listInfoDrawer", function($timeout, alert, requirePassword, ListService, HOST) {
   return {
     restrict: 'E',
     scope: {
@@ -75,11 +75,18 @@ app.directive("listInfoDrawer", function(requirePassword, ListService, HOST) {
         }
       }
 
+      $scope.save = function() {
+        $scope.saveList()
+        .then(function() {
+          $scope.editing = {};
+        });
+      }
+
       $scope.updateIcon = function(icon) {
         $scope.list.iconId = icon.id;
         $scope.list.iconUrl = icon.iconUrl;
         $scope.iconDialogIsDisplayed = false;
-        $scope.saveList();
+        $scope.save();
       }
 
       $scope.closeIconDialog = function() {
@@ -87,9 +94,7 @@ app.directive("listInfoDrawer", function(requirePassword, ListService, HOST) {
       }
 
       $scope.updateAdminFlag = function() {
-        requirePassword({
-          afterAuthenticate: $scope.saveList
-        });
+        $scope.save();
       }
 
       $scope.cancelList = function() {
