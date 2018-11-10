@@ -77,7 +77,7 @@ function createListsTable(db) {
         dateCreated datetime NOT NULL default NOW(),
         status enum('active','deleted') NOT NULL DEFAULT 'active',
         FOREIGN KEY
-          creator_key (creatorUserId)
+          lists_creator_key (creatorUserId)
           REFERENCES users (id)
       ) ENGINE=InnoDB CHARACTER SET utf8 COLLATE utf8_unicode_ci`,
     function(err) {
@@ -104,10 +104,10 @@ function createPlacesTable(db) {
         dateCreated datetime NOT NULL default NOW(),
         status enum('active','deleted') NOT NULL DEFAULT 'active',
         FOREIGN KEY
-          creator_key (creatorUserId)
+          places_creator_key (creatorUserId)
           REFERENCES users (id),
         FOREIGN KEY
-          placetype_key (placeTypeId)
+          places_placetype_key (placeTypeId)
           REFERENCES placetypes (id)
       ) ENGINE=InnoDB CHARACTER SET utf8 COLLATE utf8_unicode_ci`,
     function(err) {
@@ -160,11 +160,11 @@ function createListPlacesTable(db) {
         placeId int NOT NULL,
         PRIMARY KEY pri_key (listId, placeId),
         FOREIGN KEY
-          list_key (listId)
+          listplaces_list_key (listId)
           REFERENCES lists (id)
           ON DELETE CASCADE,
         FOREIGN KEY
-          place_key (placeId)
+          listplaces_place_key (placeId)
           REFERENCES places (id)
           ON DELETE CASCADE
       ) ENGINE=InnoDB CHARACTER SET utf8 COLLATE utf8_unicode_ci`,
@@ -184,11 +184,11 @@ function createUserListsTable(db) {
         dateFollowed datetime NOT NULL DEFAULT NOW(),
         PRIMARY KEY pri_key (userId, listId),
         FOREIGN KEY
-          user_key (userId)
+          userlists_user_key (userId)
           REFERENCES users (id)
           ON DELETE CASCADE,
         FOREIGN KEY
-          list_key (listId)
+          userlists_list_key (listId)
           REFERENCES lists (id)
           ON DELETE CASCADE
       ) ENGINE=InnoDB CHARACTER SET utf8 COLLATE utf8_unicode_ci`,
@@ -208,11 +208,11 @@ function createUserPlacesTable(db) {
         dateChecked datetime NOT NULL DEFAULT NOW(),
         PRIMARY KEY pri_key (userId, placeId),
         FOREIGN KEY
-          user_key (userId)
+          userplaces_user_key (userId)
           REFERENCES users (id)
           ON DELETE CASCADE,
         FOREIGN KEY
-          place_key (placeId)
+          userplaces_place_key (placeId)
           REFERENCES places (id)
           ON DELETE CASCADE
       ) ENGINE=InnoDB CHARACTER SET utf8 COLLATE utf8_unicode_ci`,

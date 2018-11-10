@@ -14,21 +14,19 @@ exports.setup = function(options, seedLink) {
   seed = seedLink;
 };
 
-exports.up = function(db, callback) {
-  addColumn(db)
+exports.up = function(db) {
+  return addColumn(db)
   .then(() => addToPlaces(db))
   .then(() => addRankToPlaces(db))
   .then(() => addProminence(db))
-  .then(() => callback())
   .catch((err) => console.log("Error", err));
 };
 
-exports.down = function(db, callback) {
-  dropColumn(db)
+exports.down = function(db) {
+  return dropColumn(db)
   .then(() => dropFromPlaces(db))
   .then(() => dropRankFromPlaces(db))
   .then(() => dropProminence(db))
-  .then(() => callback())
   .catch((err) => console.log("Error", err));
 };
 
@@ -68,7 +66,7 @@ function addToPlaces(db) {
 function addRankToPlaces(db) {
   return new Promise((resolve, reject) => {
     db.runSql(`ALTER TABLE listplaces
-      ADD COLUMN rank smallint not null default 0
+      ADD COLUMN rank mediumint not null default 0
       `,
     function(err) {
       if (err) return reject(err);
