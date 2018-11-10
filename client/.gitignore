@@ -6,3 +6,4 @@ config/*
 www/bundle.css
 www/bundle.js
 npm-debug.log
+package-lock.json
