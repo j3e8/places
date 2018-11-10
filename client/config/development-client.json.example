@@ -1,0 +1,4 @@
+{
+  "PLACES_SERVICE_URL": "https://localhost:4002/api",
+  "HOST": "https://localhost:4001"
+}

@@ -1,0 +1,16 @@
+{
+  "env": {
+    "NODE_TLS_REJECT_UNAUTHORIZED": 0
+  },
+
+  "https": {
+    "cert": "/Users/jake.jenne/.ssl/jake.crt",
+    "key": "/Users/jake.jenne/.ssl/jake.key"
+  },
+
+  "server": {
+    "hostname": "localhost",
+    "port": 4001,
+    "protocol": "http:"
+  }
+}
