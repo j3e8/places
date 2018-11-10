@@ -25,7 +25,7 @@ gulp.task('config', function() {
   if (config.get('env')) {
     process.env = Object.assign(process.env, config.get('env'));
   }
-  var env = process.env.NODE_ENV;
+  var env = process.env.NODE_ENV || 'development';
   if (!env) {
     throw new Error("Can't find NODE_ENV");
   }
