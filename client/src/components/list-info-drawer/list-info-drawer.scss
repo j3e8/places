@@ -1,0 +1,120 @@
+list-info-drawer {
+  display: block;
+  padding: 15px;
+
+  i.material-icons {
+    font-size: 1.4em;
+  }
+
+  @media (min-width: $desktop_min_width) {
+    flex: 0 0 auto;
+  }
+  @media (max-width: $mobile_app_width) {
+    height: 100%;
+    position: absolute;
+    left: 0;
+    width: 100%;
+    top: 0;
+  }
+
+  &.covered {
+    /* click shadow */
+    #clear-click {
+      height: 58px;
+      background-color: transparent;
+      width: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      cursor: pointer;
+    }
+  }
+
+  img.list-icon {
+    height: 80px;
+    width: auto;
+    vertical-align: top;
+    @media (max-width: 640px) {
+      height: 45px;
+    }
+  }
+  h1 {
+    input[type=text] {
+      border: 1px solid #e0e0e0;
+      padding: 5px;
+      margin: 0;
+      font-size: 21px;
+      @media (max-width: 600px) {
+        font-size: 15px;
+      }
+    }
+    @media (max-width: 600px) {
+      font-size: 17px;
+    }
+    i.material-icons {
+      font-size: 0.8em;
+    }
+    button {
+      margin: 0;
+    }
+  }
+
+  .drawer {
+    height: 100%;
+  }
+  header {
+    height: 48px;
+    background-color: $brand_color;
+    color: #fff;
+    padding: 5px 8px;
+    position: relative;
+    i.material-icons {
+      vertical-align: middle;
+    }
+    &:before {
+      content: ' ';
+      position: absolute;
+      top: -10px;
+      width: 100%;
+      height: 10px;
+      background-color: #000;
+    }
+  }
+
+  .flex-row {
+    & > .flex-cell.icon-cell {
+      @media (max-width: 640px) {
+        // order: 1;
+      }
+    }
+    & > .flex-cell.info-cell {
+      @media (max-width: 640px) {
+        // order: 4;
+        // flex: 0 0 100%;
+        // -webkit-flex: 0 0 100%;
+      }
+    }
+    & > .flex-cell.share-cell {
+      flex: 0 0 auto;
+      -webkit-flex: 0 0 auto;
+      @media (max-width: 640px) {
+        // order: 2;
+        // flex: 1 1 1px;
+        // -webkit-flex: 1 1 1px;
+      }
+    }
+    & > .flex-cell.action-cell {
+      flex: 0 0 auto;
+      -webkit-flex: 0 0 auto;
+      @media (max-width: 640px) {
+        // order: 3;
+      }
+    }
+  }
+  #shareable-link-container {
+    i.material-icons {
+      vertical-align: bottom;
+    }
+  }
+
+}

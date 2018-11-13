@@ -10,7 +10,7 @@
       followed
       <span ng-repeat="list in userList.lists track by $index">
         <span ng-if="$index > 0">, </span>
-        <a class="list-name" ng-href="/list/{{ list.id }}/user/{{ userList.userId }}">{{ list.listName }}</a>
+        <a class="list-name" ng-href="/list/{{ list.listId }}/user/{{ userList.userId }}">{{ list.listName }}</a>
       </span>
 
       <div class="subtle">Followed on {{ userList.dateFollowed | date:'MMMM d' }}</div>

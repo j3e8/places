@@ -1,158 +1,165 @@
-app.controller("userListController", ["$scope", "$routeParams", "MapService", "ClusterService", "PlaceService", "ListService", "UserService", "alert", "$timeout", "$location", "requirePassword", "HOST", "ImageService",
-function($scope, $routeParams, MapService, ClusterService, PlaceService, ListService, UserService, alert, $timeout, $location, requirePassword, HOST, ImageService) {
-  var map, clusterer;
-  var DEFAULT_COORDS = { lat: 39.5464, lng: -97.3296 };
+app.controller("userListController", function($scope, $routeParams, MapService, ClusterService, PlaceService, ListService, UserService, alert, $timeout, $location, requirePassword, HOST, ImageService) {
   var placeForLastPhotoUpload;
 
-  $scope.placeDialogIsDisplayed = undefined;
-  $scope.centerCoords = DEFAULT_COORDS;
-  $scope.signedInUser = UserService.getUser();
+  $scope.activeDrawer = 1;
 
-  UserService.getUserById($routeParams.userId)
+  $scope.placeDialogIsDisplayed = undefined;
+  $scope.signedInUser = UserService.getUser();
+  $scope.editMode = false;
+
+  var userId = $routeParams.userId || $scope.signedInUser.id;
+
+  if ($routeParams.listId) {
+    loadList();
+  }
+  else {
+    $scope.editMode = true;
+    $scope.list = {
+      listName: 'Untitled List',
+      places: []
+    }
+  }
+
+  UserService.getUserById(userId)
   .then(function(u) {
     $scope.user = u;
     $scope.$apply();
   })
   .catch(function(e) { });
 
-  if ($scope.signedInUser && $routeParams.userId == $scope.signedInUser.id) {
-    ListService.markListAsRecentlyViewed($routeParams.listId)
-    .catch(function(err) { });
-  }
-
-  MapService.load()
-  .then(function() {
-    initMap();
-    clusterer = ClusterService.createClusterer(map, $scope.placeClicked);
-    ListService.getListForUser($routeParams.listId, $routeParams.userId)
+  function loadList() {
+    ListService.getListForUser($routeParams.listId, userId)
     .then(function(list) {
       $scope.list = list;
-      ListService.sortList($scope.list, ListService.ALPHABETICALLY)
-      if (ListService.listHasPolylines($scope.list)) {
-        MapService.toggleRoads(map, false);
+      if ($scope.list.creatorUserId == $scope.signedInUser.id) {
+        $scope.editMode = true;
       }
-      var listBounds = ListService.calculateBounds($scope.list);
-      MapService.setMapToContainList(map, listBounds);
-      $scope.list.places.forEach(function(place) {
-        ClusterService.addPlaceToClusterer(clusterer, place);
-      });
-      $timeout(function() {
-        ClusterService.update(clusterer);
-      });
+      ListService.sortList($scope.list, ListService.ALPHABETICALLY);
       $scope.$apply();
     })
     .catch(function(err) {
       console.error("Couldn't load list", err);
       $scope.$apply();
     });
-  })
-  .catch(function(err) {
-    console.error(err);
-  });
-
-  $scope.placeClicked = function(gmEvent) {
-    var gmObject = this;
-    $scope.unhighlightAllPlaces();
-    $scope.placeFilter = undefined;
-
-    var clickedPlace = $scope.list.places.find(function(place) {
-      return place.id == gmObject.shapeId;
-    });
-
-    if (clickedPlace) {
-      clickedPlace.highlighted = true;
-      // MapService.updatePlaceOnMap(map, clickedPlace);
-      ClusterService.update(clusterer);
-
-      // scroll to the place on the list
-      var li = document.getElementById('place_' + clickedPlace.id);
-      if (li) {
-        var placeList = document.getElementById('place-list');
-        placeList.scrollTo(0, li.offsetTop);
-      }
-    }
-    $scope.$apply();
   }
 
-  $scope.highlightPlace = function(place) {
+  if ($scope.signedInUser && $routeParams.userId == $scope.signedInUser.id) {
+    ListService.markListAsRecentlyViewed($routeParams.listId)
+    .catch(function(err) { });
+  }
+
+  $scope.highlightPlace = function(place, zoomTo, scrollTo) {
     $scope.unhighlightAllPlaces();
     place.highlighted = true;
-    // MapService.updatePlaceOnMap(map, place);
-    ClusterService.update(clusterer);
-    MapService.zoomToPlace(map, place);
+    $scope.$broadcast('highlight-place', { place: place, zoomTo: zoomTo, scrollTo: scrollTo });
+  }
+
+  $scope.placeChanged = function(place) {
+    $scope.$broadcast('place-changed', place);
   }
 
   $scope.unhighlightAllPlaces = function() {
     $scope.list.places.forEach(function(place) {
       place.highlighted = false;
-      // MapService.updatePlaceOnMap(map, place);
-      ClusterService.update(clusterer);
     });
   }
 
-  $scope.followList = function() {
-    if (!$scope.user || !$scope.user.id) {
-      return;
+  $scope.setActiveDrawer = function(num) {
+    if ($scope.activeDrawer == num) {
+      $scope.activeDrawer = num - 1;
     }
+    else {
+      $scope.activeDrawer = num || 1;
+    }
+  }
+
+  $scope.showNewPlaceDialog = function() {
     requirePassword({
       afterAuthenticate: function() {
-        ListService.follow($scope.signedInUser.id, $scope.list.id)
-        .then(function() {
-          $location.path('/list/' + $scope.list.id);
-          $scope.$apply();
-        })
-        .catch(function(err) {
-          console.error(err);
-          $scope.$apply();
-        });
+        // var latlng = map.getCenter();
+        // $scope.centerCoords = { lat: latlng.lat(), lng: latlng.lng() };
+        // $scope.zoom = map.getZoom();
+        $scope.placeToEditId = null;
+        $scope.newPlaceDialogIsDisplayed = true;
       }
     });
   }
 
-  $scope.toggleActionsForPlace = function(place) {
-    place.actionsAreDisplayed = place.actionsAreDisplayed ? false : true;
+  $scope.editPlace = function(place) {
+    requirePassword({
+      afterAuthenticate: function() {
+        $scope.placeToEditId = place.id;
+        $scope.newPlaceDialogIsDisplayed = true;
+      }
+    });
   }
 
-  $scope.choosePhotoForPlace = function(place) {
-    document.getElementById('photo_upload').click();
-    placeForLastPhotoUpload = place;
+  $scope.afterPlaceSave = function(place) {
+    $scope.closeNewPlaceDialog();
+    $scope.addPlaceToList(place);
+    $scope.saveList();
   }
 
-  $scope.onImageChosen = function(event) {
-    if (!placeForLastPhotoUpload) {
+  $scope.handlePlaceResultClick = function(place) {
+    $scope.addPlaceToList(place);
+    $scope.placeFilter = undefined;
+  }
+
+  $scope.addPlaceToList = function(place) {
+    var existing = $scope.list.places.find(function(p) { return p.id == place.id; });
+    if (existing) {
+      // existing.gmObject.setMap(null);
+      $scope.list.places.splice($scope.list.places.indexOf(existing), 1, place);
+    }
+    else {
+      $scope.list.places.push(place);
+    }
+    // ClusterService.addPlaceToClusterer(clusterer, place);
+    // ClusterService.update(clusterer);
+  }
+
+  $scope.removePlace = function(place) {
+    confirm("Are you sure you want to remove " + place.placeName + " from this list?", function() {
+      $scope.saveList();
+      $scope.list.places.splice($scope.list.places.indexOf(place), 1);
+      // ClusterService.removePlaceFromClusterer(clusterer, place);
+      // ClusterService.update(clusterer);
+    });
+  }
+
+  $scope.closeNewPlaceDialog = function() {
+    $scope.placeToEditId = null;
+    $scope.newPlaceDialogIsDisplayed = false;
+  }
+
+  $scope.saveList = function(cb) {
+    if (!$scope.list.listName) {
+      alert("You must provide a list name in order to save your list", true);
       return;
     }
 
-    placeForLastPhotoUpload.isUploadingPhoto = true;
-
-    if (event.target.files && event.target.files.length) {
-      var file = event.target.files[0];
-      var reader = new FileReader();
-      reader.onload = function(event) {
-        if (placeForLastPhotoUpload) {
-          placeForLastPhotoUpload.img_file = event.target.result;
-          ImageService.createThumbnail(placeForLastPhotoUpload.img_file, afterCreateThumbnail.bind(placeForLastPhotoUpload, placeForLastPhotoUpload));
-          $scope.$apply();
-        }
-      };
-      reader.readAsDataURL(file);
-    }
-  }
-
-  function afterCreateThumbnail(place, thumb64) {
-    $scope.$apply(function() {
-      place.img_file_thumb = thumb64;
+    return new Promise(function(resolve, reject) {
       requirePassword({
         afterAuthenticate: function() {
-          PlaceService.updateUserPlace($scope.user.id, place)
-          .then(function() {
-            place.isUploadingPhoto = false;
-            place.actionsAreDisplayed = false;
+          $scope.isSaving = true;
+          createOrUpdate()
+          .then(function(list) {
+            $scope.isSaving = false;
+            if (list.id && !$scope.list.id) {
+              $location.path('/list/' + list.id + '/edit');
+            }
+            else {
+              $scope.list = list;
+            }
+            alert("List saved");
+            resolve();
             $scope.$apply();
           })
-          .catch(function(err) {
-            console.error(err);
-            place.isUploadingPhoto = false;
+          .catch(function(error) {
+            $scope.isSaving = false;
+            alert("There was a problem saving your list. Try again later.", true);
+            console.error(error);
+            reject();
             $scope.$apply();
           });
         }
@@ -160,88 +167,22 @@ function($scope, $routeParams, MapService, ClusterService, PlaceService, ListSer
     });
   }
 
-  $scope.saveUserPlaceDetails = function(place) {
-    if (!place.placeDescription) {
-      place.actionsAreDisplayed = false;
-      return;
-    }
-    requirePassword({
-      afterAuthenticate: function() {
-        PlaceService.updateUserPlace($scope.user.id, place)
-        .then(function() {
-          place.isSaving = false;
-          place.actionsAreDisplayed = false;
-          $scope.$apply();
-        })
-        .catch(function(err) {
-          console.error(err);
-          place.isSaving = false;
-          $scope.$apply();
-        });
-      }
+  function createOrUpdate() {
+    var list = Object.assign({}, $scope.list);
+    list.places = list.places.map(function(place) {
+      return { id: place.id };
     });
-  }
-
-  $scope.toggleShareableLink = function() {
-    $scope.shareableLinkIsDisplayed = $scope.shareableLinkIsDisplayed ? false : true;
-    if ($scope.shareableLinkIsDisplayed) {
-      $timeout(function() {
-        try {
-          var el = document.getElementById('shareable-link');
-          el.select();
-          document.execCommand('copy');
-          alert("Copied link to clipboard");
-        } catch(ex) {
-          console.error(ex);
-        }
-      }, 10);
+    if ($scope.list.id) {
+      return ListService.update(list.id, list);
+    }
+    else {
+      return ListService.create(list)
+      .then(function(l) {
+        list = l;
+        return ListService.follow($scope.user.id, list.id);
+      })
+      .then(function() { return Promise.resolve(list) });
     }
   }
 
-  $scope.getShareableLink = function() {
-    if (!$scope.list || !$scope.user) {
-      return '';
-    }
-    return HOST + '/list/' + $scope.list.id + "/user/" + $scope.user.id;
-  }
-
-  $scope.handleCheckboxClick = function(place) {
-    requirePassword({
-      afterAuthenticate: function() {
-        var p = Object.assign({}, place);
-        p.gmObject = undefined;
-        if (!p.isChecked) {
-          p.dateChecked = undefined;
-        }
-        PlaceService.updateUserPlace($scope.user.id, p)
-        .then(function(p) {
-          place.dateChecked = p.dateChecked;
-          // MapService.updatePlaceOnMap(map, place);
-          ClusterService.update(clusterer);
-          var action = p.dateChecked ? 'Saved' : 'Removed';
-          var reminder = $scope.list.isFollowed ? '' : 'Be sure to follow this list if you want to track your progress.';
-          alert(action + " your visit to " + place.placeName + ". " + reminder);
-          $scope.$apply();
-        })
-        .catch(function(err) {
-          $scope.$apply();
-        });
-      }
-    });
-  }
-
-  function initMap() {
-    map = new google.maps.Map(document.getElementById('list-map'), {
-      center: new google.maps.LatLng($scope.centerCoords),
-      mapTypeId: 'roadmap',
-      gestureHandling: 'greedy'
-    });
-    map.setOptions({ styles: CUSTOM_MAP_STYLES });
-    google.maps.event.addListener(map, "click", mapClick);
-  }
-
-  function mapClick() {
-    $scope.unhighlightAllPlaces();
-    $scope.$apply();
-  }
-}]);
+});

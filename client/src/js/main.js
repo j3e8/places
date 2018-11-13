@@ -29,16 +29,16 @@ app.config(["$routeProvider", "$locationProvider", function($routeProvider, $loc
     controller: 'listsController'
   })
   .when('/list/new', {
-    templateUrl: '/pages/edit-list/edit-list.html',
-    controller: 'editListController'
+    templateUrl: '/pages/user-list/user-list.html',
+    controller: 'userListController'
   })
   .when('/list/:listId/edit', {
-    templateUrl: '/pages/edit-list/edit-list.html',
-    controller: 'editListController'
+    templateUrl: '/pages/user-list/user-list.html',
+    controller: 'userListController'
   })
   .when('/list/:listId', {
-    templateUrl: '/pages/edit-list/edit-list.html',
-    controller: 'editListController'
+    templateUrl: '/pages/user-list/user-list.html',
+    controller: 'userListController'
   })
   .when('/list/:listId/user/:userId', {
     templateUrl: '/pages/user-list/user-list.html',
@@ -88,7 +88,11 @@ app.config(["$routeProvider", "$locationProvider", function($routeProvider, $loc
 
   $rootScope.$on('$locationChangeStart', function(event, next, current) {
     try {
-      if (current == '/' && localStorage.getItem('hasEverSignedIn')) {
+      var path = next.substring(next.indexOf('/', next.indexOf('//') + 2));
+      if (path == '/' && localStorage.getItem('user')) {
+        $location.path('/home');
+      }
+      else if (path == '/' && localStorage.getItem('hasEverSignedIn')) {
         $location.path('/signin');
       }
     } catch(ex) { }

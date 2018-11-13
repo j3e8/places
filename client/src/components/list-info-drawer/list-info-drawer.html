@@ -1,0 +1,81 @@
+<div id="clear-click" ng-click="onClick(1)"></div>
+<div class="drawer">
+  <div class="flex-row spaced wrap">
+    <div class="flex-cell fixed icon-cell">
+      <img class="list-icon clickable" ng-src="{{ list.iconUrl }}" ng-click="editMode && chooseIcon()">
+      <div class="edit-image text-center" ng-if="editMode">
+        <span class="clickable" ng-click="chooseIcon()">Edit <i class="material-icons clickable">edit</i></span>
+      </div>
+    </div>
+    <div class="flex-cell info-cell">
+      <h1>
+        <div ng-hide="editing.listName">
+          <a ng-href="/list/{{ list.id }}">{{ list.listName }}</a>
+          <span ng-if="editMode" ng-click="toggleEditField('listName')" class="clickable"><i class="material-icons">edit</i></span>
+        </div>
+        <div ng-show="editing.listName" class="flex-row mini-spaced">
+          <div class="flex-cell">
+            <input type="text" ng-model="list.listName" placeholder="New List">
+          </div>
+          <div class="flex-cell fixed">
+            <button class="sm" ng-click="save()"><i class="material-icons">check</i></button>
+            <button class="sm cancel" ng-click="toggleEditField('listName')"><i class="material-icons">close</i></button>
+          </div>
+        </div>
+      </h1>
+      for <a ng-href="/user/{{ user.id }}">{{ user.username }}</a>
+    </div>
+  </div>
+
+  <div class="breathe">
+    <span class="subtle">
+      Created by
+      <a ng-href="/user/{{ list.creatorUserId }}" ng-hide="list.official">{{ list.username }}</a>
+      <span ng-show="list.official" class="purple">kulana</span>
+    </span>
+    <div>
+      <div ng-hide="editing.description">
+        {{ list.description }}
+        <span ng-if="!list.description"><i>This list doesn't have a description</i></span>
+        <i class="material-icons clickable" ng-click="toggleEditField('description')" ng-if="editMode">edit</i>
+      </div>
+      <div class="flex-row mini-spaced" ng-show="editing.description">
+        <div class="flex-cell">
+          <textarea ng-model="list.description" placeholder="Write a description"></textarea>
+        </div>
+        <div class="flex-cell fixed">
+          <button class="sm" ng-click="save()"><i class="material-icons">check</i></button>
+          <button class="sm cancel" ng-click="toggleEditField('description')"><i class="material-icons">close</i></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="breathe">
+    <div class="flex-row vertical-bottom">
+      <div class="flex-cell">
+        <span class="highlight">{{ list.numberOfFollowers }}</span>
+        <span ng-show="list.numberOfFollowers == 1">follower</span>
+        <span ng-show="list.numberOfFollowers != 1">followers</span>
+        <div class="gap">
+          <button class="sm" ng-click="followList()" ng-show="!list.isFollowed">Follow</button>
+          <button class="sm cancel" ng-click="unfollowList()" ng-show="list.isFollowed">Unfollow</button>
+        </div>
+        <div ng-show="!list.isFollowed">Follow this list to make a copy of your own</div>
+      </div>
+      <div class="flex-cell fixed text-right">
+        <button class="sm" ng-click="toggleShareableLink()" ng-hide="shareableLinkIsDisplayed"><i class="material-icons">link</i> <span>Share</span></button>
+        <div ng-show="shareableLinkIsDisplayed" id="shareable-link-container">
+          <div class="flex-row vertical-center mini-spaced">
+            <div class="flex-cell"><label>Shareable link</label></div>
+            <div class="flex-cell fixed"><i class="material-icons clickable" ng-click="toggleShareableLink()">close</i></div>
+          </div>
+          <div><input type="text" ng-value="getShareableLink()" id="shareable-link"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<icon-dialog ng-show="iconDialogIsDisplayed" selected-icon-id="list.iconId" show="iconDialogIsDisplayed" on-save="updateIcon" on-cancel="closeIconDialog"></icon-dialog>

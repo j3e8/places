@@ -66,7 +66,7 @@ function addToPlaces(db) {
 function addRankToPlaces(db) {
   return new Promise((resolve, reject) => {
     db.runSql(`ALTER TABLE listplaces
-      ADD COLUMN rank mediumint not null default 0
+      ADD COLUMN rank int not null default 0
       `,
     function(err) {
       if (err) return reject(err);

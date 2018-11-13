@@ -8,6 +8,9 @@ $red: #ed90a0;
 $text_color: #292020;
 $cancel_color: #a7a9ac;
 
+$mobile_app_width: 800px;
+$desktop_min_width: 801px;
+
 html {
   height: 100%;
 }
@@ -41,6 +44,9 @@ body * {
 main {
   min-height: 100%;
   padding-top: 50px;
+  @media (max-width: $mobile_app_width) {
+    overflow: hidden;
+  }
 }
 
 .content {
