@@ -54,13 +54,13 @@
                       {{ place.placeDescription }}
                     </div>
                   </div>
-                  <div class="flex-cell fixed">
+                  <div class="flex-cell fixed" ng-show="user.id == signedInUser.id">
                     <i class="material-icons clickable" ng-click="toggleActionsForPlace(place)" ng-hide="place.actionsAreDisplayed">add_photo_alternate</i>
                     <i class="material-icons clickable" ng-click="toggleActionsForPlace(place)" ng-show="place.actionsAreDisplayed">close</i>
                   </div>
                 </div>
 
-                <div ng-show="place.actionsAreDisplayed" class="place-actions">
+                <div ng-show="place.actionsAreDisplayed" class="place-actions" ng-show="user.id == signedInUser.id">
                   <div class="gap">
                     <span class="clickable" ng-click="choosePhotoForPlace(place)" ng-hide="place.isUploadingPhoto">
                       <i class="material-icons">add_photo_alternate</i>
@@ -86,4 +86,5 @@
     </div>
   </div>
 
+  <input type="file" style="display: none;" id="photo_upload" accept="image/jpeg" onchange="angular.element(document.getElementById('photo_upload')).scope().onImageChosen(event)">
 </div>

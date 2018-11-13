@@ -1,9 +1,9 @@
-app.directive("listInfoDrawer", function($timeout, alert, requirePassword, ListService, HOST) {
+app.directive("listInfoDrawer", function($timeout, alert, requirePassword, ListService, UserService, HOST) {
   return {
     restrict: 'E',
     scope: {
       list: '=',
-      editMode: '@',
+      editMode: '<',
       onClick: '<',
       placeChanged: '<',
       highlightPlace: '<',
@@ -12,14 +12,30 @@ app.directive("listInfoDrawer", function($timeout, alert, requirePassword, ListS
     },
     templateUrl: '/components/list-info-drawer/list-info-drawer.html',
     link: function($scope, $elem, $attrs) {
+      $scope.signedInUser = UserService.getUser();
+
       $scope.editing = {};
 
       $scope.$watch('list', function() {
+        // if the $scope property 'list' has been set, but there isn't an id, we know it's a new list being created
         if ($scope.list && !$scope.list.id) {
           $scope.editing = {
             'listName': true
           }
-          $scope.list.listName = 'Untitled List';
+
+          // load the default icon
+          ListService.getDefaultIcon()
+          .then(function(icon) {
+            $scope.list.iconId = icon.id;
+            $scope.list.iconUrl = icon.iconUrl;
+            $scope.$apply();
+          })
+          .catch(function(err) {
+            alert("There was a problem loading the icon for the list", true);
+            $scope.$apply();
+          });
+
+
         }
       });
 
@@ -31,7 +47,26 @@ app.directive("listInfoDrawer", function($timeout, alert, requirePassword, ListS
           afterAuthenticate: function() {
             ListService.follow($scope.signedInUser.id, $scope.list.id)
             .then(function() {
-              $location.path('/list/' + $scope.list.id);
+              $scope.list.isFollowed = true;
+              $scope.$apply();
+            })
+            .catch(function(err) {
+              console.error(err);
+              $scope.$apply();
+            });
+          }
+        });
+      }
+
+      $scope.unfollowList = function() {
+        if (!$scope.user || !$scope.user.id) {
+          return;
+        }
+        requirePassword({
+          afterAuthenticate: function() {
+            ListService.unfollow($scope.signedInUser.id, $scope.list.id)
+            .then(function() {
+              $scope.list.isFollowed = false;
               $scope.$apply();
             })
             .catch(function(err) {

@@ -3,7 +3,7 @@ app.directive("listMapDrawer", function($routeParams, $timeout, ListService, Map
     restrict: 'E',
     scope: {
       list: '=',
-      editMode: '@',
+      editMode: '<',
       onClick: '<',
       placeChanged: '<',
       highlightPlace: '<',

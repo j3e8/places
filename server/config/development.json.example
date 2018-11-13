@@ -1,4 +1,16 @@
 {
+  "aws": {
+    "credentials": {
+      "accessKeyId": "AKIAJXINWXNGG3LENWYQ",
+      "secretAccessKey": "",
+      "region": "us-west-2"
+    },
+    "s3": {
+      "bucket": "kulana-dev",
+      "host": "https://s3-us-west-2.amazonaws.com"
+    }
+  },
+
   "database": {
     "host": "parakeet",
     "user": "root",

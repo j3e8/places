@@ -2,7 +2,7 @@
 <div class="drawer">
   <div class="flex-row spaced wrap">
     <div class="flex-cell fixed icon-cell">
-      <img class="list-icon clickable" ng-src="{{ list.iconUrl }}">
+      <img class="list-icon clickable" ng-src="{{ list.iconUrl }}" ng-click="editMode && chooseIcon()">
       <div class="edit-image text-center" ng-if="editMode">
         <span class="clickable" ng-click="chooseIcon()">Edit <i class="material-icons clickable">edit</i></span>
       </div>
@@ -54,14 +54,12 @@
   <div class="breathe">
     <div class="flex-row vertical-bottom">
       <div class="flex-cell">
-        <button class="sm" ng-click="followList()" ng-show="!list.isFollowed">Follow</button>
+        <span class="highlight">{{ list.numberOfFollowers }}</span>
+        <span ng-show="list.numberOfFollowers == 1">follower</span>
+        <span ng-show="list.numberOfFollowers != 1">followers</span>
         <div class="gap">
-          <span class="highlight">{{ list.numberOfFollowers }}</span>
-          <span ng-show="list.numberOfFollowers == 1">follower</span>
-          <span ng-show="list.numberOfFollowers != 1">followers</span>
-        </div>
-        <div ng-show="list.creatorUserId == signedInUser.id" class="gap">
-          <a ng-href="/list/{{ list.id }}"><i class="material-icons">edit</i> <span>Edit</span></a>
+          <button class="sm" ng-click="followList()" ng-show="!list.isFollowed">Follow</button>
+          <button class="sm cancel" ng-click="unfollowList()" ng-show="list.isFollowed">Unfollow</button>
         </div>
         <div ng-show="!list.isFollowed">Follow this list to make a copy of your own</div>
       </div>
@@ -80,5 +78,4 @@
 
 </div>
 
-<input type="file" style="display: none;" id="photo_upload" accept="image/jpeg" onchange="angular.element(document.getElementById('photo_upload')).scope().onImageChosen(event)">
 <icon-dialog ng-show="iconDialogIsDisplayed" selected-icon-id="list.iconId" show="iconDialogIsDisplayed" on-save="updateIcon" on-cancel="closeIconDialog"></icon-dialog>

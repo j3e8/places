@@ -1,9 +1,9 @@
-app.directive("listPlacesDrawer", function(requirePassword, PlaceService, ImageService) {
+app.directive("listPlacesDrawer", function(requirePassword, PlaceService, ImageService, UserService) {
   return {
     restrict: 'E',
     scope: {
       list: '=',
-      editMode: '@',
+      editMode: '<',
       onClick: '<',
       placeChanged: '<',
       highlightPlace: '<',
@@ -13,11 +13,12 @@ app.directive("listPlacesDrawer", function(requirePassword, PlaceService, ImageS
     },
     templateUrl: '/components/list-places-drawer/list-places-drawer.html',
     link: function($scope, $elem, $attrs) {
+      $scope.signedInUser = UserService.getUser();
 
       $scope.test = function() {
         console.log('test');
       }
-      
+
       $scope.$on('place-changed', function($evt, place) {
       });
 
@@ -117,7 +118,9 @@ app.directive("listPlacesDrawer", function(requirePassword, PlaceService, ImageS
         }
         requirePassword({
           afterAuthenticate: function() {
-            PlaceService.updateUserPlace($scope.user.id, place)
+            var _place = Object.assign({}, place);
+            delete _place.gmObject;
+            PlaceService.updateUserPlace($scope.user.id, _place)
             .then(function() {
               place.isSaving = false;
               place.actionsAreDisplayed = false;

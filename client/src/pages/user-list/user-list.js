@@ -14,6 +14,10 @@ app.controller("userListController", function($scope, $routeParams, MapService, 
   }
   else {
     $scope.editMode = true;
+    $scope.list = {
+      listName: 'Untitled List',
+      places: []
+    }
   }
 
   UserService.getUserById(userId)
