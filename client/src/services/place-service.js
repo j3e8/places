@@ -2,8 +2,10 @@ app.service("PlaceService", ["$http", "PLACES_SERVICE_URL", "Shape", function($h
   var PlaceService = {};
 
   PlaceService.create = function(place) {
+    var newPlace = Object.assign(place);
+    delete newPlace.gmObject;
     return new Promise(function(resolve, reject) {
-      $http.post(PLACES_SERVICE_URL + '/place', place)
+      $http.post(PLACES_SERVICE_URL + '/place', newPlace)
       .then(function(response) {
         resolve(response.data);
       }, function(err) {
@@ -46,8 +48,10 @@ app.service("PlaceService", ["$http", "PLACES_SERVICE_URL", "Shape", function($h
   }
 
   PlaceService.update = function(place) {
+    var newPlace = Object.assign(place);
+    delete newPlace.gmObject;
     return new Promise(function(resolve, reject) {
-      $http.put(PLACES_SERVICE_URL + '/place/' + place.id, place)
+      $http.put(PLACES_SERVICE_URL + '/place/' + newPlace.id, newPlace)
       .then(function(response) {
         resolve(response.data);
       }, function(err) {
@@ -57,8 +61,10 @@ app.service("PlaceService", ["$http", "PLACES_SERVICE_URL", "Shape", function($h
   }
 
   PlaceService.updateUserPlace = function(userId, place) {
+    var newPlace = Object.assign(place);
+    delete newPlace.gmObject;
     return new Promise(function(resolve, reject) {
-      $http.put(PLACES_SERVICE_URL + '/user/' + userId + '/place/' + place.id, place)
+      $http.put(PLACES_SERVICE_URL + '/user/' + userId + '/place/' + newPlace.id, newPlace)
       .then(function(response) {
         resolve(response.data);
       }, function(err) {
