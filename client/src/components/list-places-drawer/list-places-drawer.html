@@ -20,7 +20,10 @@
       <div class="content">
         <div id="desktop-header" class="flex-row vertical-bottom">
           <div class="flex-cell">
-            <h2>Places</h2>
+            <h2>
+              Places
+              <i class="material-icons" ng-click="showNewPlaceDialog()" ng-show="editMode">add_circle</i>
+            </h2>
           </div>
           <div class="flex-cell fixed">
             {{ list.places.length }}

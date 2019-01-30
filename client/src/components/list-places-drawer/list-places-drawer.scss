@@ -45,6 +45,13 @@ list-places-drawer {
 
     #desktop-header {
       display: none;
+
+      h2 {
+        i.material-icons {
+          vertical-align: middle;
+          color: $brand_color;
+        }
+      }
     }
 
     &:before {
