@@ -15,6 +15,12 @@ list-places-drawer {
 
     #desktop-header {
       margin-top: -15px;
+      h2 {
+        i.material-icons {
+          vertical-align: middle;
+          color: $brand_color;
+        }
+      }
     }
   }
   @media (max-width: $mobile_app_width) {
@@ -45,13 +51,6 @@ list-places-drawer {
 
     #desktop-header {
       display: none;
-
-      h2 {
-        i.material-icons {
-          vertical-align: middle;
-          color: $brand_color;
-        }
-      }
     }
 
     &:before {
