@@ -1,0 +1,22 @@
+{
+  "short_name": "kulana",
+  "name": "kulana",
+  "icons": [
+    {
+      "src": "/assets/app-icons/icon192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/assets/app-icons/icon512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/?pwa=t",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "orientation": "portrait",
+  "scope": "/",
+  "theme_color": "#45c5ff"
+}
