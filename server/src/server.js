@@ -18,7 +18,7 @@ require('./lib/jwt').init(jwtconf.publicKey, jwtconf.privateKey, jwtoptions);
 app.use(cors());
 app.use(compression());
 app.use(bodyParser.json({
-  limit: '5mb'
+  limit: '10mb'
 }));
 
 require('./routes/admin.js')(app);
